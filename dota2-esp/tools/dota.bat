@@ -1,1 +1,3 @@
-Injector.exe --module-name hook32.dll --process-name dota.exe --inject
+Injector.exe --module-name dota2-esp.dll --process-name dota.exe --eject
+timeout 1
+Injector.exe --module-name dota2-esp.dll --process-name dota.exe --inject

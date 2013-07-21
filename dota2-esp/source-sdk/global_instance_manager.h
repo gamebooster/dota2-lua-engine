@@ -1,3 +1,5 @@
+#pragma once
+
 #include "SDK.h"
 #include "..\utils\utils.h"
 
@@ -44,6 +46,13 @@ public:
     }
     return panel_;
   };
+  static ClientTools* GetClientTools() {
+    if (clienttools_ == nullptr) {
+      CreateInterface_t VClientFactory = ( CreateInterfaceFn ) GetProcAddress( utils::GetModuleHandleSafe( "client.dll" ), "CreateInterface" );
+      clienttools_ =  ( ClientTools* ) VClientFactory( "VCLIENTTOOLS001", NULL );
+    }
+    return clienttools_;
+  };
 
 private:
   static CHLClient* chlclient_;
@@ -52,4 +61,5 @@ private:
   static ISurface* surface_;
   static ISurfaceNew* surface_new_;
   static IPanel* panel_;
+  static ClientTools* clienttools_;
 };

@@ -9,6 +9,7 @@
 #include "Psapi.h"
 #include "convar.h"
 
+
 using namespace std;
 
 typedef void* ( __cdecl* CreateInterface_t )( const char*, int* );
@@ -54,8 +55,7 @@ typedef struct player_info_s
 	unsigned char	filesDownloaded;
 } player_info_t;
 
-class ClientClass
-{
+class ClientClass {
 public:
 	const char* GetName( void )
 	{
@@ -73,6 +73,15 @@ public:
 	{
 		return *(int*)(this+0x14);
 	}
+};
+
+class ClientTools {
+public:
+  void* GetLocalPlayer()
+  {
+    typedef void* ( __thiscall* OriginalFn )( PVOID);
+    return getvfunc<OriginalFn>( this, 23 )( this);
+  }
 };
 
 class CHLClient
@@ -93,31 +102,37 @@ public:
 		typedef ClientClass* ( __thiscall* OriginalFn )( PVOID ); //Anything inside a VTable is a __thiscall unless it completly disregards the thisptr. You can also call them as __stdcalls, but you won't have access to the __thisptr.
 		return getvfunc<OriginalFn>( this, 7 )( this ); //Return the pointer to the head CClientClass.
 	}
+
+  int GetScreenWidth() {
+    typedef int ( __cdecl* OriginalFn )();
+    return getvfunc<OriginalFn>( this, 59 )();
+  }
+  int GetScreenHeight() {
+    typedef int ( __cdecl* OriginalFn )();
+    return getvfunc<OriginalFn>( this, 60 )();
+  }
 };
-extern DWORD dwm_iHealth;
-extern DWORD dwm_flMana;
-extern DWORD dwm_flMaxMana;
-extern DWORD dwm_hReplicatingOtherHeroModel;
-extern DWORD dwm_fGameTime;
-extern DWORD dwGameRules;
-class CBaseEntity
-{
+
+extern DWORD other_hero_model_offset;
+extern DWORD game_time_offset;
+extern DWORD game_rules_address;
+
+class CBaseEntity {
 public:
-	int GetHealth()
-	{
-		return *( PINT )( ( DWORD )( this ) + dwm_iHealth );
-	}
-	float GetManaMax()
-	{
-		return *( PFLOAT )( ( DWORD )( this ) + dwm_flMaxMana );
-	}
-	float GetMana()
-	{
-		return *( PFLOAT )( ( DWORD )( this ) + dwm_flMana );
-	}
+  template <class ValueType> ValueType GetValueWithOffset(int offset) {
+    return *reinterpret_cast<ValueType*>(this + offset);
+  }
+  bool IsAlive() {
+    typedef bool ( __thiscall* OriginalFn )( PVOID );
+    return getvfunc<OriginalFn>(this, 147)(this);
+  }
+  bool IsPlayer() {
+    typedef bool ( __thiscall* OriginalFn )( PVOID );
+    return getvfunc<OriginalFn>(this, 149)(this);
+  }
 	bool IsIllusion()
 	{
-		if ((*( PINT )( ( DWORD )( this ) + dwm_hReplicatingOtherHeroModel )) <= 0 )
+		if ((*( PINT )( ( DWORD )( this ) + other_hero_model_offset )) <= 0 )
 			return false;
 		else
 			return true;
@@ -127,21 +142,22 @@ public:
 		typedef Vector& ( __thiscall* OriginalFn )( PVOID );
 		return getvfunc<OriginalFn>(this, 11)(this);
 	}
-	Vector& GetAbsAngles( )
-	{
-		typedef Vector& ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>(this, 10)(this);
-	}
+  Vector& GetAbsAngles( )
+  {
+    typedef Vector& ( __thiscall* OriginalFn )( PVOID );
+    return getvfunc<OriginalFn>(this, 10)(this);
+  }
 	const char* GetName( )
 	{
-		return (const char*)((DWORD)this+0x11A4);//ollyfind ", NAME: "
+		return (const char*)((DWORD)this+0x11A4);
 	}
-	void GetWorldSpaceCenter( Vector& vWorldSpaceCenter)
+	Vector WorldSpaceCenter()
 	{
 		Vector vMin, vMax;
 		this->GetRenderBounds( vMin, vMax );
-		vWorldSpaceCenter = this->GetAbsOrigin();
+		Vector vWorldSpaceCenter = this->GetAbsOrigin();
 		vWorldSpaceCenter.z += (vMin.z + vMax.z) / 2;
+    return vWorldSpaceCenter;
 	}
 	model_t* GetModel( )
 	{
@@ -186,8 +202,8 @@ class EngineClient
 public:
 	float GetGameTime( void )
 	{
-		DWORD GameRules = *( PDWORD )(dwGameRules);
-		return *( PFLOAT )( GameRules + dwm_fGameTime );;
+		DWORD GameRules = *( PDWORD )(game_rules_address);
+		return *( PFLOAT )( GameRules + game_time_offset );;
 	}
 	void GetScreenSize( int& width, int& height )
 	{
@@ -204,9 +220,9 @@ public:
 		typedef bool ( __thiscall* OriginalFn )( PVOID );
 		return getvfunc<OriginalFn>( this, 11 )( this );
 	}
-	int GetLocalPlayer( void )
+	void* GetLocalPlayer( void )
 	{
-		typedef int ( __thiscall* OriginalFn )( PVOID );
+		typedef void* ( __thiscall* OriginalFn )( PVOID );
 		return getvfunc<OriginalFn>( this, 12 )( this );
 	}
 	float Time( void )

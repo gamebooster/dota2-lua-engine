@@ -1,9 +1,7 @@
 #include "netvar.h"
+#include "global_instance_manager.h"
 
 namespace sourcesdk {
-
-NetVarManager::NetVarManager(CHLClient* client) : client_(client) {
-}
 
 int NetVarManager::GetOffsetFromTable(const char* class_name, const char* var_name, RecvTable* table) {
   int offset = 0;
@@ -51,7 +49,11 @@ int NetVarManager::GetOffsetFromTableL(const char* class_name, const char* var_n
 }
 
 int NetVarManager::GetNetVarOffset(const char* class_name, const char* var_name) {
-  ClientClass* clientClass = client_->GetAllClasses();
+  std::string key(class_name);
+  key.append(var_name);
+  if (cache_[key]) return cache_[key];
+
+  ClientClass* clientClass = GlobalInstanceManager::GetClient()->GetAllClasses();
 
   int offset = 0;
 
@@ -67,11 +69,17 @@ int NetVarManager::GetNetVarOffset(const char* class_name, const char* var_name)
     if( offset != 0 ) break;
   }
 
+  cache_[key] = offset;
   return offset;
 }
 
 int NetVarManager::GetNetVarOffsetL(const char* class_name, const char* var_name, const char* var_name2) {
-  ClientClass* clientClass = client_->GetAllClasses();
+  std::string key(class_name);
+  key.append(var_name);
+  key.append(var_name2);
+  if (cache_[key]) return cache_[key];
+
+  ClientClass* clientClass = GlobalInstanceManager::GetClient()->GetAllClasses();
 
   int offset = 0;
 
@@ -87,6 +95,7 @@ int NetVarManager::GetNetVarOffsetL(const char* class_name, const char* var_name
     if( offset != 0 ) break;
   }
 
+  cache_[key] = offset;
   return offset;
 }
 

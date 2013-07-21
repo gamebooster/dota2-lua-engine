@@ -72,10 +72,7 @@
     <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
     <LibraryPath>C:\Users\bogus\Documents\GitHub\dxhook-master\AntTweakBar\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>..\AntTweakBar\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(IncludePath)</IncludePath>
-  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)64</TargetName>
   </PropertyGroup>
@@ -134,6 +131,9 @@
       <Optimization>Full</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
     </ClCompile>
+    <PreLinkEvent>
+      <Command>..\Release\dota-eject.bat</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -165,7 +165,6 @@
     <ClCompile Include="dota\DotaPlayerResource.cpp" />
     <ClCompile Include="source-sdk\draw_utils.cpp" />
     <ClCompile Include="source-sdk\netvar.cpp" />
-    <ClCompile Include="source-sdk\Panels.cpp" />
     <ClCompile Include="utils\utils.cpp" />
     <ClCompile Include="utils\vmthooks.cpp" />
   </ItemGroup>
@@ -182,14 +181,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DotaChat.h" />
-    <ClInclude Include="DotaGlobal.h" />
-    <ClInclude Include="DotaPlayerResource.h" />
-    <ClInclude Include="global_instance_manager.h" />
+    <ClInclude Include="dota\DotaGlobal.h" />
+    <ClInclude Include="dota\DotaPlayerResource.h" />
+    <ClInclude Include="source-sdk\global_instance_manager.h" />
     <ClInclude Include="netvar.h" />
     <ClInclude Include="source-sdk\draw_utils.h" />
-    <ClInclude Include="source-sdk\Panels.h" />
     <ClInclude Include="source-sdk\SDK.h" />
-    <ClInclude Include="utils.h" />
+    <ClInclude Include="utils\utils.h" />
     <ClInclude Include="utils\vmthooks.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

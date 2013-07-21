@@ -45,9 +45,6 @@
     <ClCompile Include="source-sdk\draw_utils.cpp">
       <Filter>Source Files\source-sdk</Filter>
     </ClCompile>
-    <ClCompile Include="source-sdk\Panels.cpp">
-      <Filter>Source Files\source-sdk</Filter>
-    </ClCompile>
     <ClCompile Include="utils\utils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
@@ -82,12 +79,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DotaGlobal.h">
-      <Filter>Header Files\dota</Filter>
-    </ClInclude>
-    <ClInclude Include="DotaPlayerResource.h">
-      <Filter>Header Files\dota</Filter>
-    </ClInclude>
     <ClInclude Include="DotaChat.h">
       <Filter>Header Files\dota</Filter>
     </ClInclude>
@@ -97,20 +88,23 @@
     <ClInclude Include="netvar.h">
       <Filter>Header Files\source-sdk</Filter>
     </ClInclude>
-    <ClInclude Include="source-sdk\Panels.h">
-      <Filter>Header Files\source-sdk</Filter>
-    </ClInclude>
     <ClInclude Include="source-sdk\draw_utils.h">
       <Filter>Header Files\source-sdk</Filter>
     </ClInclude>
-    <ClInclude Include="global_instance_manager.h">
-      <Filter>Header Files\source-sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="utils.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\vmthooks.h">
       <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\global_instance_manager.h">
+      <Filter>Header Files\source-sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaGlobal.h">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaPlayerResource.h">
+      <Filter>Header Files\dota</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

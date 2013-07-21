@@ -60,7 +60,7 @@ const unsigned char* utils::FindPattern(const void* address, size_t size, const 
   return FindPatternInternal(reinterpret_cast<const unsigned char*>(address), size - mask_length, signature, mask);
 }
 
-std::size_t GetModuleSize(const char* module_name) {
+size_t utils::GetModuleSize(const char* module_name) {
   HMODULE hModule = GetModuleHandle(module_name);
   if(hModule == NULL) return 0;
   IMAGE_DOS_HEADER* pDOSHeader = (IMAGE_DOS_HEADER*)hModule;
@@ -100,11 +100,11 @@ HMODULE utils::GetModuleHandleSafe(const char* module_name) {
 }
 
 void utils::Log(const char* format, ...) {
-  va_list arguments; 
   char buffer[MAX_PATH];
 
-  va_start(arguments, format);
-  sprintf_s(buffer,format, arguments);
-  va_end(arguments);
+  va_list args; 
+  va_start(args, format);
+  vsnprintf_s(buffer, sizeof(buffer), sizeof(buffer), format, args);
+  va_end(args);
   OutputDebugString(buffer);
 }
