@@ -1,5 +1,6 @@
 #include "draw_utils.h"
 
+namespace sourcesdk {
 
 DrawUtils::DrawUtils(ISurface* surface, ISurfaceNew* surface_new,  EngineClient* engine_client) :
   font_(surface->CreateFont()),
@@ -89,4 +90,6 @@ bool DrawUtils::WorldToScreenNew( Vector& vIn, Vector& vOut ) {
 	}
 
 	return false;
+}
+
 }

@@ -1,8 +1,7 @@
 #include "windows.h"
 #include "vmthooks.h"
 
-namespace vtable
-{
+namespace utils {
 
 	uint CountFuncs( void** vmt )
 	{

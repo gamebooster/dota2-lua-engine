@@ -158,6 +158,7 @@
     <ProjectReference />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="backup\directx-hook.cpp" />
     <ClCompile Include="dota\DotaChat.cpp" />
     <ClCompile Include="source-sdk\global_instance_manager.cpp" />
     <ClCompile Include="main.cpp" />

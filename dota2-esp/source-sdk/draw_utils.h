@@ -3,6 +3,7 @@
 #include "SDK.h"
 #include "Panels.h"
 
+namespace sourcesdk {
 
 typedef struct ScreenSize_t
 {
@@ -26,3 +27,5 @@ private:
   ISurfaceNew* surface_new_;
   EngineClient* engine_client_;
 };
+
+}

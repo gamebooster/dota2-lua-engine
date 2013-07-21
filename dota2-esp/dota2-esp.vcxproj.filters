@@ -34,6 +34,9 @@
     <Filter Include="tools">
       <UniqueIdentifier>{6252b820-43a4-4c15-8e26-922eb29b1346}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\backup">
+      <UniqueIdentifier>{3bbfd77c-e22f-4f99-98fb-149a8a394678}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="source-sdk\netvar.cpp">
       <Filter>Source Files\source-sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="backup\directx-hook.cpp">
+      <Filter>Source Files\backup</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

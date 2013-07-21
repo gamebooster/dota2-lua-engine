@@ -1,6 +1,6 @@
 #include <cassert>
 
-namespace vtable {
+namespace utils {
 
 typedef unsigned int uint;
 typedef int int_ptr;
