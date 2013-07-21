@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\dota">
+      <UniqueIdentifier>{0229ac4f-5e21-4eb0-a308-afabd7ffc7b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dota">
+      <UniqueIdentifier>{68875c0c-62d5-426f-bca0-3efae0eeb5e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils">
+      <UniqueIdentifier>{b2addada-6322-4e75-aec7-a8e05c9e36f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{3536c2f1-8b25-4811-982a-56680a9a58ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\source-sdk">
+      <UniqueIdentifier>{8959ed2e-1dc7-46ca-8fc0-1124cfad4afa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\source-sdk">
+      <UniqueIdentifier>{450fd898-5082-464f-b5c4-a258c9356d95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tools">
+      <UniqueIdentifier>{6252b820-43a4-4c15-8e26-922eb29b1346}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source-sdk\draw_utils.cpp">
+      <Filter>Source Files\source-sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="source-sdk\Panels.cpp">
+      <Filter>Source Files\source-sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\utils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\vmthooks.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source-sdk\global_instance_manager.cpp">
+      <Filter>Source Files\source-sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="dota\DotaChat.cpp">
+      <Filter>Source Files\dota</Filter>
+    </ClCompile>
+    <ClCompile Include="dota\DotaPlayerResource.cpp">
+      <Filter>Source Files\dota</Filter>
+    </ClCompile>
+    <ClCompile Include="source-sdk\netvar.cpp">
+      <Filter>Source Files\source-sdk</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tools\Injector.exe">
+      <Filter>tools</Filter>
+    </None>
+    <None Include="tools\dota.bat">
+      <Filter>tools</Filter>
+    </None>
+    <None Include="tools\dota-eject.bat">
+      <Filter>tools</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DotaGlobal.h">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="DotaPlayerResource.h">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="DotaChat.h">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\SDK.h">
+      <Filter>Header Files\source-sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="netvar.h">
+      <Filter>Header Files\source-sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\Panels.h">
+      <Filter>Header Files\source-sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\draw_utils.h">
+      <Filter>Header Files\source-sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="global_instance_manager.h">
+      <Filter>Header Files\source-sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\vmthooks.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

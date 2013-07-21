@@ -1,0 +1,1 @@
+Injector.exe --module-name hook32.dll --process-name dota.exe --inject
