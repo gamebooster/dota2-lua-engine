@@ -77,8 +77,12 @@ void __stdcall Hooked_PaintTraverseNew(int unknw, unsigned int vguiPanel, bool f
 
     int offset_counter = 0;
 
-            dota::DotaPlayerResource* player_resource = dota::DotaPlayerResource::GetPlayerResource();
+    dota::DotaPlayerResource* player_resource = dota::DotaPlayerResource::GetPlayerResource();
+    if (player_resource == nullptr) return;
+
     CBasePlayer* local_player = (CBasePlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
+    if (local_player == nullptr) return;
+
     int local_player_id = local_player->GetPlayerId();
     int local_team =  player_resource->GetTeam(local_player_id);
 
@@ -86,10 +90,11 @@ void __stdcall Hooked_PaintTraverseNew(int unknw, unsigned int vguiPanel, bool f
       CBaseEntity *base_entity = GlobalInstanceManager::GetClientEntityList()->GetClientEntity(i);
       if (base_entity == nullptr) continue;
 
-      if (base_entity->IsPlayer() && base_entity->IsAlive() ) {
+      const char* class_name = base_entity->GetClientClass()->GetName();
+
+      if (class_name[1] == 'D' && class_name[5] == 'P') { // CDOTAPlayer
         CBasePlayer *base_player = (CBasePlayer *) base_entity;
         int player_id = base_player->GetPlayerId();
-        if (player_id != (i - 1)) break;
         CDotaPlayer *dota_player = (CDotaPlayer *) base_entity;
 
         const char* player_name = player_resource->GetPlayerName(player_id);
@@ -99,13 +104,12 @@ void __stdcall Hooked_PaintTraverseNew(int unknw, unsigned int vguiPanel, bool f
         int team = player_resource->GetTeam(player_id);
 
         if (team != local_team) {
-        
-        sourcesdk::DrawUtils::GetInstance().DrawString(5, 400 + offset_counter  * 30, 255,255,255,255, false, "%d", level);
-        sourcesdk::DrawUtils::GetInstance().DrawString(25, 400 + offset_counter * 30, 255,255,255,255, false, "%s", player_name);
-        sourcesdk::DrawUtils::GetInstance().DrawString(5, 400 + offset_counter  * 30 + 15, 255,255,255,255, false, "%d", gold);
-        sourcesdk::DrawUtils::GetInstance().DrawString(40, 400 + offset_counter  * 30 + 15, 255,255,255,255, false, "%d", lasthits);
+          sourcesdk::DrawUtils::GetInstance().DrawString(5, 400 + offset_counter  * 30, 255,255,255,255, false, "%d", level);
+          sourcesdk::DrawUtils::GetInstance().DrawString(25, 400 + offset_counter * 30, 255,255,255,255, false, "%s", player_name);
+          sourcesdk::DrawUtils::GetInstance().DrawString(5, 400 + offset_counter  * 30 + 15, 255,255,255,255, false, "%d", gold);
+          sourcesdk::DrawUtils::GetInstance().DrawString(40, 400 + offset_counter  * 30 + 15, 255,255,255,255, false, "%d", lasthits);
 
-        offset_counter++;
+          offset_counter++;
         }
 
         base_entity = GlobalInstanceManager::GetClientEntityList()->GetClientEntity(dota_player->GetAssignedHero());
