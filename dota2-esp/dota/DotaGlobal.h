@@ -13,8 +13,8 @@ public:
 
 class CDotaPlayer : CBasePlayer {
 public:
-  int16 GetAssignedHero() {
+  int16_t GetAssignedHero() {
     int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTAPlayer","m_hAssignedHero");
-    return *reinterpret_cast<int16*>(this + offset);
+    return *reinterpret_cast<int16_t*>(this + offset);
   }
 };

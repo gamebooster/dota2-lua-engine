@@ -12,10 +12,10 @@ public:
     }
     return chlclient_;
   };
-  static CEntList* GetClientEntityList() {
+  static EntityList* GetClientEntityList() {
     if (centlist_ == nullptr) {
       CreateInterface_t ClientFactory = ( CreateInterfaceFn ) GetProcAddress( utils::GetModuleHandleSafe( "client.dll" ), "CreateInterface" );
-      centlist_ = (CEntList*) ClientFactory( "VClientEntityList003", NULL );
+      centlist_ = (EntityList*) ClientFactory( "VClientEntityList003", NULL );
     }
     return centlist_;
   };
@@ -56,7 +56,7 @@ public:
 
 private:
   static CHLClient* chlclient_;
-  static CEntList* centlist_;
+  static EntityList* centlist_;
   static EngineClient* engineclient_;
   static ISurface* surface_;
   static ISurfaceNew* surface_new_;
