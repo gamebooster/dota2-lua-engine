@@ -46,7 +46,7 @@ void DrawUtils::OutlineRect( int x, int y, int w, int h, int r, int g, int b, in
 	GlobalInstanceManager::GetSurfaceNew()->DrawOutlinedRect( x, y, x + w, y + h );
 }
 
-int DrawUtils::FrustumTransform( const matrix3x4 &worldToSurface, const Vector& point, Vector& screen )
+int DrawUtils::FrustumTransform( const matrix3x4_t &worldToSurface, const Vector& point, Vector& screen )
 {
   // UNDONE: Clean this up some, handle off-screen vertices
   float w;
@@ -108,7 +108,7 @@ bool DrawUtils::WorldToScreenNew( Vector& vIn, Vector& vOut ) {
 	float w;
 	bool behind = false;
 
-	const matrix3x4& worldToScreen = GlobalInstanceManager::GetEngineClient()->WorldToScreenMatrix();
+	const matrix3x4_t& worldToScreen = GlobalInstanceManager::GetEngineClient()->WorldToScreenMatrix();
 
 	vOut.x = worldToScreen[0][0] * vIn[0] + worldToScreen[0][1] * vIn[1] + worldToScreen[0][2] * vIn[2] + worldToScreen[0][3];
 	vOut.y = worldToScreen[1][0] * vIn[0] + worldToScreen[1][1] * vIn[1] + worldToScreen[1][2] * vIn[2] + worldToScreen[1][3];

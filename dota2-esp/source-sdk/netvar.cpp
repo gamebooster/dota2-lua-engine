@@ -3,11 +3,13 @@
 
 namespace sourcesdk {
 
+#undef GetProp
+
 int NetVarManager::GetOffsetFromTable(const char* class_name, const char* var_name, RecvTable* table) {
   int offset = 0;
 
   for( int i = 0; i < table->GetNumProps(); i++ ) {
-    RecvProp* prop = table->GetProp( i );
+    RecvProp* prop = table->GetProp(i);
     if( !prop ) continue;
 
     RecvTable* child = prop->GetDataTable();

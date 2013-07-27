@@ -1,8 +1,7 @@
 #include "DotaPlayerResource.h"
 
 #include "..\utils\utils.h"
-#include <tchar.h>
-#include <windows.h>
+#include "..\source-sdk\SDK.h"
 #include "..\source-sdk\netvar.h"
 
 namespace dota {
@@ -13,7 +12,7 @@ namespace dota {
     if (player_resource_ != nullptr) return player_resource_;
 
     const uint32_t* pattern_address =  utils::FindPattern(
-      _T("client.dll"),
+      "client.dll",
       reinterpret_cast<unsigned char*>("\x77\x0F\x8B\x15\x00\x00\x00\x00\x8B\x44\x24\x1C"),
       "xxxx????xxxx",
       0x4);

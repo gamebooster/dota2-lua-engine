@@ -54,6 +54,14 @@ public:
     return clienttools_;
   };
 
+  static ICvar* GetCVar() {
+    if (cvar_ == nullptr) {
+      CreateInterface_t VStdFactory = ( CreateInterfaceFn ) GetProcAddress( utils::GetModuleHandleSafe( "vstdlib.dll" ), "CreateInterface" );
+      cvar_ = ( ICvar* ) VStdFactory( "VEngineCvar007", NULL );
+    }
+    return cvar_;
+  };
+
 private:
   static CHLClient* chlclient_;
   static EntityList* centlist_;
@@ -62,4 +70,5 @@ private:
   static ISurfaceNew* surface_new_;
   static IPanel* panel_;
   static ClientTools* clienttools_;
+  static ICvar* cvar_;
 };

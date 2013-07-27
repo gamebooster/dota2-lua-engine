@@ -79,13 +79,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DotaChat.h">
-      <Filter>Header Files\dota</Filter>
-    </ClInclude>
     <ClInclude Include="source-sdk\SDK.h">
-      <Filter>Header Files\source-sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="netvar.h">
       <Filter>Header Files\source-sdk</Filter>
     </ClInclude>
     <ClInclude Include="source-sdk\draw_utils.h">
@@ -105,6 +99,12 @@
     </ClInclude>
     <ClInclude Include="dota\DotaPlayerResource.h">
       <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaChat.h">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\netvar.h">
+      <Filter>Header Files\source-sdk</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

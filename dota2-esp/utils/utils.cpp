@@ -108,3 +108,10 @@ void utils::Log(const char* format, ...) {
   va_end(args);
   OutputDebugString(buffer);
 }
+
+const std::wstring utils::ConvertToWide(const char *text) {
+  const size_t size = strlen(text)+1;
+  std::wstring wtext( size, L'#' );
+  mbstowcs( &wtext[0], text, size );
+  return wtext;
+}

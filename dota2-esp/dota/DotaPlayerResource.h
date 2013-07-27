@@ -1,5 +1,4 @@
 #include <string>
-#include <stdint.h>
 
 namespace dota {
   class DotaPlayerResource {

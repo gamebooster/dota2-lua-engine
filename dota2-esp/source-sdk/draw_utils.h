@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SDK.h"
-#include "Vector.h"
 
 namespace sourcesdk {
 
@@ -18,7 +17,7 @@ public:
 	void OutlineRect( int x, int y, int w, int h, int r, int g, int b, int a );
 	bool WorldToScreenNew( Vector& vIn, Vector& vOut );
   bool GetVectorInScreenSpace( Vector pos, int& iX, int& iY, Vector *vecOffset = NULL );
-  int FrustumTransform( const matrix3x4 &worldToSurface, const Vector& point, Vector& screen );
+  int FrustumTransform( const matrix3x4_t& worldToSurface, const Vector& point, Vector& screen );
   int HudTransform( const Vector& point, Vector& screen );
 private:
   DrawUtils();
