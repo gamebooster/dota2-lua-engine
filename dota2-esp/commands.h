@@ -8,7 +8,7 @@ namespace commands {
 
   void SetAnnouncer(const CCommandContext &context, const CCommand &args);
   void SetKillstreakAnnouncer(const CCommandContext &context, const CCommand &args);
-  void SetHud();
+  void SetHud(const CCommandContext &context, const CCommand &args);
 
   void ShiftDown(const CCommandContext &context, const CCommand &args);
   void ShiftUp(const CCommandContext &context, const CCommand &args);

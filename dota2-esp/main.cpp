@@ -123,7 +123,7 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
   int local_player_id = local_player->GetPlayerId();
   int local_team =  player_resource->GetTeam(local_player_id);
 
-  for (int i = 1; i < 32; i++ ) {
+  for (int i = 1; i < 11; i++ ) {
     CBaseEntity *base_entity = GlobalInstanceManager::GetClientEntityList()->GetClientEntity(i);
     if (base_entity == nullptr) continue;
 
@@ -132,6 +132,8 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
     if (class_name[1] == 'D' && class_name[5] == 'P' && class_name[8] == 'y') { // CDOTAPlayer
       CDotaPlayer *dota_player = (CDotaPlayer *) base_entity;
       int player_id = dota_player->GetPlayerId();
+
+      if (player_id < 0 || player_id > 10) return;
 
       const char* player_name = player_resource->GetPlayerName(player_id);
       int level = player_resource->GetLevel(player_id);
@@ -175,7 +177,12 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
             }
             message.append(GlobalInstanceManager::GetLocalize()->Find(name.c_str()));
           }
-          chat->MessagePrintf(0, message.c_str(), player_id, 0, GlobalInstanceManager::GetEngineClient()->Time());
+          const char* hero_name = dota::DotaPlayerResource::GetPlayerSelectedHero(player_id);
+          hero_name = StringAfterPrefix(hero_name, "npc_dota_hero_");
+          const char* item_name = item_data->GetString("AbilityName");
+          item_name = StringAfterPrefix(item_name, "item_");
+          CDotaSFHudOverlay::GetInstance()->ShowSpecItemPickup(hero_name, item_name);
+          //chat->MessagePrintf(0, message.c_str(), player_id, 0, GlobalInstanceManager::GetEngineClient()->Time());
 
           items.insert(item);
         } 
@@ -210,6 +217,7 @@ void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName 
   client_hook->GetMethod<OriginalFunction>(4)(thisptr, pMapName);
 
   items.clear();
+  dota::DotaChat::Invalidate();
 }
 
 void FinalizeHook() {

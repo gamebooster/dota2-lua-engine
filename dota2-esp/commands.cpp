@@ -96,8 +96,21 @@ namespace commands {
     announcer->SetAnnouncerItem(item, 1);
   }
 
-  void SetHud( void ) {
-    Msg("This is my SetHud\n");
+  void SetHud( const CCommandContext &context, const CCommand &args ) {
+    if ( args.ArgC() < 2 ) {
+      Msg("Usage: dota_hud_set <item_id>\n");
+      return;
+    }
+
+    EconItemView* item = EconItemView::Create();
+    int item_id = atoi(args.Arg(1));
+    if (item_id == 0) {
+      Msg("could not convert item_id to integer\n");
+      return;
+    }
+    item->Init(item_id, 9999, 9999, 0);
+
+    CHud::SelectHudSkin(item, 1);
   }
 
   void ShiftDown(const CCommandContext &context, const CCommand &args) {

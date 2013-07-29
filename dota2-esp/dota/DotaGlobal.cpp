@@ -6,6 +6,10 @@ CGameRules* CGameRules::instance_ = nullptr;
 
 CHud* CHud::instance_ = nullptr;
 unsigned long CHud::find_element_address_ = 0;
+unsigned long CHud::select_hud_skin_address_ = 0;
+
+CDotaSFHudOverlay* CDotaSFHudOverlay::instance_ = nullptr;
+unsigned long CDotaSFHudOverlay::show_spec_item_address_ = 0;
 
 unsigned long CMinimap::create_location_ping_address_ = 0;
 

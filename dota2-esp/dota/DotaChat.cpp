@@ -2,6 +2,7 @@
 
 #include "..\utils\utils.h"
 #include "..\source-sdk\SDK.h"
+#include "DotaGlobal.h"
 
 namespace dota {
   unsigned long DotaChat::event_printf_address_ = 0;
@@ -9,16 +10,14 @@ namespace dota {
   DotaChat* DotaChat::dota_chat_ = nullptr;
 
   DotaChat* DotaChat::GetInstance() {
-    if (dota_chat_ != nullptr) return dota_chat_;
-
-    const uint32_t* pattern_address =  utils::FindPattern(
-      _T("client.dll"),
-      reinterpret_cast<unsigned char*>("\x56\x8B\x35\x00\x00\x00\x00\x85\xF6\x74\x24"),
-      "xxx????xxxx",
-      0x3);
-
-    dota_chat_ = *(dota::DotaChat**)pattern_address;
+    if (dota_chat_ == nullptr) {
+      dota_chat_ = (DotaChat*)CHud::GetInstance()->FindSFElement("CDOTA_SF_Hud_Chat");
+    }
     return dota_chat_;
+  }
+
+  void DotaChat::Invalidate() {
+    dota_chat_ = nullptr;
   }
 
   void DotaChat::MessagePrintf(int area, wchar_t const* message, int player_index, int priority, float time) {

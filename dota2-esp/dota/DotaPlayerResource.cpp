@@ -6,6 +6,7 @@
 
 namespace dota {
   DWORD DotaPlayerResource::get_player_name_address_ = 0;
+  unsigned long DotaPlayerResource::get_player_selected_hero_address_ = 0;
   DotaPlayerResource* DotaPlayerResource::player_resource_ = nullptr;
 
   DotaPlayerResource* DotaPlayerResource::GetPlayerResource() {
@@ -92,6 +93,26 @@ namespace dota {
       call [get_player_name_address_]
       mov [name], eax
       popad
+    }
+    return name;
+  }
+
+  const char* DotaPlayerResource::GetPlayerSelectedHero(int index) {
+    if (get_player_selected_hero_address_ == 0) {
+      unsigned long pattern_address = (unsigned long)utils::FindPattern(
+        _T("client.dll"),
+        reinterpret_cast<unsigned char*>("\xE8\x00\x00\x00\x00\x8B\x0D\x00\x00\x00\x00\x8B\x57\x2C\x50"),
+        "x????xx????xxxx");
+
+      get_player_selected_hero_address_ = utils::GetAbsoluteAddress(pattern_address);
+    }
+
+    const char* name = nullptr;
+
+    __asm {
+      mov eax, index
+      call get_player_selected_hero_address_
+      mov [name], eax
     }
     return name;
   }

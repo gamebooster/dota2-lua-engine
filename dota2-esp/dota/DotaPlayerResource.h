@@ -17,9 +17,12 @@ namespace dota {
      int GetUnreliableGold(int index);
      int GetTeam(int index);
 
+     static const char* GetPlayerSelectedHero(int index);
+
      static DotaPlayerResource* GetPlayerResource();
    private:
     static DotaPlayerResource* player_resource_;
     static unsigned long get_player_name_address_;
+    static unsigned long get_player_selected_hero_address_;
   };
 }
