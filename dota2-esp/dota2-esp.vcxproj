@@ -143,6 +143,15 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <PreBuildEvent />
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -168,7 +177,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="backup\directx-hook.cpp" />
+    <ClCompile Include="commands.cpp" />
     <ClCompile Include="dota\DotaChat.cpp" />
+    <ClCompile Include="dota\DotaGlobal.cpp" />
+    <ClCompile Include="dota\DotaItem.cpp" />
     <ClCompile Include="source-sdk\global_instance_manager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="dota\DotaPlayerResource.cpp" />
@@ -181,7 +193,7 @@
     <None Include="tools\dota-eject.bat">
       <DeploymentContent>true</DeploymentContent>
     </None>
-    <None Include="tools\dota.bat">
+    <None Include="tools\dota-inject.bat">
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="tools\Injector.exe">
@@ -189,8 +201,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="commands.h" />
     <ClInclude Include="dota\DotaChat.h" />
     <ClInclude Include="dota\DotaGlobal.h" />
+    <ClInclude Include="dota\DotaItem.h" />
     <ClInclude Include="dota\DotaPlayerResource.h" />
     <ClInclude Include="source-sdk\global_instance_manager.h" />
     <ClInclude Include="source-sdk\netvar.h" />

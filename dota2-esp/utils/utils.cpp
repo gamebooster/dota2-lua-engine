@@ -115,3 +115,22 @@ const std::wstring utils::ConvertToWide(const char *text) {
   mbstowcs( &wtext[0], text, size );
   return wtext;
 }
+
+const std::string utils::ConvertToANSI(const wchar_t *text) {
+  const size_t size = wcslen(text)+1;
+  std::string wtext( size, '#' );
+  WideCharToMultiByte(CP_UTF8, 0, text, -1, &wtext[0], size, NULL, NULL);
+  return wtext;
+}
+
+int utils::ConvertANSIToUnicode(const char *ansi, wchar_t *unicode, int unicodeBufferSizeInBytes) {
+  int chars = MultiByteToWideChar(CP_UTF8, 0, ansi, -1, unicode, unicodeBufferSizeInBytes / sizeof(wchar_t));
+  unicode[(unicodeBufferSizeInBytes / sizeof(wchar_t)) - 1] = 0;
+  return chars;
+}
+
+int utils::ConvertUnicodeToANSI(const wchar_t *unicode, char *ansi, int ansiBufferSize) {
+  int result = WideCharToMultiByte(CP_UTF8, 0, unicode, -1, ansi, ansiBufferSize, NULL, NULL);
+  ansi[ansiBufferSize - 1] = 0;
+  return result;
+}

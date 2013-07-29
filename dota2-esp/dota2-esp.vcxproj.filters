@@ -66,15 +66,24 @@
     <ClCompile Include="backup\directx-hook.cpp">
       <Filter>Source Files\backup</Filter>
     </ClCompile>
+    <ClCompile Include="commands.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dota\DotaGlobal.cpp">
+      <Filter>Source Files\dota</Filter>
+    </ClCompile>
+    <ClCompile Include="dota\DotaItem.cpp">
+      <Filter>Source Files\dota</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="tools\Injector.exe">
       <Filter>tools</Filter>
     </None>
-    <None Include="tools\dota.bat">
+    <None Include="tools\dota-eject.bat">
       <Filter>tools</Filter>
     </None>
-    <None Include="tools\dota-eject.bat">
+    <None Include="tools\dota-inject.bat">
       <Filter>tools</Filter>
     </None>
   </ItemGroup>
@@ -105,6 +114,12 @@
     </ClInclude>
     <ClInclude Include="source-sdk\netvar.h">
       <Filter>Header Files\source-sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="commands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaItem.h">
+      <Filter>Header Files\dota</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

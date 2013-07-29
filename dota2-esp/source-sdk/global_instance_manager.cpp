@@ -8,3 +8,5 @@ ISurfaceNew* GlobalInstanceManager::surface_new_ = nullptr;
 IPanel* GlobalInstanceManager::panel_ = nullptr;
 ClientTools* GlobalInstanceManager::clienttools_ = nullptr;
 ICvar* GlobalInstanceManager::cvar_ = nullptr;
+Vgui_IInput* GlobalInstanceManager::vgui_input_ = nullptr;
+ILocalize* GlobalInstanceManager::localize_ = nullptr;

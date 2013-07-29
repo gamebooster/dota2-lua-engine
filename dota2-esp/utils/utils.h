@@ -14,6 +14,7 @@ namespace utils {
   HMODULE GetModuleHandleSafe(const char* module_name );
   void Log(const char* format, ...);
   const std::wstring ConvertToWide(const char *text);
+  const std::string ConvertToANSI(const wchar_t *text);
 
   inline void**& GetVtable( void* inst, size_t offset = 0 )
   {
@@ -28,4 +29,6 @@ namespace utils {
   {
     return reinterpret_cast<Fn>( GetVtable( inst, offset )[ index ] );
   }
+  int ConvertANSIToUnicode(const char *ansi, wchar_t *unicode, int unicodeBufferSizeInBytes);
+  int ConvertUnicodeToANSI(const wchar_t *unicode, char *ansi, int ansiBufferSize);
 }

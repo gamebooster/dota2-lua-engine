@@ -62,6 +62,22 @@ public:
     return cvar_;
   };
 
+  static Vgui_IInput* GetVguiInput() {
+    if (vgui_input_ == nullptr) {
+      CreateInterface_t VGUI2Factory = ( CreateInterfaceFn ) GetProcAddress( utils::GetModuleHandleSafe( "vgui2.dll" ), "CreateInterface" );
+      vgui_input_ = ( Vgui_IInput* ) VGUI2Factory( "VGUI_Input005", NULL );
+    }
+    return vgui_input_;
+  };
+
+  static ILocalize* GetLocalize() {
+    if (localize_ == nullptr) {
+      CreateInterface_t VGUI2Factory = ( CreateInterfaceFn ) GetProcAddress( utils::GetModuleHandleSafe( "localize.dll" ), "CreateInterface" );
+      localize_ = ( ILocalize* ) VGUI2Factory( "Localize_001", NULL );
+    }
+    return localize_;
+  };
+
 private:
   static CHLClient* chlclient_;
   static EntityList* centlist_;
@@ -71,4 +87,6 @@ private:
   static IPanel* panel_;
   static ClientTools* clienttools_;
   static ICvar* cvar_;
+  static Vgui_IInput* vgui_input_;
+  static ILocalize* localize_;
 };

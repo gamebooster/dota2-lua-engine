@@ -4,6 +4,89 @@
 #include "..\source-sdk\netvar.h"
 #include "..\utils\utils.h"
 #include "..\source-sdk\global_instance_manager.h"
+#include "DotaItem.h"
+
+class CBaseEntity;
+class CBaseNpc;
+class CAnnouncer;
+class GameSystemsRetriever;
+
+class GameSystemsRetriever {
+public:
+  GameSystemsRetriever() {
+    if (game_systems_ == nullptr) {
+      const uint32_t* pattern_address =  utils::FindPattern(
+        "client.dll",
+        reinterpret_cast<unsigned char*>("\x8B\x0D\x00\x00\x00\x00\x8B\x0C\x99"),
+        "xx????xxx",
+        0x2);
+
+      game_systems_ = (CUtlVector<IGameSystem*>*)pattern_address;
+    }
+  }
+
+  IGameSystem* FindByName(const char* name) {
+    for (int i = 0; i < game_systems_->Count(); i++) {
+      if (strcmp((*game_systems_)[i]->Name(), name) == 0) return (*game_systems_)[i];
+    }
+    return nullptr;
+  }
+  void DumpSystems() {
+    for (int i = 0; i < game_systems_->Count(); i++) {
+      utils::Log("hook: %s 0x%x", (*game_systems_)[i]->Name(), (*game_systems_)[i]);
+    }
+  }
+private:
+  static CUtlVector<IGameSystem*>* game_systems_;
+};
+class CDotaGameManager {
+public:
+  static CDotaGameManager* GetInstance() {
+    if (instance_ == nullptr) {
+      instance_ = (CDotaGameManager*)GameSystemsRetriever().FindByName("CDOTAGameManager");
+    }
+    return instance_;
+  }
+
+  KeyValues* GetItemDataByItemID(int item_id) {
+    KeyValues* items = *(KeyValues**)(this + 0x1c);
+
+    if (items == nullptr) return nullptr;
+    KeyValues* sub = nullptr;
+    for (sub = items->GetFirstSubKey(); ; sub = sub->GetNextKey() ) {
+      if (sub == nullptr) break;
+      if (sub->GetInt("ID", 0) == item_id ) return sub;
+    }
+    return nullptr;
+  }
+private:
+  static CDotaGameManager* instance_;
+};
+
+class CCommandBuffer {
+public:
+  static CCommandBuffer* GetInstance() {
+    if (instance_ == nullptr) {
+      const uint32_t* pattern_address =  utils::FindPattern(
+        "engine.dll",
+        reinterpret_cast<unsigned char*>("\x81\xC7\x00\x00\x00\x00\x8B\x87\x00\x00\x00\x00"),
+        "xx????xx????",
+        0x2);
+
+      instance_ = (CCommandBuffer*)pattern_address;
+    }
+    return instance_;
+  }
+
+  void SetWaitDelayTime(int delay) {
+    *(int*)(this + 0x8040) = delay;
+  }
+  void SetWaitEnabled(bool enabled) {
+    *(bool*)(this + 0x8049) = enabled;
+  }
+private:
+  static CCommandBuffer* instance_;
+};
 
 class CBasePlayer : public CBaseEntity {
 public:
@@ -15,6 +98,72 @@ public:
 
 class CHudElement {
 
+};
+
+class CGameRules {
+public:
+  static CGameRules* GetInstance() {
+    if (instance_ == nullptr) {
+      const uint32_t* pattern_address =  utils::FindPattern(
+        "client.dll",
+        reinterpret_cast<unsigned char*>("\x8B\x0D\x00\x00\x00\x00\x85\xC9\x74\x08\x8B\x01\x8B\x10\x6A\x01\xFF\xD2\x56\xC7\x05\x00\x00\x00\x00\x00\x00\x00\x00"),
+        "xx????xxxxxxxxxxxxxxx????????",
+        0x2);
+
+      instance_ = *(CGameRules**)pattern_address;
+    }
+    return instance_;
+  }
+  float GetGameTime() {
+    int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffsetL("DT_DOTAGamerulesProxy", "dota_gamerules_data", "m_fGameTime");
+    return *(float*)(this + offset);
+  }
+  CAnnouncer* GetAnnouncer(int team_index) {
+    if (get_announcer_address_ == 0) {
+      unsigned long pattern_address = (unsigned long)utils::FindPattern(
+        "client.dll",
+        reinterpret_cast<unsigned char*>("\xE8\x00\x00\x00\x00\x85\xC0\x74\x1F\x38\x98\x00\x00\x00\x00"),
+        "x????xxxxxx????");
+
+      get_announcer_address_ = utils::GetAbsoluteAddress(pattern_address);
+    }
+
+    CAnnouncer* announcer;
+
+    __asm {
+      mov ecx, team_index
+      mov eax, this
+      call get_announcer_address_
+      mov announcer, eax
+    }
+
+    return announcer;
+  }
+  CAnnouncer* GetKillingSpreeAnnouncer(int team_index) {
+    if (get_announcer_killingspree_address_ == 0) {
+      unsigned long pattern_address = (unsigned long)utils::FindPattern(
+        "client.dll",
+        reinterpret_cast<unsigned char*>("\xE8\x00\x00\x00\x00\xEB\x3B\x8B\x0D\x00\x00\x00\x00"),
+        "x????xxxx????");
+
+      get_announcer_killingspree_address_ = utils::GetAbsoluteAddress(pattern_address);
+    }
+
+    CAnnouncer* announcer;
+
+    __asm {
+      mov ecx, team_index
+        mov eax, this
+        call get_announcer_killingspree_address_
+        mov announcer, eax
+    }
+
+    return announcer;
+  }
+private:
+  static CGameRules* instance_;
+  static unsigned long get_announcer_address_;
+  static unsigned long get_announcer_killingspree_address_;
 };
 
 class CHud {
@@ -52,9 +201,6 @@ private:
   static unsigned long find_element_address_;
 };
 
-CHud* CHud::instance_ = nullptr;
-unsigned long CHud::find_element_address_ = 0;
-
 class CMinimap {
 public:
   static void CreateLocationPing(Vector vector, int unknown) {
@@ -83,8 +229,6 @@ public:
 private:
   static unsigned long create_location_ping_address_;
 };
-
-unsigned long CMinimap::create_location_ping_address_ = 0;
 
 class CModifierManager {
 public:
@@ -128,9 +272,6 @@ private:
   static unsigned long get_modifier_constant_address_;
   static unsigned long modifier_default_params_;
 };
-
-unsigned long CModifierManager::get_modifier_constant_address_ = 0;
-unsigned long CModifierManager::modifier_default_params_ = 0;
 
 
 class ParticleManager {
@@ -308,14 +449,6 @@ private:
   static ParticleManager* instance_;
 };
 
-unsigned long ParticleManager::create_particle_address_ = 0;
-unsigned long ParticleManager::set_particle_ent_address_ = 0;
-unsigned long ParticleManager::release_particle_address_ = 0;
-unsigned long ParticleManager::precache_particle_system_adddress_ = 0;
-unsigned long ParticleManager::set_particle_control_address_ = 0;
-unsigned long ParticleManager::destroy_particle_address_ = 0;
-ParticleManager* ParticleManager::instance_ = nullptr;
-
 class CDotaItem : public CBaseEntity {
 public:
   const char* GetName() {
@@ -363,6 +496,18 @@ class CAbility {
 
 class CBaseNpc : public CBaseEntity {
 public:
+  int GetHealth() {
+    int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_iHealth");
+    return *(int*)(this + offset);
+  }
+  float GetMana() {
+    int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_flMana");
+    return *(float*)(this + offset);
+  }
+  float GetMaxMana() {
+    int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_flMaxMana");
+    return *(float*)(this + offset);
+  }
   CUnitInventory* GetInventory() {
     int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_Inventory");
     return (CUnitInventory*)(this + offset);
@@ -453,8 +598,36 @@ private:
   static unsigned long get_attack_range_address_;
 };
 
-unsigned long CBaseNpc::is_entity_in_range_address_ = 0;
-unsigned long CBaseNpc::get_attack_range_address_ = 0;
+class CAnnouncer : public CBaseNpc {
+public:
+  void SetAnnouncerItem(EconItemView* item, bool unknown0) {
+    if (set_announcer_item_address_ == 0) {
+      unsigned long pattern_address = (unsigned long)utils::FindPattern(
+        "client.dll",
+        reinterpret_cast<unsigned char*>("\xE8\x00\x00\x00\x00\xEB\x2F\x68\x00\x00\x00\x00"),
+        "x????xxx????");
+
+      set_announcer_item_address_ = utils::GetAbsoluteAddress(pattern_address);
+    }
+
+    __asm {
+      mov ecx, item
+        mov esi, this
+        mov al, unknown0
+        call set_announcer_item_address_
+    }
+  }
+private:
+  static unsigned long set_announcer_item_address_;
+};
+
+class CBaseNpcHero : public CBaseNpc {
+public:
+  bool IsIllusion() {
+    int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC_Hero","m_hReplicatingOtherHeroModel");
+    return *(int*)(this + offset) <= 0;
+  }
+};
 
 class CDotaPlayer : public CBasePlayer {
 public:
@@ -481,9 +654,9 @@ public:
 
     return LocalPlayerSelectedUnit();
   }
-  int16_t GetAssignedHero() {
+  int16 GetAssignedHero() {
     int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTAPlayer","m_hAssignedHero");
-    return *reinterpret_cast<int16_t*>(this + offset);
+    return *reinterpret_cast<int16*>(this + offset);
   }
 
   void ShowRingEffect(CBaseNpc* npc, Vector const& vector, int unknown0, int unknown1) {
@@ -544,8 +717,3 @@ private:
   static unsigned long set_click_behaviour_address;
   static unsigned long show_ring_effect_address;
 };
-
-unsigned long CDotaPlayer::prepare_unit_orders_address = 0;
-unsigned long CDotaPlayer::show_ring_effect_address = 0;
-unsigned long CDotaPlayer::set_click_behaviour_address = 0;
-unsigned long CDotaPlayer::get_local_selected_unit_address = 0;

@@ -12,71 +12,21 @@
 #include "source-sdk\draw_utils.h"
 #include "source-sdk\global_instance_manager.h"
 
-DWORD health_offset;
-DWORD mana_offset;
-DWORD max_mana_offset;
-DWORD other_hero_model_offset;
-DWORD game_time_offset;
-DWORD game_rules_address;
+#include "commands.h"
 
 static utils::VMTManager* panel_hook;
 static utils::VMTManager* client_hook;
+static utils::VMTManager* input_hook;
+static HANDLE thread = nullptr;
 
 static std::set<CDotaItem*> items;
 void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface);
+void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName );
+bool __fastcall IsKeyDown(void* thisptr, int edx, int key_code );
 
 static bool active_thread = true;
+bool simulate_shift_down = false;
 DWORD WINAPI LastHitThread( LPVOID lpArguments );
-
-
-void FillOffsets() {
-	health_offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_iHealth");
-	mana_offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_flMana");
-	max_mana_offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_flMaxMana");
-	other_hero_model_offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC_Hero","m_hReplicatingOtherHeroModel");
-	game_time_offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffsetL("DT_DOTAGamerulesProxy", "dota_gamerules_data", "m_fGameTime");
-	game_rules_address = (DWORD)utils::FindPattern(
-    "client.dll",
-    reinterpret_cast<unsigned char*>("\x8B\x0D\x00\x00\x00\x00\x85\xC9\x74\x08\x8B\x01\x8B\x10\x6A\x01\xFF\xD2\x56\xC7\x05\x00\x00\x00\x00\x00\x00\x00\x00"),
-    "xx????xxxxxxxxxxxxxxx????????",
-    0x2);
-}
-
-void SetAnnouncer( void ) {
-  Msg("This is my SetAnnouncer\n");
-}
-
-void SetKillstreakAnnouncer( void ) {
-  Msg("This is my SetKillstreakAnnouncer\n");
-}
-
-void SetHud( void ) {
-  Msg("This is my SetHud\n");
-}
-
-CON_COMMAND( set_var, "Change cvar value" )
-{
-  if ( args.ArgC() < 3 )
-  {
-    Msg("Usage: set_var <cvarname> <value>\n");
-    return;
-  }
-  ConVar* temp = g_pCVar->FindVar(args.Arg(1));
-  temp->SetValue(atoi(args.Arg(2)));
-}
-
-
-static ConVar dota_esp_draw( "dota_esp_draw", "1", FCVAR_NONE, "Draw the esp" );
-static ConCommand announcer_command( "announcer_set", SetAnnouncer, "Set the announcer");
-static ConCommand announcer_killstreak_command( "announcer_killstreak_set", SetKillstreakAnnouncer, "Set the killstreak announcer");
-static ConCommand hud_command("hud_set", SetHud, "Set the hud");
-
-void __fastcall Hooked_LevelInitPreEntity(void* thisptr, int edx, char const* pMapName ) {
-  typedef void ( __thiscall* OriginalFunction )(void*, char const*);
-  client_hook->GetMethod<OriginalFunction>(4)(thisptr, pMapName);
-
-  items.clear();
-}
 
 DWORD WINAPI InitializeHook( LPVOID lpArguments ) {
 	while(utils::GetModuleHandleSafe("engine.dll" ) == NULL
@@ -85,24 +35,34 @@ DWORD WINAPI InitializeHook( LPVOID lpArguments ) {
 		Sleep( 100 );
   }
 
-  FillOffsets();
-
   panel_hook = new utils::VMTManager(CHud::GetInstance()->FindElement("CHudHealthBars"), 0x34);
   panel_hook->HookMethod(CHudHealthBars_Paint, 107);
 
   client_hook = new utils::VMTManager(GlobalInstanceManager::GetClient());
-  client_hook->HookMethod(Hooked_LevelInitPreEntity, 4);
+  client_hook->HookMethod(LevelInitPreEntity, 4);
 
   g_pCVar = (ICvar*)GlobalInstanceManager::GetCVar();
+  Vgui_IInput* input = GlobalInstanceManager::GetVguiInput();
+  
+  input_hook = new utils::VMTManager(input);
+  input_hook->HookMethod(IsKeyDown, 18);
 
-  GlobalInstanceManager::GetCVar()->RegisterConCommand(&dota_esp_draw); 
-  GlobalInstanceManager::GetCVar()->RegisterConCommand(&announcer_command); 
-  GlobalInstanceManager::GetCVar()->RegisterConCommand(&announcer_killstreak_command); 
-  GlobalInstanceManager::GetCVar()->RegisterConCommand(&hud_command);
+  CCommandBuffer::GetInstance()->SetWaitEnabled(true);
+
+  GameSystemsRetriever().DumpSystems();
+
+  commands::Register();
 
   // CreateThread( NULL, 0, LastHitThread, 0, 0, NULL);  
 
 	return 1; 
+}
+bool __fastcall IsKeyDown(void* thisptr, int edx, int key_code ) {
+  typedef bool ( __thiscall* OriginalFunction )(void*, int code);
+  if (key_code == 0x50 || key_code == 0x51) {
+    if (simulate_shift_down) return true;
+  }
+  return input_hook->GetMethod<OriginalFunction>(18)(thisptr, key_code);
 }
 
 DWORD WINAPI LastHitThread( LPVOID lpArguments ) {
@@ -147,7 +107,7 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
   typedef void ( __thiscall* OriginalFunction )(PVOID, PVOID);
   panel_hook->GetMethod<OriginalFunction>(107)(thisptr, guipaintsurface);
 
-  //if (esp.GetBool() == false) return;
+  if (commands::dota_esp_draw.GetBool() == false) return;
 
   int offset_counter = 0;
 
@@ -188,7 +148,7 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
         offset_counter++;
       }
 
-      CBaseNpc* hero = (CBaseNpc*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(dota_player->GetAssignedHero());
+      CBaseNpcHero* hero = (CBaseNpcHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(dota_player->GetAssignedHero());
       if (hero == nullptr) continue;
 
 
@@ -200,18 +160,32 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
         if (item == nullptr) continue;
         if (items.count(item) == 0) {
           std::wstring message = L" bought ";
-          message.append(utils::ConvertToWide(item->GetName()));
+          CDotaGameManager* game_manager = CDotaGameManager::GetInstance();
+          if (game_manager == nullptr) return;
+          KeyValues* item_data = game_manager->GetItemDataByItemID(item->GetItemId());
+          if (item_data == nullptr) {
+            message.append(utils::ConvertToWide(item->GetName()));
+          } else {
+            std::string name = "#DOTA_Tooltip_Ability_";
+            name.append(item_data->GetString("AbilityName"));
+            std::string::size_type found = name.find("recipe_");
+            if (found != std::string::npos) {
+              name.erase(found, 7);
+              message.append(L"Recipe ");
+            }
+            message.append(GlobalInstanceManager::GetLocalize()->Find(name.c_str()));
+          }
           chat->MessagePrintf(0, message.c_str(), player_id, 0, GlobalInstanceManager::GetEngineClient()->Time());
 
           items.insert(item);
         } 
       }
         
-      int health = hero->GetValueWithOffset<int>(health_offset);
+      int health = hero->GetHealth();
 
-      float manaMax = hero->GetValueWithOffset<float>(max_mana_offset);
+      float manaMax = hero->GetMaxMana();
       if (manaMax == 0) continue;
-      float mana = hero->GetValueWithOffset<float>(mana_offset);
+      float mana = hero->GetMana();
 
       int barWidth = 100;
       int lifeWidth = (int)(mana*100/manaMax);
@@ -231,6 +205,13 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
   
 }
 
+void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName ) {
+  typedef void ( __thiscall* OriginalFunction )(void*, char const*);
+  client_hook->GetMethod<OriginalFunction>(4)(thisptr, pMapName);
+
+  items.clear();
+}
+
 void FinalizeHook() {
   if (panel_hook != nullptr) {
     panel_hook->Unhook();
@@ -240,23 +221,22 @@ void FinalizeHook() {
     client_hook->Unhook();
     delete client_hook;
   }
+  if (input_hook != nullptr) {
+    input_hook->Unhook();
+    delete input_hook;
+  }
   active_thread = false;
-  GlobalInstanceManager::GetCVar()->UnregisterConCommand(&dota_esp_draw); 
-  GlobalInstanceManager::GetCVar()->UnregisterConCommand(&announcer_command); 
-  GlobalInstanceManager::GetCVar()->UnregisterConCommand(&announcer_killstreak_command); 
-  GlobalInstanceManager::GetCVar()->UnregisterConCommand(&hud_command); 
+  commands::Unregister();
   Sleep(500);
 }
 
 int WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
-  HANDLE thread = nullptr;
-
   if( DLL_PROCESS_ATTACH == fdwReason ) {
     thread = CreateThread( NULL, 0, InitializeHook, 0, 0, NULL);  
   } else if (DLL_PROCESS_DETACH == fdwReason) {
     WaitForSingleObject(thread, INFINITE);
     CloseHandle(thread);
     FinalizeHook();
-	}
-	return 1;
+  }
+  return 1;
 }
