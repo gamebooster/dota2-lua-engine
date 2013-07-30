@@ -1,8 +1,15 @@
 #include "DotaGlobal.h"
 
+const Vector vec3_invalid(FLT_MAX, FLT_MAX, FLT_MAX);
+const Vector vec3_origin(0,0,0);
+
 unsigned long CGameRules::get_announcer_address_ = 0;
 unsigned long CGameRules::get_announcer_killingspree_address_ = 0;
 CGameRules* CGameRules::instance_ = nullptr;
+
+unsigned long CParticleProperty::create_particle_address_ = 0;
+unsigned long CParticleProperty::stop_and_destroy_particle_address_ = 0;
+unsigned long CNewParticleEffect::set_control_point_address_ = 0;
 
 CHud* CHud::instance_ = nullptr;
 unsigned long CHud::find_element_address_ = 0;

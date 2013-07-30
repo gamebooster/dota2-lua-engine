@@ -6,6 +6,7 @@
 #define COMPILER_MSVC64
 
 #include "dt_recv.h"
+#include "mathlib\vector.h"
 #include "tier1\KeyValues.h"
 #include "tier1\convar.h"
 
@@ -151,6 +152,10 @@ public:
 
 class CBaseEntity {
 public:
+  int ComputeTranslucencyType() {
+    typedef int ( __thiscall* OriginalFn )(void*);
+    return utils::GetVtableFunction<OriginalFn>(this, 100)(this);
+  }
   bool IsAlive() {
     typedef bool ( __thiscall* OriginalFn )(void*);
     return utils::GetVtableFunction<OriginalFn>(this, 147)(this);

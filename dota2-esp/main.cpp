@@ -20,6 +20,7 @@ static utils::VMTManager* input_hook;
 static HANDLE thread = nullptr;
 
 static std::set<CDotaItem*> items;
+static std::set<CBaseNpcHero*> illusions;
 void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface);
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName );
 bool __fastcall IsKeyDown(void* thisptr, int edx, int key_code );
@@ -52,6 +53,18 @@ DWORD WINAPI InitializeHook( LPVOID lpArguments ) {
   GameSystemsRetriever().DumpSystems();
 
   commands::Register();
+
+  dota::DotaPlayerResource* player_resource = dota::DotaPlayerResource::GetPlayerResource();
+  if (player_resource == nullptr) return 1;
+  Msg("player_resource: 0x%x \n", player_resource);
+
+  CDotaPlayer* local_player = (CDotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
+  if (local_player == nullptr) return 1;
+  Msg("local_player: 0x%x \n", local_player);
+
+  CBaseNpcHero* local_hero = (CBaseNpcHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(local_player->GetAssignedHero());
+  if (local_hero == nullptr) return 1;
+  Msg("local_hero: 0x%x \n", local_hero);
 
   // CreateThread( NULL, 0, LastHitThread, 0, 0, NULL);  
 
@@ -103,6 +116,9 @@ DWORD WINAPI LastHitThread( LPVOID lpArguments ) {
   return 1;
 }
 
+
+static CNewParticleEffect* effect = nullptr;
+
 void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface) {
   typedef void ( __thiscall* OriginalFunction )(PVOID, PVOID);
   panel_hook->GetMethod<OriginalFunction>(107)(thisptr, guipaintsurface);
@@ -114,8 +130,24 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
   dota::DotaPlayerResource* player_resource = dota::DotaPlayerResource::GetPlayerResource();
   if (player_resource == nullptr) return;
 
-  CBasePlayer* local_player = (CBasePlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
+  CDotaPlayer* local_player = (CDotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
   if (local_player == nullptr) return;
+
+  CBaseNpcHero* local_hero = (CBaseNpcHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(local_player->GetAssignedHero());
+  if (local_hero == nullptr) return;
+  if (local_hero->IsVisibleByEnemyTeam()) {
+    if (effect == nullptr) {
+      effect = local_hero->GetParticleProp()->Create("rune_haste", 1, -1);
+      effect->SetControlPoint(0, local_hero->GetAbsOrigin());
+      Vector vector2( 100, 0, 0);
+      effect->SetControlPoint(1, vector2);
+    }
+  } else {
+    if (effect != nullptr) {
+      local_hero->GetParticleProp()->StopEmissionAndDestroyImmediately(effect);
+      effect = nullptr;
+    }
+  }
 
   dota::DotaChat* chat = dota::DotaChat::GetInstance();
   if (chat == nullptr) return;
@@ -123,13 +155,26 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
   int local_player_id = local_player->GetPlayerId();
   int local_team =  player_resource->GetTeam(local_player_id);
 
-  for (int i = 1; i < 11; i++ ) {
+  for (int i = 1; i < GlobalInstanceManager::GetClientEntityList()->GetHighestEntityIndex(); i++ ) {
     CBaseEntity *base_entity = GlobalInstanceManager::GetClientEntityList()->GetClientEntity(i);
     if (base_entity == nullptr) continue;
 
     const char* class_name = base_entity->GetClientClass()->GetName();
+    if (class_name == nullptr) continue;
 
-    if (class_name[1] == 'D' && class_name[5] == 'P' && class_name[8] == 'y') { // CDOTAPlayer
+    if (StringHasPrefix(class_name, "CDOTA_Unit_Hero_")) {
+      CBaseNpcHero* hero = (CBaseNpcHero*)base_entity;
+      if (hero == nullptr) continue;
+
+      if (hero->IsIllusion() && illusions.count(hero) == 0) {
+        CNewParticleEffect* ghost_effect = hero->GetParticleProp()->Create("ghost", 1, -1);
+        Vector vector2(200, 0, 0);
+        ghost_effect->SetControlPoint(1, vector2);
+        illusions.insert(hero);
+      }
+    }
+
+    if (V_stricmp("CDOTAPlayer", class_name) == 0) { // CDOTAPlayer
       CDotaPlayer *dota_player = (CDotaPlayer *) base_entity;
       int player_id = dota_player->GetPlayerId();
 
@@ -152,7 +197,6 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
 
       CBaseNpcHero* hero = (CBaseNpcHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(dota_player->GetAssignedHero());
       if (hero == nullptr) continue;
-
 
       CUnitInventory* inventory = hero->GetInventory();
       if (inventory == nullptr) continue;
@@ -187,6 +231,8 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
           items.insert(item);
         } 
       }
+
+
         
       int health = hero->GetHealth();
 
@@ -235,6 +281,15 @@ void FinalizeHook() {
   }
   active_thread = false;
   commands::Unregister();
+  if (effect != nullptr) {
+    CDotaPlayer* local_player = (CDotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
+    if (local_player == nullptr) return;
+
+    CBaseNpcHero* local_hero = (CBaseNpcHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(local_player->GetAssignedHero());
+    if (local_hero == nullptr) return;
+    local_hero->GetParticleProp()->StopEmissionAndDestroyImmediately(effect);
+    effect = nullptr;
+  }
   Sleep(500);
 }
 

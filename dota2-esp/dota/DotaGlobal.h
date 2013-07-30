@@ -11,6 +11,95 @@ class CBaseNpc;
 class CAnnouncer;
 class GameSystemsRetriever;
 
+class CNewParticleEffect {
+public:
+  void SetControlPoint(int unknown, Vector const& vector2) {
+    if (set_control_point_address_ == 0) {
+      unsigned long pattern_address = (unsigned long)utils::FindPattern(
+        "client.dll",
+        reinterpret_cast<unsigned char*>("\xE8\x00\x00\x00\x00\x83\x44\x24\x10\x04"),
+        "x????xxxxx");
+
+      set_control_point_address_ = utils::GetAbsoluteAddress(pattern_address);
+      if (set_control_point_address_ == 0) {
+        utils::Log("hook: ParticlePoperty::SetControlPoint");
+        return;
+      }
+    }
+
+    Vector vector = vector2;
+
+    __asm {
+      lea esi, [vector]
+      push unknown
+      mov edi, this
+      call set_control_point_address_
+    }
+  }
+private:
+  static unsigned long set_control_point_address_;
+};
+
+class CParticleProperty {
+public:
+  void StopEmissionAndDestroyImmediately(CNewParticleEffect* effect) {
+    if (stop_and_destroy_particle_address_ == 0) {
+      unsigned long pattern_address = (unsigned long)utils::FindPattern(
+        "client.dll",
+        reinterpret_cast<unsigned char*>("\xE8\x00\x00\x00\x00\xC7\x86\x20\x32\x00\x00\x00\x00\x00\x00"),
+        "x????xxxxxxxxxx");
+
+      stop_and_destroy_particle_address_ = utils::GetAbsoluteAddress(pattern_address);
+      if (stop_and_destroy_particle_address_ == 0) {
+        utils::Log("hook: ParticleProperty::StopAndDestroyError");
+        return;
+      }
+    }
+    __asm {
+      mov eax, effect
+      mov ecx, this
+      call stop_and_destroy_particle_address_
+    }
+  }
+  CNewParticleEffect* Create(char const* name, int particle_attachment, int attachment_point, Vector vector = vec3_origin) {
+    if (create_particle_address_ == 0) {
+      unsigned long pattern_address = (unsigned long)utils::FindPattern(
+        "client.dll",
+        reinterpret_cast<unsigned char*>("\xE8\x00\x00\x00\x00\x8D\x0C\x5B"),
+        "x????xxx");
+
+      create_particle_address_ = utils::GetAbsoluteAddress(pattern_address);
+      if (create_particle_address_ == 0) {
+        utils::Log("hook: ParticlePoperty::CreateError");
+        return 0;
+      }
+    }
+
+    CNewParticleEffect* effect = nullptr;
+
+    float x = vector.x;
+    float y = vector.y;
+    float z = vector.z;
+
+    __asm {
+      push z
+      push y
+      push x
+      push attachment_point
+      push particle_attachment
+      push this
+      mov eax, name
+      call create_particle_address_
+      mov effect, eax
+    }
+
+    return effect;
+  }
+private:
+  static unsigned long create_particle_address_;
+  static unsigned long stop_and_destroy_particle_address_;
+};
+
 class GameSystemsRetriever {
 public:
   GameSystemsRetriever() {
@@ -491,12 +580,8 @@ public:
   }
   static ParticleManager* ParticleManager::GetInstance() {
     if (instance_ == nullptr) {
-      const uint32_t* pattern_address =  utils::FindPattern(
-        "client.dll",
-        reinterpret_cast<unsigned char*>("\x8B\x3D\x00\x00\x00\x00\x8B\xCB\xFF\xD2"),
-        "xx????xxxx",
-        0x2);
-        instance_ = *(ParticleManager**)pattern_address;
+        unsigned long system = (unsigned long)GameSystemsRetriever().FindByName("CDOTA_ParticleManagerSystem");
+        instance_ = *(ParticleManager**)(system + 0xC);
     }
     return instance_;
   }
@@ -557,9 +642,32 @@ class CAbility {
 
 class CBaseNpc : public CBaseEntity {
 public:
+  CParticleProperty* GetParticleProp() {
+    PVOID pParticleProp = (PVOID)(this + 0x10);
+    typedef CParticleProperty* ( __thiscall* OriginalFn )( PVOID );
+    return utils::GetVtableFunction<OriginalFn>( pParticleProp, 0 )( pParticleProp );
+  }
+  float GetEffectiveInvisibilityLevel() {
+    typedef float ( __thiscall* OriginalFn )( PVOID );
+    return utils::GetVtableFunction<OriginalFn>(this, 277)(this);
+  }
+  bool IsVisibleByEnemyTeam() {
+    int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_iTaggedAsVisibleByTeam");
+    return *(byte*)(this + offset) == 30;
+  }
   int GetHealth() {
     int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_iHealth");
     return *(int*)(this + offset);
+  }
+  float GetVisibilityLevel() {
+    int offset = 0x3160;
+    return *(float*)(this + offset);
+  }
+  void SetVisibilityLevel(float level) {
+    int offset = 0x3160;
+    *(float*)(this + offset) = level;
+    *(float*)(this + 0x118C) = level > 0 ? 1 : 0;
+    GetEffectiveInvisibilityLevel();
   }
   float GetMana() {
     int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_flMana");
@@ -686,7 +794,7 @@ class CBaseNpcHero : public CBaseNpc {
 public:
   bool IsIllusion() {
     int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC_Hero","m_hReplicatingOtherHeroModel");
-    return *(int*)(this + offset) <= 0;
+    return *(int*)(this + offset) != -1;
   }
 };
 
