@@ -37,6 +37,12 @@
     <Filter Include="Source Files\backup">
       <UniqueIdentifier>{3bbfd77c-e22f-4f99-98fb-149a8a394678}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\lua">
+      <UniqueIdentifier>{e5a86e9d-40eb-4ff9-835c-e13baca48236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lua">
+      <UniqueIdentifier>{c1d6319b-d0db-4fd3-9d69-f330d473b320}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,9 +69,6 @@
     <ClCompile Include="source-sdk\netvar.cpp">
       <Filter>Source Files\source-sdk</Filter>
     </ClCompile>
-    <ClCompile Include="backup\directx-hook.cpp">
-      <Filter>Source Files\backup</Filter>
-    </ClCompile>
     <ClCompile Include="commands.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -74,6 +77,24 @@
     </ClCompile>
     <ClCompile Include="dota\DotaItem.cpp">
       <Filter>Source Files\dota</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lua_state.cpp">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="precompiled_headers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lua_global.cpp">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="source-sdk\SDK.cpp">
+      <Filter>Source Files\source-sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="lua\lua_engine.cpp">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\global_address_retriever.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +107,7 @@
     <None Include="tools\dota-inject.bat">
       <Filter>tools</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source-sdk\SDK.h">
@@ -115,10 +137,55 @@
     <ClInclude Include="source-sdk\netvar.h">
       <Filter>Header Files\source-sdk</Filter>
     </ClInclude>
-    <ClInclude Include="commands.h">
+    <ClInclude Include="dota\DotaItem.h">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\lua_state.hpp">
+      <Filter>Header Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\lua_global.hpp">
+      <Filter>Header Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="commands.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dota\DotaItem.h">
+    <ClInclude Include="precompiled_headers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source-sdk\game_event_listener.h">
+      <Filter>Header Files\source-sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\lua_game_event_listener.hpp">
+      <Filter>Header Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="lua\lua_engine.hpp">
+      <Filter>Header Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\global_address_retriever.hpp">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaGameRules.hpp">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaHud.hpp">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaUnits.hpp">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaParticle.hpp">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaPlayer.hpp">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaParticleManager.hpp">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaMinimap.hpp">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaModifierManager.hpp">
       <Filter>Header Files\dota</Filter>
     </ClInclude>
   </ItemGroup>

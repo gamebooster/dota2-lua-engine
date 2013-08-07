@@ -1,15 +1,5 @@
 #pragma once
 
-// extern source sdk
-
-#define COMPILER_MSVC
-#define COMPILER_MSVC64
-
-#include "dt_recv.h"
-#include "mathlib\vector.h"
-#include "tier1\KeyValues.h"
-#include "tier1\convar.h"
-
 #include "..\utils\utils.h"
 
 using namespace std;
@@ -19,36 +9,18 @@ typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
 
 typedef struct player_info_s
 {
-	unsigned __int64			xuid;
-	char			name[32];
-	int				userID;
-	char			guid[33];
-	unsigned long	friendsID;
-	char			friendsName[32];
-	bool			fakeplayer;
-	bool			ishltv;
-	unsigned long	customFiles[4];
-	unsigned char	filesDownloaded;
+  unsigned __int64			xuid;
+  char			name[32];
+  int				userID;
+  char			guid[33];
+  unsigned long	friendsID;
+  char			friendsName[32];
+  bool			fakeplayer;
+  bool			ishltv;
+  unsigned long	customFiles[4];
+  unsigned char	filesDownloaded;
 } player_info_t;
 
-class ClientClass {
- public:
-	const char* GetName( void ) {
-		return *(char**)(this + 0x8);
-	}
-	RecvTable* GetTable( )
-	{
-		return *(RecvTable**)(this + 0xC);
-	}
-	ClientClass* NextClass( )
-	{
-		return *(ClientClass**)(this + 0x10);
-	}
-	int GetClassID( void )
-	{
-		return *(int*)(this + 0x14);
-	}
-};
 
 abstract_class IGameSystem
 {
@@ -117,6 +89,25 @@ public:
   static void PostRenderAllSystems();
 };
 
+class ClientClass {
+ public:
+	const char* GetName( void ) {
+		return *(char**)(this + 0x8);
+	}
+	RecvTable* GetTable( )
+	{
+		return *(RecvTable**)(this + 0xC);
+	}
+	ClientClass* NextClass( )
+	{
+		return *(ClientClass**)(this + 0x10);
+	}
+	int GetClassID( void )
+	{
+		return *(int*)(this + 0x14);
+	}
+};
+
 class ClientTools {
 public:
   void* GetLocalPlayer()
@@ -152,6 +143,10 @@ public:
 
 class CBaseEntity {
 public:
+  const CBaseHandle& GetRefEHandle() {
+    typedef CBaseHandle& ( __thiscall* OriginalFn )(void*);
+    return utils::GetVtableFunction<OriginalFn>(this, 2)(this);
+  }
   int ComputeTranslucencyType() {
     typedef int ( __thiscall* OriginalFn )(void*);
     return utils::GetVtableFunction<OriginalFn>(this, 100)(this);
@@ -343,6 +338,7 @@ class EntityList {
 };
 
 class Vgui_IInput {
+public:
   bool IsKeyDown( int key_code ) {
     typedef int ( __thiscall* OriginalFn )( PVOID, int );
     return utils::GetVtableFunction<OriginalFn>( this, 18 )( this, key_code );

@@ -1,25 +1,16 @@
+#include "precompiled_headers.h"
+
 #include "DotaPlayerResource.h"
 
 #include "..\utils\utils.h"
 #include "..\source-sdk\SDK.h"
 #include "..\source-sdk\netvar.h"
+#include "..\utils\global_address_retriever.hpp"
 
 namespace dota {
-  DWORD DotaPlayerResource::get_player_name_address_ = 0;
-  unsigned long DotaPlayerResource::get_player_selected_hero_address_ = 0;
-  DotaPlayerResource* DotaPlayerResource::player_resource_ = nullptr;
 
   DotaPlayerResource* DotaPlayerResource::GetPlayerResource() {
-    if (player_resource_ != nullptr) return player_resource_;
-
-    const uint32_t* pattern_address =  utils::FindPattern(
-      "client.dll",
-      reinterpret_cast<unsigned char*>("\x77\x0F\x8B\x15\x00\x00\x00\x00\x8B\x44\x24\x1C"),
-      "xxxx????xxxx",
-      0x4);
-
-    player_resource_ = *(dota::DotaPlayerResource**)pattern_address;
-    return player_resource_;
+    return *(DotaPlayerResource**)GlobalAddressRetriever::GetInstance().GetDynamicAddress("PlayerResource");
   }
 
   int DotaPlayerResource::GetLevel(int index) {
@@ -75,43 +66,27 @@ namespace dota {
   }
 
   const char* DotaPlayerResource::GetPlayerName(int index) {
-    if (get_player_name_address_ == 0) {
-      unsigned long GetPlayerNameAddress = (unsigned long)utils::FindPattern(
-        _T("client.dll"),
-        reinterpret_cast<unsigned char*>("\xE8\x00\x00\x00\x00\x8B\x4D\xFC\x89\x45\xC0"),
-        "x????xxxxxx");
-
-      get_player_name_address_ = utils::GetAbsoluteAddress(GetPlayerNameAddress);
-    }
+    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("DotaPlayerResource::GetPlayerName");
 
     const char* name = nullptr;
 
     __asm {
-      pushad
       mov esi, this
       mov eax, index
-      call [get_player_name_address_]
-      mov [name], eax
-      popad
+      call address
+      mov name, eax
     }
     return name;
   }
 
   const char* DotaPlayerResource::GetPlayerSelectedHero(int index) {
-    if (get_player_selected_hero_address_ == 0) {
-      unsigned long pattern_address = (unsigned long)utils::FindPattern(
-        _T("client.dll"),
-        reinterpret_cast<unsigned char*>("\xE8\x00\x00\x00\x00\x8B\x0D\x00\x00\x00\x00\x8B\x57\x2C\x50"),
-        "x????xx????xxxx");
-
-      get_player_selected_hero_address_ = utils::GetAbsoluteAddress(pattern_address);
-    }
+    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("DotaPlayerResource::GetPlayerSelectedHero");
 
     const char* name = nullptr;
 
     __asm {
       mov eax, index
-      call get_player_selected_hero_address_
+      call address
       mov [name], eax
     }
     return name;

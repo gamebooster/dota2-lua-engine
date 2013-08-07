@@ -380,7 +380,7 @@ enum Collision_Group_t
 	LAST_SHARED_COLLISION_GROUP
 };
 
-#include "basetypes.h"
+#include "tier0\basetypes.h"
 
 #define SOUND_NORMAL_CLIP_DIST	1000.0f
 

@@ -1,3 +1,5 @@
+#include "precompiled_headers.h"
+
 #include "global_instance_manager.h"
 
 CHLClient* GlobalInstanceManager::chlclient_ = nullptr;
@@ -10,3 +12,4 @@ ClientTools* GlobalInstanceManager::clienttools_ = nullptr;
 ICvar* GlobalInstanceManager::cvar_ = nullptr;
 Vgui_IInput* GlobalInstanceManager::vgui_input_ = nullptr;
 ILocalize* GlobalInstanceManager::localize_ = nullptr;
+IGameEventManager2* GlobalInstanceManager::game_event_manager_ = nullptr;

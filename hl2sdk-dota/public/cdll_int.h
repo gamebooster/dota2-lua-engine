@@ -10,11 +10,11 @@
 #pragma once
 #endif
 
-#include "basetypes.h"
-#include "interface.h"
+#include "tier0\basetypes.h"
+#include "tier1\interface.h"
 #include "mathlib/mathlib.h"
 #include "const.h"
-#include "checksum_crc.h"
+#include "tier1\checksum_crc.h"
 #include "datamap.h"
 #include "tier1/bitbuf.h"
 #include "inputsystem/ButtonCode.h"
@@ -22,7 +22,7 @@
 #include "toolframework/itoolentity.h"
 
 #if !defined( _X360 )
-#include "xbox/xboxstubs.h"
+#include "xboxstubs.h"
 #endif
 
 //-----------------------------------------------------------------------------

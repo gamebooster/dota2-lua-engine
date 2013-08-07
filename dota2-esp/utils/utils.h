@@ -1,9 +1,5 @@
 #pragma once
 
-#include <stdint.h>
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <string>
 
 namespace utils {
   const unsigned char* FindPattern(const void* address, size_t size, const unsigned char* signature, const char* mask);
@@ -11,6 +7,8 @@ namespace utils {
   const uint32_t* FindPattern(const char* module_name, const unsigned char* signature, const char* mask, int offset);
   uint32_t GetAbsoluteAddress(uint32_t relative_address);
   size_t GetModuleSize(const char* module_name);
+  std::string GetModulePath(HMODULE module);
+  HMODULE GetCurrentModule();
   HMODULE GetModuleHandleSafe(const char* module_name );
   void Log(const char* format, ...);
   const std::wstring ConvertToWide(const char *text);
@@ -31,4 +29,5 @@ namespace utils {
   }
   int ConvertANSIToUnicode(const char *ansi, wchar_t *unicode, int unicodeBufferSizeInBytes);
   int ConvertUnicodeToANSI(const wchar_t *unicode, char *ansi, int ansiBufferSize);
+    std::string GetModuleDirectory();
 }

@@ -12,7 +12,7 @@
 #endif
 
 #include "mathlib/mathlib.h"
-#include "interface.h"
+#include "tier1\interface.h"
 #include "iclientunknown.h"
 #include "client_render_handle.h"
 #include "engine/ivmodelrender.h"

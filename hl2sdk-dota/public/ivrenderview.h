@@ -11,9 +11,9 @@
 #pragma once
 #endif
 
-#include "basetypes.h"
+#include "tier0\basetypes.h"
 #include "mathlib/vplane.h"
-#include "interface.h"
+#include "tier1\interface.h"
 #include "materialsystem/imaterialsystem.h"
 #include "const.h"
 #include "tier1/refcount.h"

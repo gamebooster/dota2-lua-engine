@@ -77,6 +77,13 @@ public:
     }
     return localize_;
   };
+  static IGameEventManager2* GetGameEventManager() {
+    if (game_event_manager_ == nullptr) {
+      CreateInterface_t EngineFactory = ( CreateInterfaceFn ) GetProcAddress( utils::GetModuleHandleSafe( "engine.dll" ), "CreateInterface" );
+      game_event_manager_ = ( IGameEventManager2* ) EngineFactory( "GAMEEVENTSMANAGER002", NULL );
+    }
+    return game_event_manager_;
+  };
 
 private:
   static CHLClient* chlclient_;
@@ -89,4 +96,5 @@ private:
   static ICvar* cvar_;
   static Vgui_IInput* vgui_input_;
   static ILocalize* localize_;
+  static IGameEventManager2* game_event_manager_;
 };

@@ -1,3 +1,5 @@
+#include "precompiled_headers.h"
+
 #include "netvar.h"
 #include "global_instance_manager.h"
 

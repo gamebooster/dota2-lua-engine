@@ -1,3 +1,5 @@
+#include "precompiled_headers.h"
+
 #include "utils.h"
 
 #include <stdint.h>
@@ -133,4 +135,29 @@ int utils::ConvertUnicodeToANSI(const wchar_t *unicode, char *ansi, int ansiBuff
   int result = WideCharToMultiByte(CP_UTF8, 0, unicode, -1, ansi, ansiBufferSize, NULL, NULL);
   ansi[ansiBufferSize - 1] = 0;
   return result;
+}
+
+std::string utils::GetModulePath(HMODULE module) {
+  char path[MAX_PATH];
+  GetModuleFileName(module, path, MAX_PATH);
+  return std::string(path);
+}
+
+ extern "C" IMAGE_DOS_HEADER __ImageBase;
+
+HMODULE utils::GetCurrentModule() {
+ return (HINSTANCE)&__ImageBase;
+}
+
+std::string utils::GetModuleDirectory() {
+  std::string module_path_with_filename = utils::GetModulePath(utils::GetCurrentModule());
+  char module_drive[_MAX_DRIVE];
+  char module_dir[_MAX_DIR];
+
+  _splitpath(module_path_with_filename.c_str(), module_drive, module_dir, NULL, NULL);
+
+  std::string module_path(module_drive);
+  module_path += module_dir;
+
+  return module_path;
 }

@@ -73,8 +73,8 @@
     <LibraryPath>C:\Users\bogus\Documents\GitHub\dxhook-master\AntTweakBar\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>..\hl2sdk-dota\lib\public;$(LibraryPath)</LibraryPath>
-    <IncludePath>..\hl2sdk-dota\public;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lua\lib\;..\Release;..\hl2sdk-dota\lib\public;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\boost_1_54_0;..\hl2sdk-dota\public;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)64</TargetName>
@@ -126,7 +126,7 @@
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vstdlib.lib;tier0.lib;tier1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vstdlib.lib;tier0.lib;tier1.lib;lua.lib;SignaturePatternResolver.lib;libyaml-cppmd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <MASM />
     <MASM />
@@ -135,6 +135,8 @@
       <Optimization>Full</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompiled_headers.h</PrecompiledHeaderFile>
     </ClCompile>
     <PreLinkEvent>
       <Command>
@@ -176,20 +178,26 @@
     <ProjectReference />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="backup\directx-hook.cpp" />
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="dota\DotaChat.cpp" />
     <ClCompile Include="dota\DotaGlobal.cpp" />
     <ClCompile Include="dota\DotaItem.cpp" />
+    <ClCompile Include="lua\lua_engine.cpp" />
+    <ClCompile Include="lua\lua_global.cpp" />
+    <ClCompile Include="lua\lua_state.cpp" />
+    <ClCompile Include="precompiled_headers.cpp" />
     <ClCompile Include="source-sdk\global_instance_manager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="dota\DotaPlayerResource.cpp" />
     <ClCompile Include="source-sdk\draw_utils.cpp" />
     <ClCompile Include="source-sdk\netvar.cpp" />
+    <ClCompile Include="source-sdk\SDK.cpp" />
+    <ClCompile Include="utils\global_address_retriever.cpp" />
     <ClCompile Include="utils\utils.cpp" />
     <ClCompile Include="utils\vmthooks.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="tools\dota-eject.bat">
       <DeploymentContent>true</DeploymentContent>
     </None>
@@ -201,15 +209,30 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="commands.h" />
+    <ClInclude Include="commands.hpp" />
     <ClInclude Include="dota\DotaChat.h" />
+    <ClInclude Include="dota\DotaGameRules.hpp" />
     <ClInclude Include="dota\DotaGlobal.h" />
+    <ClInclude Include="dota\DotaHud.hpp" />
     <ClInclude Include="dota\DotaItem.h" />
+    <ClInclude Include="dota\DotaMinimap.hpp" />
+    <ClInclude Include="dota\DotaModifierManager.hpp" />
+    <ClInclude Include="dota\DotaParticle.hpp" />
+    <ClInclude Include="dota\DotaParticleManager.hpp" />
+    <ClInclude Include="dota\DotaPlayer.hpp" />
     <ClInclude Include="dota\DotaPlayerResource.h" />
+    <ClInclude Include="dota\DotaUnits.hpp" />
+    <ClInclude Include="lua\lua_engine.hpp" />
+    <ClInclude Include="lua\lua_game_event_listener.hpp" />
+    <ClInclude Include="lua\lua_global.hpp" />
+    <ClInclude Include="lua\lua_state.hpp" />
+    <ClInclude Include="precompiled_headers.h" />
+    <ClInclude Include="source-sdk\game_event_listener.h" />
     <ClInclude Include="source-sdk\global_instance_manager.h" />
     <ClInclude Include="source-sdk\netvar.h" />
     <ClInclude Include="source-sdk\draw_utils.h" />
     <ClInclude Include="source-sdk\SDK.h" />
+    <ClInclude Include="utils\global_address_retriever.hpp" />
     <ClInclude Include="utils\utils.h" />
     <ClInclude Include="utils\vmthooks.h" />
   </ItemGroup>

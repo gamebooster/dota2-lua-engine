@@ -17,7 +17,7 @@
 #include <float.h>
 
 // For vec_t, put this somewhere else?
-#include "basetypes.h"
+#include "tier0/basetypes.h"
 
 // For rand(). We really need a library!
 #include <stdlib.h>

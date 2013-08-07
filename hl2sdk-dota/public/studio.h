@@ -13,7 +13,7 @@
 #pragma once
 #endif
 
-#include "basetypes.h"
+#include "tier0\basetypes.h"
 #include "mathlib/vector2d.h"
 #include "mathlib/vector.h"
 #include "mathlib/vector4d.h"
@@ -21,12 +21,12 @@
 #include "tier0/dbg.h"
 #include "tier0/threadtools.h"
 #include "mathlib/mathlib.h"
-#include "utlvector.h"
-#include "utlhash.h"
+#include "tier1\utlvector.h"
+#include "tier1\utlhash.h"
 #include "datamap.h"
-#include "generichash.h"
+#include "tier1\generichash.h"
 #include "localflexcontroller.h"
-#include "utlsymbol.h"
+#include "tier1\utlsymbol.h"
 
 
 #define STUDIO_ENABLE_PERF_COUNTERS

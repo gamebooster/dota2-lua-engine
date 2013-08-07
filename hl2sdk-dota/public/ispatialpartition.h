@@ -9,7 +9,7 @@
 #ifndef ISPATIALPARTITION_H
 #define ISPATIALPARTITION_H
 
-#include "interface.h"
+#include "tier1\interface.h"
 
 //-----------------------------------------------------------------------------
 // forward declarations

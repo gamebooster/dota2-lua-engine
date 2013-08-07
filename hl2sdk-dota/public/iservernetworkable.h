@@ -13,7 +13,7 @@
 
 
 #include "ihandleentity.h"
-#include "basetypes.h"
+#include "tier0\basetypes.h"
 #include "bitvec.h"
 #include "const.h"
 #include "bspfile.h"

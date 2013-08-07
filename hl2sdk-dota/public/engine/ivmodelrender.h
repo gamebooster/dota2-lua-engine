@@ -13,7 +13,7 @@
 #pragma once
 #endif
 
-#include "interface.h"
+#include "tier1\interface.h"
 #include "mathlib/mathlib.h"
 #include "istudiorender.h"
 #include "datacache/idatacache.h"

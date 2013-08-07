@@ -11,7 +11,7 @@
 #pragma once
 #endif
 
-#include "logging.h"
+#include "tier0\logging.h"
 
 
 const int MAX_SIMULTANEOUS_LOGGING_FILE_COUNT = 16;

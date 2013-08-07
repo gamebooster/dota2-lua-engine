@@ -1,26 +1,30 @@
-#include <set>
+#include "precompiled_headers.h"
 
 #include "source-sdk\SDK.h"
 
 #include "dota\DotaPlayerResource.h"
 #include "dota\DotaChat.h"
+#include <boost/exception/diagnostic_information.hpp> 
 #include "dota\DotaGlobal.h"
 
 #include "utils\utils.h"
 #include "utils\vmthooks.h"
 
 #include "source-sdk\draw_utils.h"
+#include "source-sdk\game_event_listener.h"
 #include "source-sdk\global_instance_manager.h"
 
-#include "commands.h"
+#include "lua/lua_global.hpp"
 
-static utils::VMTManager* panel_hook;
-static utils::VMTManager* client_hook;
-static utils::VMTManager* input_hook;
+#include "commands.hpp"
+
+static utils::VtableHook* panel_hook;
+static utils::VtableHook* client_hook;
+static utils::VtableHook* input_hook;
 static HANDLE thread = nullptr;
 
-static std::set<CDotaItem*> items;
-static std::set<CBaseNpcHero*> illusions;
+static std::set<CBaseHandle> items;
+static std::set<CBaseHandle> illusions;
 void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface);
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName );
 bool __fastcall IsKeyDown(void* thisptr, int edx, int key_code );
@@ -29,23 +33,27 @@ static bool active_thread = true;
 bool simulate_shift_down = false;
 DWORD WINAPI LastHitThread( LPVOID lpArguments );
 
+
+
 DWORD WINAPI InitializeHook( LPVOID lpArguments ) {
-	while(utils::GetModuleHandleSafe("engine.dll" ) == NULL
-    &&  utils::GetModuleHandleSafe( "client.dll" ) == NULL
-    &&  utils::GetModuleHandleSafe( "steamclient.dll" ) == NULL) {
-		Sleep( 100 );
+  while(utils::GetModuleHandleSafe("engine.dll" ) == nullptr
+    ||  utils::GetModuleHandleSafe( "client.dll" ) == nullptr
+    ||  utils::GetModuleHandleSafe( "steamclient.dll" ) == nullptr) {
+    Sleep(100);
   }
 
-  panel_hook = new utils::VMTManager(CHud::GetInstance()->FindElement("CHudHealthBars"), 0x34);
+  GlobalAddressRetriever::GetInstance();
+
+  panel_hook = new utils::VtableHook(CHud::GetInstance()->FindElement("CHudHealthBars"), 0x34);
   panel_hook->HookMethod(CHudHealthBars_Paint, 107);
 
-  client_hook = new utils::VMTManager(GlobalInstanceManager::GetClient());
+  client_hook = new utils::VtableHook(GlobalInstanceManager::GetClient());
   client_hook->HookMethod(LevelInitPreEntity, 4);
 
   g_pCVar = (ICvar*)GlobalInstanceManager::GetCVar();
   Vgui_IInput* input = GlobalInstanceManager::GetVguiInput();
   
-  input_hook = new utils::VMTManager(input);
+  input_hook = new utils::VtableHook(input);
   input_hook->HookMethod(IsKeyDown, 18);
 
   CCommandBuffer::GetInstance()->SetWaitEnabled(true);
@@ -68,8 +76,9 @@ DWORD WINAPI InitializeHook( LPVOID lpArguments ) {
 
   // CreateThread( NULL, 0, LastHitThread, 0, 0, NULL);  
 
-	return 1; 
+	return 1;
 }
+
 bool __fastcall IsKeyDown(void* thisptr, int edx, int key_code ) {
   typedef bool ( __thiscall* OriginalFunction )(void*, int code);
   if (key_code == 0x50 || key_code == 0x51) {
@@ -118,12 +127,11 @@ DWORD WINAPI LastHitThread( LPVOID lpArguments ) {
 
 
 static CNewParticleEffect* effect = nullptr;
+static bool tagged_towers = false;
 
 void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface) {
   typedef void ( __thiscall* OriginalFunction )(PVOID, PVOID);
   panel_hook->GetMethod<OriginalFunction>(107)(thisptr, guipaintsurface);
-
-  if (commands::dota_esp_draw.GetBool() == false) return;
 
   int offset_counter = 0;
 
@@ -149,6 +157,12 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
     }
   }
 
+  if (tagged_towers == false) {
+    CNewParticleEffect* range_effect = local_hero->GetParticleProp()->Create("range_display", 1, -1);
+    Vector vector2( 1200, 0, 0);
+    range_effect->SetControlPoint(1, vector2);
+  }
+
   dota::DotaChat* chat = dota::DotaChat::GetInstance();
   if (chat == nullptr) return;
 
@@ -166,11 +180,13 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
       CBaseNpcHero* hero = (CBaseNpcHero*)base_entity;
       if (hero == nullptr) continue;
 
-      if (hero->IsIllusion() && illusions.count(hero) == 0) {
+      CBaseHandle hero_handle = hero->GetRefEHandle();
+
+      if (hero->IsIllusion() && illusions.count(hero_handle) == 0) {
         CNewParticleEffect* ghost_effect = hero->GetParticleProp()->Create("ghost", 1, -1);
         Vector vector2(200, 0, 0);
         ghost_effect->SetControlPoint(1, vector2);
-        illusions.insert(hero);
+        illusions.insert(hero_handle);
       }
     }
 
@@ -198,42 +214,36 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
       CBaseNpcHero* hero = (CBaseNpcHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(dota_player->GetAssignedHero());
       if (hero == nullptr) continue;
 
+            if (team != local_team) {
+
       CUnitInventory* inventory = hero->GetInventory();
       if (inventory == nullptr) continue;
 
       for (int i = 0; i < 6; i++ ) {
         CDotaItem* item = inventory->GetItemInSlot(i);
         if (item == nullptr) continue;
-        if (items.count(item) == 0) {
+
+        CBaseHandle item_handle = item->GetRefEHandle();
+
+        if (items.count(item_handle) == 0) {
           std::wstring message = L" bought ";
+
           CDotaGameManager* game_manager = CDotaGameManager::GetInstance();
           if (game_manager == nullptr) return;
+
           KeyValues* item_data = game_manager->GetItemDataByItemID(item->GetItemId());
-          if (item_data == nullptr) {
-            message.append(utils::ConvertToWide(item->GetName()));
-          } else {
-            std::string name = "#DOTA_Tooltip_Ability_";
-            name.append(item_data->GetString("AbilityName"));
-            std::string::size_type found = name.find("recipe_");
-            if (found != std::string::npos) {
-              name.erase(found, 7);
-              message.append(L"Recipe ");
-            }
-            message.append(GlobalInstanceManager::GetLocalize()->Find(name.c_str()));
-          }
+
           const char* hero_name = dota::DotaPlayerResource::GetPlayerSelectedHero(player_id);
           hero_name = StringAfterPrefix(hero_name, "npc_dota_hero_");
           const char* item_name = item_data->GetString("AbilityName");
           item_name = StringAfterPrefix(item_name, "item_");
           CDotaSFHudOverlay::GetInstance()->ShowSpecItemPickup(hero_name, item_name);
-          //chat->MessagePrintf(0, message.c_str(), player_id, 0, GlobalInstanceManager::GetEngineClient()->Time());
 
-          items.insert(item);
+          items.insert(item_handle);
         } 
       }
+            }
 
-
-        
       int health = hero->GetHealth();
 
       float manaMax = hero->GetMaxMana();
@@ -255,7 +265,8 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
       }
     }
   }
-  
+
+  tagged_towers = true;
 }
 
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName ) {
@@ -263,7 +274,9 @@ void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName 
   client_hook->GetMethod<OriginalFunction>(4)(thisptr, pMapName);
 
   items.clear();
+  illusions.clear();
   dota::DotaChat::Invalidate();
+  tagged_towers = false;
 }
 
 void FinalizeHook() {
