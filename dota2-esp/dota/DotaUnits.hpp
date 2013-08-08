@@ -3,6 +3,11 @@
 #include "..\utils\global_address_retriever.hpp"
 #include "DotaParticle.hpp"
 #include "DotaModifierManager.hpp"
+#include "DotaConstants.h"
+#include "DotaPlayer.hpp"
+#include "DotaBaseEntity.hpp"
+
+namespace dota {
 
 class DotaItem : public BaseEntity {
 public:
@@ -56,6 +61,14 @@ public:
     typedef float ( __thiscall* OriginalFn )( PVOID );
     return utils::GetVtableFunction<OriginalFn>(this, 277)(this);
   }
+
+  bool IsEnemy(BaseEntity* entity) {
+    DotaPlayer* local_player = reinterpret_cast<DotaPlayer*>(GlobalInstanceManager::GetClientTools()->GetLocalPlayer());
+    int local_team = local_player->GetTeamIndex();
+    if (local_team == dota::constants::kSpectatorTeam) return false; 
+    return local_player->GetTeamIndex() != entity->GetTeamIndex();
+  }
+
   bool IsVisibleByEnemyTeam() {
     int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_iTaggedAsVisibleByTeam");
     return *(byte*)(this + offset) == 30;
@@ -172,3 +185,5 @@ class BaseNPCHero : public BaseNPC {
     return *(int*)(this + offset) != -1;
   }
 };
+
+}

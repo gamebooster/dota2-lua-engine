@@ -192,5 +192,11 @@
     <ClInclude Include="dota\DotaModifierManager.hpp">
       <Filter>Header Files\dota</Filter>
     </ClInclude>
+    <ClInclude Include="dota\DotaConstants.h">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\DotaBaseEntity.hpp">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

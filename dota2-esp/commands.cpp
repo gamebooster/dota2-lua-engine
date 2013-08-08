@@ -84,13 +84,13 @@ namespace commands {
       Msg("Usage: dota_set_announcer <item_id>\n");
       return;
     }
-    DotaPlayer* player = (DotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
+    dota::DotaPlayer* player = (dota::DotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
     if (player == nullptr) {
       Msg("Could not get local player\n");
       return;
     }
 
-    EconItemView* item = EconItemView::Create();
+    dota::EconItemView* item = dota::EconItemView::Create();
     int item_id = atoi(args.Arg(1));
     if (item_id == 0) {
       Msg("could not convert item_id to integer\n");
@@ -99,14 +99,14 @@ namespace commands {
     item->Init(item_id, 9999, 9999, 0);
 
     int team_index = player->GetTeamIndex();
-    GameRules* gamerules = GameRules::GetInstance();
+    dota::GameRules* gamerules = dota::GameRules::GetInstance();
 
     if (gamerules == nullptr) {
       Msg("Could not get gamerules\n");
       return;
     }
 
-    UnitAnnouncer* announcer = gamerules->GetAnnouncer(team_index);
+    dota::UnitAnnouncer* announcer = gamerules->GetAnnouncer(team_index);
 
     if (announcer == nullptr) {
       Msg("Could not get announcer\n");
@@ -121,13 +121,13 @@ namespace commands {
       Msg("Usage: dota_announcer_killstreak_set <item_id>\n");
       return;
     }
-    DotaPlayer* player = (DotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
+    dota::DotaPlayer* player = (dota::DotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
     if (player == nullptr) {
       Msg("Could not get local player\n");
       return;
     }
 
-    EconItemView* item = EconItemView::Create();
+    dota::EconItemView* item = dota::EconItemView::Create();
     int item_id = atoi(args.Arg(1));
     if (item_id == 0) {
       Msg("could not convert item_id to integer\n");
@@ -136,14 +136,14 @@ namespace commands {
     item->Init(item_id, 9999, 9999, 0);
 
     int team_index = player->GetTeamIndex();
-    GameRules* gamerules = GameRules::GetInstance();
+    dota::GameRules* gamerules = dota::GameRules::GetInstance();
 
     if (gamerules == nullptr) {
       Msg("Could not get gamerules\n");
       return;
     }
 
-    UnitAnnouncer* announcer = gamerules->GetKillingSpreeAnnouncer(team_index);
+    dota::UnitAnnouncer* announcer = gamerules->GetKillingSpreeAnnouncer(team_index);
 
     if (announcer == nullptr) {
       Msg("Could not get announcer\n");
@@ -159,7 +159,7 @@ namespace commands {
       return;
     }
 
-    EconItemView* item = EconItemView::Create();
+    dota::EconItemView* item = dota::EconItemView::Create();
     int item_id = atoi(args.Arg(1));
     if (item_id == 0) {
       Msg("could not convert item_id to integer\n");
@@ -167,7 +167,7 @@ namespace commands {
     }
     item->Init(item_id, 9999, 9999, 0);
 
-    Hud::SelectHudSkin(item, 1);
+    dota::Hud::SelectHudSkin(item, 1);
   }
 
   void ShiftDown(const CCommandContext &context, const CCommand &args) {

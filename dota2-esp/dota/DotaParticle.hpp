@@ -2,6 +2,8 @@
 
 #include "..\utils\global_address_retriever.hpp"
 
+namespace dota {
+
 class CNewParticleEffect {
 public:
   void SetControlPoint(int index, Vector const& vector) {
@@ -51,3 +53,5 @@ public:
     return effect;
   }
 };
+
+}

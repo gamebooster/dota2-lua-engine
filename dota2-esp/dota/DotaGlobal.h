@@ -11,6 +11,8 @@
 #include "DotaPlayer.hpp"
 #include "DotaParticle.hpp"
 
+namespace dota {
+
 class GameSystemsRetriever {
 public:
   GameSystemsRetriever() {
@@ -69,3 +71,5 @@ public:
     *(bool*)(this + 0x8049) = enabled;
   }
 };
+
+}

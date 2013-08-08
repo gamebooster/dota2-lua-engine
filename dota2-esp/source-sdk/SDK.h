@@ -7,6 +7,10 @@ using namespace std;
 typedef void* ( __cdecl* CreateInterface_t )( const char*, int* );
 typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
 
+namespace dota {
+ class BaseEntity;
+}
+
 typedef struct player_info_s {
   unsigned __int64			xuid;
   char			name[32];
@@ -136,56 +140,6 @@ public:
   }
 };
 
-class BaseEntity {
-public:
-  const CBaseHandle& GetRefEHandle() {
-    typedef CBaseHandle& ( __thiscall* OriginalFn )(void*);
-    return utils::GetVtableFunction<OriginalFn>(this, 2)(this);
-  }
-  int ComputeTranslucencyType() {
-    typedef int ( __thiscall* OriginalFn )(void*);
-    return utils::GetVtableFunction<OriginalFn>(this, 100)(this);
-  }
-  bool IsAlive() {
-    typedef bool ( __thiscall* OriginalFn )(void*);
-    return utils::GetVtableFunction<OriginalFn>(this, 147)(this);
-  }
-  int GetTeamIndex() {
-    typedef int ( __thiscall* OriginalFn )(void*);
-    return utils::GetVtableFunction<OriginalFn>(this, 87)(this);
-  }
-  int GetHealth() {
-    typedef int ( __thiscall* OriginalFn )(void*);
-    return utils::GetVtableFunction<OriginalFn>(this, 120)(this);
-  }
-  bool IsPlayer() {
-    typedef bool ( __thiscall* OriginalFn )(void*);
-    return utils::GetVtableFunction<OriginalFn>(this, 149)(this);
-  }
-	Vector& GetAbsOrigin() {
-		typedef Vector& ( __thiscall* OriginalFn )( PVOID );
-		return utils::GetVtableFunction<OriginalFn>(this, 11)(this);
-	}
-  Vector& GetAbsAngles() {
-    typedef Vector& ( __thiscall* OriginalFn )( PVOID );
-    return utils::GetVtableFunction<OriginalFn>(this, 10)(this);
-  }
-	Vector WorldSpaceCenter() {
-		Vector vWorldSpaceCenter;
-    return vWorldSpaceCenter;
-	}
-	ClientClass* GetClientClass() {
-		PVOID pNetworkable = (PVOID)(this + 0x8);
-		typedef ClientClass* ( __thiscall* OriginalFn )( PVOID );
-		return utils::GetVtableFunction<OriginalFn>( pNetworkable, 2 )( pNetworkable );
-	}
-	int GetIndex() {
-		PVOID pNetworkable = (PVOID)(this + 0x8);
-		typedef int ( __thiscall* OriginalFn )( PVOID );
-		return utils::GetVtableFunction<OriginalFn>( pNetworkable, 9 )( pNetworkable );
-	}
-};
-
 class EngineClient {
 public:
 	void GetScreenSize(int& width, int& height) {
@@ -312,12 +266,12 @@ public:
 
 class EntityList {
   public:
-  BaseEntity* GetClientEntity( int entnum ) {
-    typedef BaseEntity* ( __thiscall* OriginalFn )( PVOID, int );
+  dota::BaseEntity* GetClientEntity( int entnum ) {
+    typedef dota::BaseEntity* ( __thiscall* OriginalFn )( PVOID, int );
     return utils::GetVtableFunction<OriginalFn>( this, 3 )( this, entnum );
   }
-  BaseEntity* GetClientEntityFromHandle( int hEnt ) {
-    typedef BaseEntity* ( __thiscall* OriginalFn )( PVOID, int );
+  dota::BaseEntity* GetClientEntityFromHandle( int hEnt ) {
+    typedef dota::BaseEntity* ( __thiscall* OriginalFn )( PVOID, int );
     return utils::GetVtableFunction<OriginalFn>( this, 4 )( this, hEnt );
   }
   int GetHighestEntityIndex(void) {

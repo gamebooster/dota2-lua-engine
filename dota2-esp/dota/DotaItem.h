@@ -3,6 +3,8 @@
 #include "..\utils\global_address_retriever.hpp"
 #include "..\utils\utils.h"
 
+namespace dota {
+
 class EconItemView {
 public:
   void Init(int item_id, int unknown0, int unknown1, int unknown2) {
@@ -29,3 +31,5 @@ public:
     return (EconItemView*)store;
   }
 };
+
+}

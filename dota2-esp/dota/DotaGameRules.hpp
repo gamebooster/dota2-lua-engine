@@ -6,6 +6,8 @@
 #include "DotaItem.h"
 #include "DotaUnits.hpp"
 
+namespace dota {
+
 class GameRules {
 public:
   static GameRules* GetInstance() {
@@ -43,3 +45,5 @@ public:
     return announcer;
   }
 };
+
+}

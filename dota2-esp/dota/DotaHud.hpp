@@ -3,6 +3,8 @@
 #include "DotaItem.h"
 #include "..\utils\global_address_retriever.hpp"
 
+namespace dota {
+
 class CHudElement {
 
 };
@@ -72,3 +74,5 @@ class DotaSFHudOverlay {
  private:
   static DotaSFHudOverlay* instance_;
 };
+
+}

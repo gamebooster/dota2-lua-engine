@@ -213,7 +213,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commands.hpp" />
+    <ClInclude Include="dota\DotaBaseEntity.hpp" />
     <ClInclude Include="dota\DotaChat.h" />
+    <ClInclude Include="dota\DotaConstants.h" />
     <ClInclude Include="dota\DotaGameRules.hpp" />
     <ClInclude Include="dota\DotaGlobal.h" />
     <ClInclude Include="dota\DotaHud.hpp" />

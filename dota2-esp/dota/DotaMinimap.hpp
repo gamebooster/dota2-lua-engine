@@ -2,6 +2,8 @@
 #include "..\source-sdk\SDK.h"
 #include "..\utils\global_address_retriever.hpp"
 
+namespace dota {
+
 class Minimap {
 public:
   static void CreateLocationPing(Vector vector, int unknown) {
@@ -20,3 +22,5 @@ public:
     }
   }
 };
+
+}

@@ -1,6 +1,9 @@
 #pragma once
 
+#include "DotaBaseEntity.hpp"
 #include "DotaUnits.hpp"
+
+namespace dota {
 
 class BasePlayer : public BaseEntity {
 public:
@@ -12,7 +15,7 @@ public:
 
 class DotaPlayer : public BasePlayer {
 public:
-  BaseEntity* GetSelectedUnit(int index) {
+  dota::BaseEntity* GetSelectedUnit(int index) {
     if (*(int*)(this + 0x1A80) > index) {
       int entindex = *(int*)(*(int*)(this + 0x1A74) + index * 4);
       utils::Log("hook: %d", entindex);
@@ -23,7 +26,7 @@ public:
   static BaseEntity* GetLocalPlayerSelectedUnit() {
     uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("DotaPlayer::GetLocalPlayerSelectedUnit");
 
-    BaseEntity* (__cdecl *LocalPlayerSelectedUnit)() =
+    dota::BaseEntity* (__cdecl *LocalPlayerSelectedUnit)() =
       reinterpret_cast<BaseEntity*(__cdecl *)()>(address);
 
     return LocalPlayerSelectedUnit();
@@ -33,18 +36,18 @@ public:
     return *reinterpret_cast<int16*>(this + offset);
   }
 
-  void ShowRingEffect(BaseNPC* npc, Vector const& vector, int unknown0, int unknown1) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("DotaPlayer::ShowRingEffect");
+  //void ShowRingEffect(BaseNPC* npc, Vector const& vector, int unknown0, int unknown1) {
+  //  uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("DotaPlayer::ShowRingEffect");
 
-    __asm {
-      push unknown1
-      push unknown0
-      push npc
-      push this
-      mov eax, vector
-      call address
-    }
-  }
+  //  __asm {
+  //    push unknown1
+  //    push unknown0
+  //    push npc
+  //    push this
+  //    mov eax, vector
+  //    call address
+  //  }
+  //}
   void PrepareUnitOrders(int order, int entity_index) {
     uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("DotaPlayer::PrepareUnitOrders");
 
@@ -65,3 +68,5 @@ public:
     }
   }
 };
+
+}

@@ -3,6 +3,8 @@
 #include "DotaGlobal.h"
 #include "..\utils\global_address_retriever.hpp"
 
+namespace dota {
+
 class ParticleManager {
 public:
   static void PrecacheParticleSystem(const char* name) {
@@ -104,3 +106,5 @@ public:
 };
 
 ParticleManager* ParticleManager::instance_ = nullptr;
+
+}

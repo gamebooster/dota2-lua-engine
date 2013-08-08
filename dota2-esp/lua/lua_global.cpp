@@ -10,7 +10,7 @@
 
 #include "..\dota\DotaGlobal.h"
 
-#include "..\dota\DotaGlobal.h"
+#include "..\dota\DotaUnits.hpp"
 #include "..\utils\utils.h"
 #include "..\utils\vmthooks.h"
 #include "..\source-sdk\draw_utils.h"
@@ -71,7 +71,7 @@ namespace lua {
     }
    private:
      PaintHookManager() {
-       hook_ = new utils::VtableHook(Hud::GetInstance()->FindElement("CHudHealthBars"), 0x34);
+       hook_ = new utils::VtableHook(dota::Hud::GetInstance()->FindElement("CHudHealthBars"), 0x34);
        hook_->HookMethod(CHudHealthBars_Paint, 107);
      }
      static void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface) {
@@ -104,7 +104,7 @@ namespace lua {
 
   class LuaParticleEffect {
    public:
-    LuaParticleEffect(CNewParticleEffect* particle_effect, ParticleProperty* prop) : effect_(particle_effect), prop_(prop) {
+    LuaParticleEffect(dota::CNewParticleEffect* particle_effect, dota::ParticleProperty* prop) : effect_(particle_effect), prop_(prop) {
       Warning("create particle \n");
     }
     void SetControlPoint(int point, Vector vec) {
@@ -115,13 +115,13 @@ namespace lua {
       if (effect_ != nullptr && prop_ != nullptr) prop_->StopEmissionAndDestroyImmediately(effect_);
     }
    private:
-     CNewParticleEffect* effect_;
-     ParticleProperty* prop_;
+     dota::CNewParticleEffect* effect_;
+     dota::ParticleProperty* prop_;
   };
 
   class LuaParticleProp {
    public:
-    LuaParticleProp(ParticleProperty* particle_property) : prop_(particle_property) {
+    LuaParticleProp(dota::ParticleProperty* particle_property) : prop_(particle_property) {
 
     }
 
@@ -129,10 +129,10 @@ namespace lua {
       return new LuaParticleEffect(prop_->Create(name, 1, -1), prop_);
     }
    private:
-     ParticleProperty* prop_;
+     dota::ParticleProperty* prop_;
   };
 
-  class LuaBaseNpc : public BaseNPC {
+  class LuaBaseNpc : public dota::BaseNPC {
   public:
     LuaParticleProp GetLuaParticleProp() {
       return LuaParticleProp(GetParticleProp());
@@ -145,7 +145,7 @@ namespace lua {
       luabridge::LuaRef table = luabridge::newTable(L);
       int count = 1;
       for (int i = 1; i < GlobalInstanceManager::GetClientEntityList()->GetHighestEntityIndex(); i++ ) {
-        BaseEntity *base_entity = GlobalInstanceManager::GetClientEntityList()->GetClientEntity(i);
+        dota::BaseEntity *base_entity = GlobalInstanceManager::GetClientEntityList()->GetClientEntity(i);
         if (base_entity == nullptr) continue;
 
         const char* class_name = base_entity->GetClientClass()->GetName();
@@ -313,8 +313,8 @@ namespace lua {
 
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
-        .beginClass<UnitInventory>("CUnitInventory")
-         .addFunction("GetItemInSlot", &UnitInventory::GetItemInSlot)
+        .beginClass<dota::UnitInventory>("CUnitInventory")
+         .addFunction("GetItemInSlot", &dota::UnitInventory::GetItemInSlot)
         .endClass()
      .endNamespace();
 
@@ -335,8 +335,8 @@ namespace lua {
 
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
-        .beginClass<CNewParticleEffect>("CNewParticleEffect")
-         .addFunction("SetControlPoint", &CNewParticleEffect::SetControlPoint)
+        .beginClass<dota::CNewParticleEffect>("CNewParticleEffect")
+         .addFunction("SetControlPoint", &dota::CNewParticleEffect::SetControlPoint)
         .endClass()
      .endNamespace();
     luabridge::getGlobalNamespace(state)
@@ -355,19 +355,19 @@ namespace lua {
 
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
-        .beginClass<BaseEntity>("CBaseEntity")
-         .addFunction("GetRefEHandle", &BaseEntity::GetRefEHandle)
-         .addFunction("GetClientClass", &BaseEntity::GetClientClass)
-         .addFunction("ComputeTranslucencyType", &BaseEntity::ComputeTranslucencyType)
-         .addFunction("IsAlive", &BaseEntity::IsAlive)
-         .addFunction("GetTeamIndex", &BaseEntity::GetTeamIndex)
-         .addFunction("GetHealth", &BaseEntity::GetHealth)
-         .addFunction("IsPlayer", &BaseEntity::IsPlayer)
-         .addFunction("GetAbsOrigin", &BaseEntity::GetAbsOrigin)
-         .addFunction("GetAbsAngles", &BaseEntity::GetAbsAngles)
-         .addFunction("GetIndex", &BaseEntity::GetIndex)
+        .beginClass<dota::BaseEntity>("CBaseEntity")
+         .addFunction("GetRefEHandle", &dota::BaseEntity::GetRefEHandle)
+         .addFunction("GetClientClass", &dota::BaseEntity::GetClientClass)
+         .addFunction("ComputeTranslucencyType", &dota::BaseEntity::ComputeTranslucencyType)
+         .addFunction("IsAlive", &dota::BaseEntity::IsAlive)
+         .addFunction("GetTeamIndex", &dota::BaseEntity::GetTeamIndex)
+         .addFunction("GetHealth", &dota::BaseEntity::GetHealth)
+         .addFunction("IsPlayer", &dota::BaseEntity::IsPlayer)
+         .addFunction("GetAbsOrigin", &dota::BaseEntity::GetAbsOrigin)
+         .addFunction("GetAbsAngles", &dota::BaseEntity::GetAbsAngles)
+         .addFunction("GetIndex", &dota::BaseEntity::GetIndex)
         .endClass()
-        .deriveClass <LuaBaseNpc, BaseEntity> ("LuaBaseNpc")
+        .deriveClass <LuaBaseNpc, dota::BaseEntity> ("LuaBaseNpc")
           .addFunction ("GetParticleProp", &LuaBaseNpc::GetLuaParticleProp)
           .addFunction ("GetEffectiveInvisibilityLevel", &LuaBaseNpc::GetEffectiveInvisibilityLevel)
           .addFunction ("IsVisibleByEnemyTeam", &LuaBaseNpc::IsVisibleByEnemyTeam)
@@ -387,17 +387,17 @@ namespace lua {
           .addFunction ("GetAttackRange", &LuaBaseNpc::GetAttackRange)
           .addFunction ("IsEntityInRange", &LuaBaseNpc::IsEntityInRange)
         .endClass ()
-        .deriveClass <BaseNPCHero, LuaBaseNpc> ("CBaseNpcHero")
-          .addFunction ("IsIllusion", &BaseNPCHero::IsIllusion)
+        .deriveClass <dota::BaseNPCHero, LuaBaseNpc> ("CBaseNpcHero")
+          .addFunction ("IsIllusion", &dota::BaseNPCHero::IsIllusion)
         .endClass ()
-        .deriveClass <DotaItem, BaseEntity> ("CDotaItem")
-          .addFunction ("GetName", &DotaItem::GetName)
-          .addFunction ("GetItemId", &DotaItem::GetItemId)
-          .addFunction ("GetRequiresCharges", &DotaItem::GetRequiresCharges)
-          .addFunction ("GetCurrentCharges", &DotaItem::GetCurrentCharges)
-          .addFunction ("GetInitialCharges", &DotaItem::GetInitialCharges)
-          .addFunction ("GetPurchaser", &DotaItem::GetPurchaser)
-          .addFunction ("GetPurchaseTime", &DotaItem::GetPurchaseTime)
+        .deriveClass <dota::DotaItem, dota::BaseEntity> ("CDotaItem")
+          .addFunction ("GetName", &dota::DotaItem::GetName)
+          .addFunction ("GetItemId", &dota::DotaItem::GetItemId)
+          .addFunction ("GetRequiresCharges", &dota::DotaItem::GetRequiresCharges)
+          .addFunction ("GetCurrentCharges", &dota::DotaItem::GetCurrentCharges)
+          .addFunction ("GetInitialCharges", &dota::DotaItem::GetInitialCharges)
+          .addFunction ("GetPurchaser", &dota::DotaItem::GetPurchaser)
+          .addFunction ("GetPurchaseTime", &dota::DotaItem::GetPurchaseTime)
         .endClass ()
       .endNamespace();
 

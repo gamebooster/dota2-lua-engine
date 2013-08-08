@@ -6,6 +6,10 @@
 const Vector vec3_invalid(FLT_MAX, FLT_MAX, FLT_MAX);
 const Vector vec3_origin(0,0,0);
 
+namespace dota {
+
 CUtlVector<IGameSystem*>* GameSystemsRetriever::game_systems_ = nullptr;
 
 CDotaGameManager* CDotaGameManager::instance_ = nullptr;
+
+}
