@@ -71,7 +71,7 @@ namespace lua {
     }
    private:
      PaintHookManager() {
-       hook_ = new utils::VtableHook(CHud::GetInstance()->FindElement("CHudHealthBars"), 0x34);
+       hook_ = new utils::VtableHook(Hud::GetInstance()->FindElement("CHudHealthBars"), 0x34);
        hook_->HookMethod(CHudHealthBars_Paint, 107);
      }
      static void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface) {
@@ -104,7 +104,7 @@ namespace lua {
 
   class LuaParticleEffect {
    public:
-    LuaParticleEffect(CNewParticleEffect* particle_effect, CParticleProperty* prop) : effect_(particle_effect), prop_(prop) {
+    LuaParticleEffect(CNewParticleEffect* particle_effect, ParticleProperty* prop) : effect_(particle_effect), prop_(prop) {
       Warning("create particle \n");
     }
     void SetControlPoint(int point, Vector vec) {
@@ -116,12 +116,12 @@ namespace lua {
     }
    private:
      CNewParticleEffect* effect_;
-     CParticleProperty* prop_;
+     ParticleProperty* prop_;
   };
 
   class LuaParticleProp {
    public:
-    LuaParticleProp(CParticleProperty* particle_property) : prop_(particle_property) {
+    LuaParticleProp(ParticleProperty* particle_property) : prop_(particle_property) {
 
     }
 
@@ -129,10 +129,10 @@ namespace lua {
       return new LuaParticleEffect(prop_->Create(name, 1, -1), prop_);
     }
    private:
-     CParticleProperty* prop_;
+     ParticleProperty* prop_;
   };
 
-  class LuaBaseNpc : public CBaseNpc {
+  class LuaBaseNpc : public BaseNPC {
   public:
     LuaParticleProp GetLuaParticleProp() {
       return LuaParticleProp(GetParticleProp());
@@ -145,7 +145,7 @@ namespace lua {
       luabridge::LuaRef table = luabridge::newTable(L);
       int count = 1;
       for (int i = 1; i < GlobalInstanceManager::GetClientEntityList()->GetHighestEntityIndex(); i++ ) {
-        CBaseEntity *base_entity = GlobalInstanceManager::GetClientEntityList()->GetClientEntity(i);
+        BaseEntity *base_entity = GlobalInstanceManager::GetClientEntityList()->GetClientEntity(i);
         if (base_entity == nullptr) continue;
 
         const char* class_name = base_entity->GetClientClass()->GetName();
@@ -313,8 +313,8 @@ namespace lua {
 
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
-        .beginClass<CUnitInventory>("CUnitInventory")
-         .addFunction("GetItemInSlot", &CUnitInventory::GetItemInSlot)
+        .beginClass<UnitInventory>("CUnitInventory")
+         .addFunction("GetItemInSlot", &UnitInventory::GetItemInSlot)
         .endClass()
      .endNamespace();
 
@@ -355,19 +355,19 @@ namespace lua {
 
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
-        .beginClass<CBaseEntity>("CBaseEntity")
-         .addFunction("GetRefEHandle", &CBaseEntity::GetRefEHandle)
-         .addFunction("GetClientClass", &CBaseEntity::GetClientClass)
-         .addFunction("ComputeTranslucencyType", &CBaseEntity::ComputeTranslucencyType)
-         .addFunction("IsAlive", &CBaseEntity::IsAlive)
-         .addFunction("GetTeamIndex", &CBaseEntity::GetTeamIndex)
-         .addFunction("GetHealth", &CBaseEntity::GetHealth)
-         .addFunction("IsPlayer", &CBaseEntity::IsPlayer)
-         .addFunction("GetAbsOrigin", &CBaseEntity::GetAbsOrigin)
-         .addFunction("GetAbsAngles", &CBaseEntity::GetAbsAngles)
-         .addFunction("GetIndex", &CBaseEntity::GetIndex)
+        .beginClass<BaseEntity>("CBaseEntity")
+         .addFunction("GetRefEHandle", &BaseEntity::GetRefEHandle)
+         .addFunction("GetClientClass", &BaseEntity::GetClientClass)
+         .addFunction("ComputeTranslucencyType", &BaseEntity::ComputeTranslucencyType)
+         .addFunction("IsAlive", &BaseEntity::IsAlive)
+         .addFunction("GetTeamIndex", &BaseEntity::GetTeamIndex)
+         .addFunction("GetHealth", &BaseEntity::GetHealth)
+         .addFunction("IsPlayer", &BaseEntity::IsPlayer)
+         .addFunction("GetAbsOrigin", &BaseEntity::GetAbsOrigin)
+         .addFunction("GetAbsAngles", &BaseEntity::GetAbsAngles)
+         .addFunction("GetIndex", &BaseEntity::GetIndex)
         .endClass()
-        .deriveClass <LuaBaseNpc, CBaseEntity> ("LuaBaseNpc")
+        .deriveClass <LuaBaseNpc, BaseEntity> ("LuaBaseNpc")
           .addFunction ("GetParticleProp", &LuaBaseNpc::GetLuaParticleProp)
           .addFunction ("GetEffectiveInvisibilityLevel", &LuaBaseNpc::GetEffectiveInvisibilityLevel)
           .addFunction ("IsVisibleByEnemyTeam", &LuaBaseNpc::IsVisibleByEnemyTeam)
@@ -377,7 +377,6 @@ namespace lua {
           .addFunction ("GetMana", &LuaBaseNpc::GetMana)
           .addFunction ("GetMaxMana", &LuaBaseNpc::GetMaxMana)
           .addFunction ("GetInventory", &LuaBaseNpc::GetInventory)
-          .addFunction ("GetAbilityByIndex", &LuaBaseNpc::GetAbilityByIndex)
           .addFunction ("GetModifierManager", &LuaBaseNpc::GetModifierManager)
           .addFunction ("GetPhysicalArmor", &LuaBaseNpc::GetPhysicalArmor)
           .addFunction ("IsEntityLastHittable", &LuaBaseNpc::IsEntityLastHittable)
@@ -388,17 +387,17 @@ namespace lua {
           .addFunction ("GetAttackRange", &LuaBaseNpc::GetAttackRange)
           .addFunction ("IsEntityInRange", &LuaBaseNpc::IsEntityInRange)
         .endClass ()
-        .deriveClass <CBaseNpcHero, LuaBaseNpc> ("CBaseNpcHero")
-          .addFunction ("IsIllusion", &CBaseNpcHero::IsIllusion)
+        .deriveClass <BaseNPCHero, LuaBaseNpc> ("CBaseNpcHero")
+          .addFunction ("IsIllusion", &BaseNPCHero::IsIllusion)
         .endClass ()
-        .deriveClass <CDotaItem, CBaseEntity> ("CDotaItem")
-          .addFunction ("GetName", &CDotaItem::GetName)
-          .addFunction ("GetItemId", &CDotaItem::GetItemId)
-          .addFunction ("GetRequiresCharges", &CDotaItem::GetRequiresCharges)
-          .addFunction ("GetCurrentCharges", &CDotaItem::GetCurrentCharges)
-          .addFunction ("GetInitialCharges", &CDotaItem::GetInitialCharges)
-          .addFunction ("GetPurchaser", &CDotaItem::GetPurchaser)
-          .addFunction ("GetPurchaseTime", &CDotaItem::GetPurchaseTime)
+        .deriveClass <DotaItem, BaseEntity> ("CDotaItem")
+          .addFunction ("GetName", &DotaItem::GetName)
+          .addFunction ("GetItemId", &DotaItem::GetItemId)
+          .addFunction ("GetRequiresCharges", &DotaItem::GetRequiresCharges)
+          .addFunction ("GetCurrentCharges", &DotaItem::GetCurrentCharges)
+          .addFunction ("GetInitialCharges", &DotaItem::GetInitialCharges)
+          .addFunction ("GetPurchaser", &DotaItem::GetPurchaser)
+          .addFunction ("GetPurchaseTime", &DotaItem::GetPurchaseTime)
         .endClass ()
       .endNamespace();
 

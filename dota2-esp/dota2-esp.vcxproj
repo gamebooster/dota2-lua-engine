@@ -151,8 +151,7 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /y "$(ProjectDir)config.yaml" "$(OutDir)"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -181,6 +180,7 @@
     <ClCompile Include="commands.cpp" />
     <ClCompile Include="dota\DotaChat.cpp" />
     <ClCompile Include="dota\DotaGlobal.cpp" />
+    <ClCompile Include="dota\DotaHud.cpp" />
     <ClCompile Include="dota\DotaItem.cpp" />
     <ClCompile Include="lua\lua_engine.cpp" />
     <ClCompile Include="lua\lua_global.cpp" />
@@ -198,6 +198,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="config.yaml">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="tools\dota-eject.bat">
       <DeploymentContent>true</DeploymentContent>
     </None>

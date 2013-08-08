@@ -1,0 +1,188 @@
+--- 
+dynamic: 
+  client.dll:
+    - 
+      commands: 
+        offset: 4
+      name: PlayerResource
+      signature: "77 0F 8B 15 ? ? ? ? 8B 44 24 1C"
+    - 
+      commands: 
+        offset: 2
+      name: GameSystemsRetriever
+      signature: "8B 0D ? ? ? ? 8B 0C 99"
+    - 
+      commands: 
+        offset: 2
+      name: GameRules
+      signature: "8B 0D ? ? ? ? 85 C9 74 08 8B 01 8B 10 6A 01 FF D2 56 C7 05"
+    - 
+      commands: 
+        offset: 2
+      name: Hud
+      signature: "57 BE ? ? ? ? E8 ? ? ? ? 56"
+    - 
+      commands: 
+        offset: 3
+      name: ModifierDefaultParams
+      signature: "74 4E 68 ? ? ? ? 8D 55 F4"
+  engine.dll: 
+    - 
+      commands: 
+        offset: 2
+      name: CommandBuffer
+      signature: "81 C7 ? ? ? ? 8B 87 ? ? ? ?"
+static: 
+  client.dll: 
+    - 
+      commands: 
+        relative: 0
+      name: "CNewParticleEffect::SetControlPoint"
+      signature: "E8 ? ? ? ? 83 44 24 10 04"
+    - 
+      commands:
+        relative: 0
+      name: "ParticleProperty::StopEmissionAndDestroyImmediately"
+      signature: "E8 ? ? ? ? C7 86 20 32 00 00 00 00 00 00"
+    - 
+      commands: 
+        relative: 0
+      name: "ParticleProperty::Create"
+      signature: "E8 ? ? ? ? 8D 0C 5B"
+    - 
+      commands: 
+        relative: 0
+      name: "GameRules::GetAnnouncer"
+      signature: "E8 ? ? ? ? 85 C0 74 1F 38 98 ? ? ? ?"
+    - 
+      commands: 
+        relative: 0
+      name: "GameRules::GetKillingSpreeAnnouncer"
+      signature: "E8 ? ? ? ? EB 3B 8B 0D"
+    - 
+      commands: 
+        relative: 0
+      name: "Hud::SelectHudSkin"
+      signature: "E8 ? ? ? ? 5F 5E 5B 8B E5 5D C2 08 00 0F B6 43 0E"
+    - 
+      commands: 
+        offset: 6
+        relative: 0
+      name: "Hud::FindElement"
+      signature: "89 15 ? ? ? ? E8 ? ? ? ? 8B 4D FC"
+    - 
+      commands: 
+        offset: 1
+        relative: 0
+      name: "SFHudOverlay::ShowSpecItemPickup"
+      signature: "51 E8 ? ? ? ? E9 ? ? ? ? 68 ? ? ? ? 68 ? ? ? ?"
+    - 
+      commands: 
+        relative: 0
+      name: "Minimap::CreateLocationPing"
+      signature: "E8 ? ? ? ? 83 C4 10 B0 01 8B E5"
+    - 
+      commands: 
+        relative: 0
+      name: "ModifierManager::GetModifier_Constant_Additive_Internal"
+      signature: "E8 ? ? ? ? 83 BF ? ? ? ? ? 0F 57 C9"
+    - 
+      commands: 
+        relative: 0
+      name: "BaseNpc::GetAttackRange"
+      signature: "E8 ? ? ? ? 51 8B F3"
+    - 
+      commands: 
+        relative: 0
+      name: "BaseNpc::IsEntityInRange"
+      signature: "E8 ? ? ? ? 84 C0 75 36 8B 17"
+    - 
+      commands: 
+        relative: 0
+      name: "UnitAnnouncer::SetAnnouncerItem"
+      signature: "E8 ? ? ? ? EB 2F 68"
+    - 
+      commands: 
+        relative: 0
+      name: "DotaPlayerResource::GetPlayerSelectedHero"
+      signature: "E8 ? ? ? ? 8B 0D ? ? ? ? 8B 57 2C 50"
+    - 
+      commands: 
+        relative: 0
+      name: "DotaPlayerResource::GetPlayerName"
+      signature: "E8 ? ? ? ? 8B 4D FC 89 45 C0"
+    - 
+      commands:
+        offset: 2
+        relative: 0
+      name: "DotaChat::MessagePrintf"
+      signature: "33 C0 E8 ? ? ? ? 5F B0 01"
+    - 
+      commands: 
+        relative: 0
+      name: "DotaChat::EventPrintf"
+      signature: "E8 ? ? ? ? 33 D2 83 7C 24"
+    - 
+      commands: 
+        relative: 0
+      name: "DotaPlayer::GetLocalPlayerSelectedUnit"
+      signature: "E8 ? ? ? ? 85 C0 74 50 53"
+    - 
+      commands: 
+        relative: 0
+      name: "DotaPlayer::ShowRingEffect"
+      signature: "E8 ? ? ? ? EB 78 33 D2"
+    - 
+      commands: 
+        relative: 0
+      name: "DotaPlayer::PrepareUnitOrders"
+      signature: "E8 ? ? ? ? 83 CF FF EB 1E"
+    - 
+      commands: 
+        relative: 0
+      name: "DotaPlayer::SetClickBehaviour"
+      signature: "E8 ? ? ? ? 81 4D"
+    - 
+      commands: 
+        offset: 1
+        relative: 0
+      name: "EconItemView::Init"
+      signature: "57 E8 ? ? ? ? 8B B3"
+    - 
+      commands:
+        offset: 2
+        relative: 0
+      name: "EconItemView::Create"
+      signature: "8B F0 E8 ? ? ? ? 89 45 10 EB 07"
+    - 
+      commands:
+        offset: 3
+        relative: 0
+      name: "ParticleManager::PrecacheParticleSystem"
+      signature: "8B 75 0C E8 ? ? ? ? 85 FF 74 07"
+    - 
+      commands:
+        offset: 1
+        relative: 0
+      name: "ParticleManager::DestroyParticle"
+      signature: "50 E8 ? ? ? ? C7 86 ? ? ? ? ? ? ? ? 5F"
+    - 
+      commands:
+        relative: 0
+      name: "ParticleManager::CreateParticle"
+      signature: "E8 ? ? ? ? 6A 00 6A 00 68 ? ? ? ? 6A 01"
+    - 
+      commands:
+        relative: 0
+      name: "ParticleManager::SetParticleControl"
+      signature: "E8 ? ? ? ? 8B 15 ? ? ? ? 52 EB 41"
+    - 
+      commands:
+        relative: 0
+      name: "ParticleManager::SetParticleControlEnt"
+      signature: "E8 ? ? ? ? 8B 0D ? ? ? ? 51 8B C7 E8 ? ? ? ? 8B CE"
+    - 
+      commands:
+        relative: 0
+      name: "ParticleManager::ReleaseParticleIndex"
+      signature: "E8 ? ? ? ? 8B 44 24 34 99"

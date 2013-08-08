@@ -4,7 +4,7 @@
 #include "DotaParticle.hpp"
 #include "DotaModifierManager.hpp"
 
-class CDotaItem : public CBaseEntity {
+class DotaItem : public BaseEntity {
 public:
   const char* GetName() {
     int offset = 0x778;
@@ -36,20 +36,20 @@ public:
   }
 };
 
-class CUnitInventory {
+class UnitInventory {
 public:
-  CDotaItem* GetItemInSlot(int index) {
+  DotaItem* GetItemInSlot(int index) {
     int offset = 0x18;
     int handle = *(int*)(this + offset + index * 4);
-    return (CDotaItem*)GlobalInstanceManager::GetClientEntityList()->GetClientEntityFromHandle(handle);
+    return (DotaItem*)GlobalInstanceManager::GetClientEntityList()->GetClientEntityFromHandle(handle);
   }
 };
 
-class CBaseNpc : public CBaseEntity {
+class BaseNPC : public BaseEntity {
 public:
-  CParticleProperty* GetParticleProp() {
+  ParticleProperty* GetParticleProp() {
     PVOID pParticleProp = (PVOID)(this + 0x10);
-    typedef CParticleProperty* ( __thiscall* OriginalFn )( PVOID );
+    typedef ParticleProperty* ( __thiscall* OriginalFn )( PVOID );
     return utils::GetVtableFunction<OriginalFn>( pParticleProp, 0 )( pParticleProp );
   }
   float GetEffectiveInvisibilityLevel() {
@@ -82,20 +82,20 @@ public:
     int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_flMaxMana");
     return *(float*)(this + offset);
   }
-  CUnitInventory* GetInventory() {
+  UnitInventory* GetInventory() {
     int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_Inventory");
-    return (CUnitInventory*)(this + offset);
+    return (UnitInventory*)(this + offset);
   }
-  CModifierManager* GetModifierManager() {
+  ModifierManager* GetModifierManager() {
     int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC","m_ModifierManager");
-    return (CModifierManager*)(this + offset);
+    return (ModifierManager*)(this + offset);
   }
   float GetPhysicalArmor() {
     typedef float ( __thiscall* OriginalFn )( PVOID );
     return utils::GetVtableFunction<OriginalFn>(this, 261)(this);
   }
 
-  bool IsEntityLastHittable(CBaseNpc* entity) {
+  bool IsEntityLastHittable(BaseNPC* entity) {
     int health = entity->GetHealth();
     if (health <= 0) return false;
     int damage = GetDamageMin() + GetBonusDamage();
@@ -128,47 +128,44 @@ public:
 
     __asm {
       mov esi, this
-        call get_attack_range_address_
-        movss [range], xmm0
+      call address
+      movss [range], xmm0
     }
 
     return range;
   }
-  bool IsEntityInRange(CBaseEntity* base_enity, float distance) {
+  bool IsEntityInRange(BaseEntity* base_enity, float distance) {
     uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("BaseNpc::IsEntityInRange");
 
     bool in_range;
 
     __asm {
       push distance
-        mov esi, base_enity
-        mov ecx, this
-        call is_entity_in_range_address_
-        mov in_range, al
+      mov esi, base_enity
+      mov ecx, this
+      call address
+      mov in_range, al
     }
 
     return in_range;
   }
-private:
-  static unsigned long is_entity_in_range_address_;
-  static unsigned long get_attack_range_address_;
 };
 
-class UnitAnnouncer : public CBaseNpc {
+class UnitAnnouncer : public BaseNPC {
 public:
   void SetAnnouncerItem(EconItemView* item, bool unknown0) {
     uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("UnitAnnouncer::SetAnnouncerItem");
 
     __asm {
       mov ecx, item
-        mov esi, this
-        mov al, unknown0
-        call set_announcer_item_address_
+      mov esi, this
+      mov al, unknown0
+      call address
     }
   }
 };
 
-class CBaseNpcHero : public CBaseNpc {
+class BaseNPCHero : public BaseNPC {
  public:
   bool IsIllusion() {
     int offset = sourcesdk::NetVarManager::GetInstance().GetNetVarOffset("DT_DOTA_BaseNPC_Hero","m_hReplicatingOtherHeroModel");

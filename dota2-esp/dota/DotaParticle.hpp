@@ -4,27 +4,27 @@
 
 class CNewParticleEffect {
 public:
-  void SetControlPoint(int unknown, Vector const& vector) {
+  void SetControlPoint(int index, Vector const& vector) {
     uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("CNewParticleEffect::SetControlPoint");
     Vector local_vector = vector;
 
     __asm {
-      lea esi, [vector]
-      push unknown
+      lea esi, [local_vector]
+      push index
       mov edi, this
       call address
     }
   }
 };
 
-class CParticleProperty {
+class ParticleProperty {
 public:
   void StopEmissionAndDestroyImmediately(CNewParticleEffect* effect) {
     uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("ParticleProperty::StopEmissionAndDestroyImmediately");
     __asm {
       mov eax, effect
-        mov ecx, this
-        call address
+      mov ecx, this
+      call address
     }
   }
   CNewParticleEffect* Create(char const* name, int particle_attachment, int attachment_point, Vector vector = vec3_origin) {
@@ -38,14 +38,14 @@ public:
 
     __asm {
       push z
-        push y
-        push x
-        push attachment_point
-        push particle_attachment
-        push this
-        mov eax, name
-        call address
-        mov effect, eax
+      push y
+      push x
+      push attachment_point
+      push particle_attachment
+      push this
+      mov eax, name
+      call address
+      mov effect, eax
     }
 
     return effect;

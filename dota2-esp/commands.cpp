@@ -121,7 +121,7 @@ namespace commands {
       Msg("Usage: dota_announcer_killstreak_set <item_id>\n");
       return;
     }
-    CDotaPlayer* player = (CDotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
+    DotaPlayer* player = (DotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
     if (player == nullptr) {
       Msg("Could not get local player\n");
       return;
@@ -167,7 +167,7 @@ namespace commands {
     }
     item->Init(item_id, 9999, 9999, 0);
 
-    CHud::SelectHudSkin(item, 1);
+    Hud::SelectHudSkin(item, 1);
   }
 
   void ShiftDown(const CCommandContext &context, const CCommand &args) {

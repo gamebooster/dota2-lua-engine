@@ -17,7 +17,6 @@ public:
 
 private:
   GlobalAddressRetriever() : static_addresses_("static"), dynamic_addresses_("dynamic") {
-
     try {
       static_addresses_.LoadSignatures(utils::GetModuleDirectory() + "config.yaml");
     } catch( boost::exception &e) {

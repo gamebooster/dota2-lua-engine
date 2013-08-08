@@ -7,8 +7,7 @@ using namespace std;
 typedef void* ( __cdecl* CreateInterface_t )( const char*, int* );
 typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
 
-typedef struct player_info_s
-{
+typedef struct player_info_s {
   unsigned __int64			xuid;
   char			name[32];
   int				userID;
@@ -22,8 +21,7 @@ typedef struct player_info_s
 } player_info_t;
 
 
-abstract_class IGameSystem
-{
+abstract_class IGameSystem {
 public:
   // GameSystems are expected to implement these methods.
   virtual char const *Name() = 0;
@@ -91,19 +89,16 @@ public:
 
 class ClientClass {
  public:
-	const char* GetName( void ) {
+	const char* GetName() {
 		return *(char**)(this + 0x8);
 	}
-	RecvTable* GetTable( )
-	{
+	RecvTable* GetTable() {
 		return *(RecvTable**)(this + 0xC);
 	}
-	ClientClass* NextClass( )
-	{
+	ClientClass* NextClass() {
 		return *(ClientClass**)(this + 0x10);
 	}
-	int GetClassID( void )
-	{
+	int GetClassID() {
 		return *(int*)(this + 0x14);
 	}
 };
@@ -141,7 +136,7 @@ public:
   }
 };
 
-class CBaseEntity {
+class BaseEntity {
 public:
   const CBaseHandle& GetRefEHandle() {
     typedef CBaseHandle& ( __thiscall* OriginalFn )(void*);
@@ -205,13 +200,11 @@ public:
 		typedef bool ( __thiscall* OriginalFn )( PVOID );
 		return utils::GetVtableFunction<OriginalFn>( this, 11 )( this );
 	}
-	int GetLocalPlayerIndex ()
-	{
+	int GetLocalPlayerIndex() {
 		typedef int ( __thiscall* OriginalFn )( PVOID );
 		return utils::GetVtableFunction<OriginalFn>( this, 12 )( this );
 	}
-	float Time()
-	{
+	float Time() {
 		typedef float ( __thiscall* OriginalFn )( PVOID );
 		return utils::GetVtableFunction<OriginalFn>( this, 14 )( this );
 	}
@@ -227,8 +220,7 @@ public:
 		typedef int ( __thiscall* OriginalFn )( PVOID );
 		return utils::GetVtableFunction<OriginalFn>( this, 21 )( this );
 	}
-	bool IsInGame()
-	{
+	bool IsInGame() {
 		typedef bool ( __thiscall* OriginalFn )( PVOID );
 		return utils::GetVtableFunction<OriginalFn>( this, 26 )( this );
 	}
@@ -258,16 +250,13 @@ public:
 	}
 };
 
-class IPanel
-{
+class IPanel {
 public:
-	const char *GetName(unsigned int vguiPanel)
-	{
+	const char *GetName(unsigned int vguiPanel) {
 		typedef const char* ( __thiscall* OriginalFn )( PVOID, unsigned int );
 		return utils::GetVtableFunction<OriginalFn>( this, 40 )( this, vguiPanel );
 	}
-	void PaintTraverse(int unknw, unsigned int vguiPanel, bool forceRepaint, bool allowForce)
-	{
+	void PaintTraverse(int unknw, unsigned int vguiPanel, bool forceRepaint, bool allowForce) {
 		typedef void ( __thiscall* OriginalFn )( PVOID, int, unsigned int, bool, bool);
 		return utils::GetVtableFunction<OriginalFn>( this, 45 )( this, unknw, vguiPanel, forceRepaint, allowForce);
 	}
@@ -323,12 +312,12 @@ public:
 
 class EntityList {
   public:
-  CBaseEntity* GetClientEntity( int entnum ) {
-    typedef CBaseEntity* ( __thiscall* OriginalFn )( PVOID, int );
+  BaseEntity* GetClientEntity( int entnum ) {
+    typedef BaseEntity* ( __thiscall* OriginalFn )( PVOID, int );
     return utils::GetVtableFunction<OriginalFn>( this, 3 )( this, entnum );
   }
-  CBaseEntity* GetClientEntityFromHandle( int hEnt ) {
-    typedef CBaseEntity* ( __thiscall* OriginalFn )( PVOID, int );
+  BaseEntity* GetClientEntityFromHandle( int hEnt ) {
+    typedef BaseEntity* ( __thiscall* OriginalFn )( PVOID, int );
     return utils::GetVtableFunction<OriginalFn>( this, 4 )( this, hEnt );
   }
   int GetHighestEntityIndex(void) {

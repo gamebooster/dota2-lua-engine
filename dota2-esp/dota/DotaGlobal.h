@@ -8,6 +8,8 @@
 #include "DotaItem.h"
 #include "DotaHud.hpp"
 #include "DotaGameRules.hpp"
+#include "DotaPlayer.hpp"
+#include "DotaParticle.hpp"
 
 class GameSystemsRetriever {
 public:

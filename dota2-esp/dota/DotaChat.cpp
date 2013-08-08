@@ -11,7 +11,7 @@
 namespace dota {
 
   DotaChat* DotaChat::GetInstance() {
-    return (DotaChat*)CHud::GetInstance()->FindSFElement("CDOTA_SF_Hud_Chat");
+    return (DotaChat*)Hud::GetInstance()->FindSFElement("CDOTA_SF_Hud_Chat");
   }
 
   void DotaChat::MessagePrintf(int area, wchar_t const* message, int player_index, int priority, float time) {

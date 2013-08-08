@@ -96,6 +96,9 @@
     <ClCompile Include="utils\global_address_retriever.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="dota\DotaHud.cpp">
+      <Filter>Source Files\dota</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="tools\Injector.exe">
@@ -108,6 +111,7 @@
       <Filter>tools</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
+    <None Include="config.yaml" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source-sdk\SDK.h">
