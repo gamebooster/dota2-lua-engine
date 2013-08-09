@@ -5,6 +5,10 @@
 
 namespace dota {
 
+class ParticleManagerSystem {
+
+};
+
 class ParticleManager {
 public:
   static void PrecacheParticleSystem(const char* name) {
@@ -97,12 +101,12 @@ public:
   static ParticleManager* ParticleManager::GetInstance() {
     if (instance_ == nullptr) {
       unsigned long system = (unsigned long)GameSystemsRetriever().FindByName("CDOTA_ParticleManagerSystem");
-      instance_ = *(ParticleManager**)(system + 0xC);
+      instance_ = (ParticleManagerSystem*)(system);
     }
-    return instance_;
+    return *(ParticleManager**)(instance_ + 0xC);
   }
  private:
-  static ParticleManager* instance_;
+  static ParticleManagerSystem* instance_;
 };
 
 }

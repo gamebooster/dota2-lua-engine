@@ -3,5 +3,5 @@
 #include "DotaParticleManager.hpp"
 
 namespace dota {
-  ParticleManager* ParticleManager::instance_ = nullptr;
+  ParticleManagerSystem* ParticleManager::instance_ = nullptr;
 }

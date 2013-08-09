@@ -126,10 +126,6 @@ DWORD WINAPI LastHitThread( LPVOID lpArguments ) {
   return 1;
 }
 
-
-static dota::CNewParticleEffect* effect = nullptr;
-static bool tagged_towers = false;
-
 void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface) {
   typedef void ( __thiscall* OriginalFunction )(PVOID, PVOID);
   panel_hook->GetMethod<OriginalFunction>(107)(thisptr, guipaintsurface);
@@ -144,23 +140,6 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
 
   dota::BaseNPCHero* local_hero = (dota::BaseNPCHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(local_player->GetAssignedHero());
   if (local_hero == nullptr) return;
-  if (local_hero->IsVisibleByEnemyTeam()) {
-    if (effect == nullptr) {
-      effect = local_hero->GetParticleProp()->Create("rune_haste", 1, -1);
-    }
-  } else {
-    if (effect != nullptr) {
-      local_hero->GetParticleProp()->StopEmissionAndDestroyImmediately(effect);
-      effect = nullptr;
-    }
-  }
-
-  if (tagged_towers == false) {
-    Vector vector2( 1200, 0, 0);
-    int index = dota::ParticleManager::GetInstance()->CreateParticle("range_display", 1, local_hero);
-    dota::ParticleManager::GetInstance()->SetParticleControl(index, 1, vector2);
-    dota::ParticleManager::GetInstance()->ReleaseParticleIndex(index);
-  }
 
   dota::DotaChat* chat = dota::DotaChat::GetInstance();
   if (chat == nullptr) return;
@@ -262,7 +241,6 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
     }
   }
 
-  tagged_towers = true;
 }
 
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName ) {
@@ -271,10 +249,10 @@ void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName 
 
   items.clear();
   illusions.clear();
-  tagged_towers = false;
 }
 
 void FinalizeHook() {
+
   if (panel_hook != nullptr) {
     panel_hook->Unhook();
     delete panel_hook;
@@ -289,15 +267,7 @@ void FinalizeHook() {
   }
   active_thread = false;
   commands::Unregister();
-  if (effect != nullptr) {
-    dota::DotaPlayer* local_player = (dota::DotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
-    if (local_player == nullptr) return;
 
-    dota::BaseNPCHero* local_hero = (dota::BaseNPCHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(local_player->GetAssignedHero());
-    if (local_hero == nullptr) return;
-    local_hero->GetParticleProp()->StopEmissionAndDestroyImmediately(effect);
-    effect = nullptr;
-  }
   Sleep(500);
 }
 

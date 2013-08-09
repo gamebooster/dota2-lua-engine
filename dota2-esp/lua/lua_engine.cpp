@@ -27,7 +27,5 @@ namespace lua {
   }
 
 
-  LuaEngine::LuaEngine() {
-
-  }
+  LuaEngine::LuaEngine() {}
 }

@@ -73,16 +73,17 @@ namespace lua {
     }
    private:
      PaintHookManager() {
-       hook_ = new utils::VtableHook(dota::Hud::GetInstance()->FindElement("CHudHealthBars"), 0x34);
+       hook_ = new utils::VtableHook(dota::Hud::GetInstance()->FindElement("CHudHealthBars") , 0x34);
        hook_->HookMethod(CHudHealthBars_Paint, 107);
      }
      static void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface) {
-       PaintHookManager& hook_manager = PaintHookManager::GetInstance();
        typedef void ( __thiscall* OriginalFunction )(PVOID, PVOID);
+       static PaintHookManager& hook_manager = PaintHookManager::GetInstance();
        hook_manager.hook_->GetMethod<OriginalFunction>(107)(thisptr, guipaintsurface);
        
        hook_manager.CallListener();
      }
+
   };
   class PaintHookListener : public HookListener {
   public:
@@ -161,6 +162,12 @@ namespace lua {
   static dota::DotaPlayer* GetLocalPlayer() {
     return reinterpret_cast<dota::DotaPlayer*>(GlobalInstanceManager::GetClientTools()->GetLocalPlayer());
   }
+  static dota::BaseNPCHero* GetLocalHero() {
+    dota::DotaPlayer* local_player = (dota::DotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
+    if (local_player == nullptr) return nullptr;
+
+    return reinterpret_cast<dota::BaseNPCHero*>(GlobalInstanceManager::GetClientEntityList()->GetClientEntity(local_player->GetAssignedHero()));
+  }
   class LuaParticle {
    public:
     LuaParticle(dota::BaseEntity* entity, const char* name) {
@@ -187,6 +194,40 @@ namespace lua {
   static RefCountedPtr<LuaParticle> CreateParticle(Vector vector, const char* name) {
     return new LuaParticle(vector, name);
   } 
+
+  class ConsoleCommand {
+  public:
+    ConsoleCommand(const char* name, luabridge::LuaRef callback) : command_(name, ConsoleCallback, "dynamic lua command") {
+      ConsoleCommand::callbacks_.insert(std::pair<std::string, luabridge::LuaRef>(command_.GetName(), callback));
+      GlobalInstanceManager::GetCVar()->RegisterConCommand(&command_);
+    }
+    ~ConsoleCommand() {
+      Warning("Unregister ConsoleCommand\n");
+      GlobalInstanceManager::GetCVar()->UnregisterConCommand(&command_);
+      ConsoleCommand::callbacks_.erase(command_.GetName());
+    }
+  private: 
+    static void ConsoleCallback(const CCommandContext &context, const CCommand &args) {
+      try {
+        luabridge::LuaRef func = ConsoleCommand::callbacks_.at(args[0]);
+        func(args[1]);
+      }
+      catch (luabridge::LuaException const& e) {
+        Warning("booster-lua: ConsoleCallbackError %s \n", e.what());
+      }
+      catch (const std::out_of_range& oor) {
+        Warning("booster-lua: ConsoleCallbackError %s \n", oor.what());
+      }
+      catch (...) {
+        Warning("booster-lua: ConsoleCallbackError \n");
+      }
+    }
+
+    ConCommand command_;
+    static std::map<std::string, luabridge::LuaRef> callbacks_;
+  };
+
+  std::map<std::string, luabridge::LuaRef> ConsoleCommand::callbacks_;
 
   typedef void(*MsgSignature)(const tchar* msg, ...); 
   template<MsgSignature T>
@@ -226,9 +267,17 @@ namespace lua {
 
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
+        .beginClass<ConsoleCommand>("AddConsoleCommand")
+          .addConstructor<void (*) (const char*, luabridge::LuaRef)> ()
+        .endClass()
+      .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
         .addFunction("FindEntities", &FindEntities)
         .addFunction("FindEntitiesWithName", &FindEntitiesWithName)
         .addFunction("GetLocalPlayer", &GetLocalPlayer)
+        .addFunction("GetLocalHero", &GetLocalHero)
         .addFunction("CreateParticle", &CreateParticle)
         .addFunction("CreateEntityParticle", &CreateEntityParticle)
         .addVariable("kDotaPlayer", &kDotaPlayer, false)
