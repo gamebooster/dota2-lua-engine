@@ -109,6 +109,13 @@ namespace lua {
   static int kDotaBaseNPC = 1;
   static int kDotaBaseNPCHero = 2;
 
+  class LuaDotaPlayer : public dota::DotaPlayer {
+  public:
+    dota::BaseNPCHero* LuaGetAssignedHero() {
+      return (dota::BaseNPCHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(this->GetAssignedHero()); 
+    }
+  };
+
   static luabridge::LuaRef FindEntities(int type,  lua_State* L) {
     luabridge::LuaRef table = luabridge::newTable(L);
     int count = 1;
@@ -122,7 +129,7 @@ namespace lua {
 
       if (type == kDotaPlayer) {
         if (StringHasPrefix(class_name, "CDOTAPlayer")) {
-          dota::DotaPlayer* player = reinterpret_cast<dota::DotaPlayer*>(base_entity);
+          LuaDotaPlayer* player = reinterpret_cast<LuaDotaPlayer*>(base_entity);
           table[count] = player;
           count++;
         }
@@ -159,11 +166,11 @@ namespace lua {
     }
     return table;
   }
-  static dota::DotaPlayer* GetLocalPlayer() {
-    return reinterpret_cast<dota::DotaPlayer*>(GlobalInstanceManager::GetClientTools()->GetLocalPlayer());
+  static LuaDotaPlayer* GetLocalPlayer() {
+    return reinterpret_cast<LuaDotaPlayer*>(GlobalInstanceManager::GetClientTools()->GetLocalPlayer());
   }
   static dota::BaseNPCHero* GetLocalHero() {
-    dota::DotaPlayer* local_player = (dota::DotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
+    LuaDotaPlayer* local_player = (LuaDotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
     if (local_player == nullptr) return nullptr;
 
     return reinterpret_cast<dota::BaseNPCHero*>(GlobalInstanceManager::GetClientEntityList()->GetClientEntity(local_player->GetAssignedHero()));
@@ -229,6 +236,19 @@ namespace lua {
 
   std::map<std::string, luabridge::LuaRef> ConsoleCommand::callbacks_;
 
+  static void DrawString(int x, int y, int r, int g, int b, int a, bool center, const char* text) {
+    sourcesdk::DrawUtils::GetInstance().DrawString(x, y, r, g, b, a, center, text);
+  }
+  static Vector GetVectorInScreenSpace(Vector vec) {
+    int x, y;
+    if (sourcesdk::DrawUtils::GetInstance().GetVectorInScreenSpace(vec, x, y)) {
+      return Vector(x, y, 0);
+    } else {
+      return vec3_origin;
+    }
+  }
+
+
   typedef void(*MsgSignature)(const tchar* msg, ...); 
   template<MsgSignature T>
   int  LogWrapper(lua_State *L) {
@@ -290,6 +310,9 @@ namespace lua {
         .beginClass<sourcesdk::DrawUtils>("DrawUtils")
           .addStaticFunction("GetInstance", &sourcesdk::DrawUtils::GetInstance)
           .addFunction("DrawRect", &sourcesdk::DrawUtils::DrawRect)
+          .addStaticFunction("GetVectorInScreenSpace", &GetVectorInScreenSpace)
+          .addFunction("OutlineRect", &sourcesdk::DrawUtils::OutlineRect)
+          .addStaticFunction("DrawString", &DrawString)
         .endClass()
       .endNamespace();
 
@@ -424,8 +447,8 @@ namespace lua {
         .beginClass<Vector>("Vector")
          .addConstructor<void (*) (float, float, float)>()
          .addData("x", &Vector::x)
-         .addData("y", &Vector::x)
-         .addData("z", &Vector::x)
+         .addData("y", &Vector::y)
+         .addData("z", &Vector::z)
          .addFunction("IsValid", &Vector::IsValid)
          .addFunction("Invalidate", &Vector::Invalidate)
          .addFunction("Zero", &Vector::Zero)
@@ -491,9 +514,9 @@ namespace lua {
         .endClass ()
         .deriveClass <dota::DotaPlayer, dota::BasePlayer> ("DotaPlayer")
           .addFunction ("GetAssignedHero", &dota::DotaPlayer::GetAssignedHero)
-          .addFunction ("PrepareUnitOrders", &dota::DotaPlayer::PrepareUnitOrders)
-          .addFunction ("GetSelectedUnit", &dota::DotaPlayer::GetSelectedUnit)
-          .addFunction ("SetClickBehaviour", &dota::DotaPlayer::SetClickBehaviour)
+        .endClass ()
+        .deriveClass <LuaDotaPlayer, dota::DotaPlayer> ("LuaDotaPlayer")
+          .addFunction ("GetAssignedHero", &LuaDotaPlayer::LuaGetAssignedHero)
         .endClass ()
       .endNamespace();
 
