@@ -54,9 +54,8 @@ void FinalizeHook() {
   if (client_hook != nullptr) {
     delete client_hook;
   }
-
+  lua::LuaEngine::GetInstance().UnloadScripts();
   commands::Unregister();
-  Sleep(500);
 }
 
 int WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
