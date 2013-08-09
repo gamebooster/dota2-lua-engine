@@ -188,56 +188,6 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
 
         offset_counter++;
       }
-
-      dota::BaseNPCHero* hero = (dota::BaseNPCHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(dota_player->GetAssignedHero());
-      if (hero == nullptr) continue;
-
-      if (team != local_team) {
-        dota::UnitInventory* inventory = hero->GetInventory();
-        if (inventory == nullptr) continue;
-
-        for (int i = 0; i < 6; i++ ) {
-          dota::DotaItem* item = inventory->GetItemInSlot(i);
-          if (item == nullptr) continue;
-
-          CBaseHandle item_handle = item->GetRefEHandle();
-
-          if (items.count(item_handle) == 0) {
-            dota::CDotaGameManager* game_manager = dota::CDotaGameManager::GetInstance();
-            if (game_manager == nullptr) return;
-
-            KeyValues* item_data = game_manager->GetItemDataByItemID(item->GetItemId());
-
-            const char* hero_name = dota::DotaPlayerResource::GetPlayerSelectedHero(player_id);
-            hero_name = StringAfterPrefix(hero_name, "npc_dota_hero_");
-            const char* item_name = item_data->GetString("AbilityName");
-            item_name = StringAfterPrefix(item_name, "item_");
-            dota::DotaSFHudOverlay::GetInstance()->ShowSpecItemPickup(hero_name, item_name);
-
-            items.insert(item_handle);
-          } 
-        }
-      }
-
-      //int health = hero->GetHealth();
-
-      //float manaMax = hero->GetMaxMana();
-      //if (manaMax == 0) continue;
-      //float mana = hero->GetMana();
-
-      //int barWidth = 100;
-      //int lifeWidth = (mana * 100 / manaMax);
-
-      //Vector vecScreen;
-      //int xpos, ypos;
-
-      //if (sourcesdk::DrawUtils::GetInstance().GetVectorInScreenSpace(hero->GetAbsOrigin(), xpos, ypos)) {
-      //  sourcesdk::DrawUtils::GetInstance().DrawRect(xpos-45,ypos-20-25,barWidth,10,0,0,0,255);
-      //  sourcesdk::DrawUtils::GetInstance().DrawRect(xpos-45,ypos-20-25,lifeWidth,10,0,128,255,255);
-      //  sourcesdk::DrawUtils::GetInstance().OutlineRect(xpos-45-1,ypos-20-25-1,barWidth+2,10+2,0,0,0,255);
-      //  sourcesdk::DrawUtils::GetInstance().DrawString(xpos-45+(barWidth/2),ypos-23-25, 255,255,255,255, true, "%d / %d",(int)mana,(int)manaMax);
-      //  sourcesdk::DrawUtils::GetInstance().DrawString(xpos-45+(barWidth/2),ypos - 100, 255,255,255,255, true, "%d", health);
-      //}
     }
   }
 

@@ -11,6 +11,7 @@
 #include "..\dota\DotaGlobal.h"
 #include "..\dota\DotaConstants.h"
 #include "..\dota\DotaParticleManager.hpp"
+#include "..\dota\DotaPlayerResource.h"
 
 #include "..\dota\DotaUnits.hpp"
 #include "..\utils\utils.h"
@@ -318,6 +319,22 @@ namespace lua {
 
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
+        .beginClass<dota::DotaPlayerResource>("PlayerResource")
+          .addStaticFunction("GetPlayerResource", &dota::DotaPlayerResource::GetPlayerResource)
+          .addStaticFunction("GetPlayerSelectedHero", &dota::DotaPlayerResource::GetPlayerSelectedHero)
+        .endClass()
+      .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<dota::DotaSFHudOverlay>("SFHudOverlay")
+          .addStaticFunction("GetInstance", &dota::DotaSFHudOverlay::GetInstance)
+          .addFunction("ShowSpecItemPickup", &dota::DotaSFHudOverlay::ShowSpecItemPickup)
+        .endClass()
+      .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
         .beginClass<GlobalInstanceManager>("GlobalInstanceManager")
          .addStaticFunction("GetClient", &GlobalInstanceManager::GetClient)
          .addStaticFunction("GetClientEntityList", &GlobalInstanceManager::GetClientEntityList)
@@ -461,6 +478,13 @@ namespace lua {
       .beginNamespace("dota")
         .beginClass<dota::CNewParticleEffect>("CNewParticleEffect")
          .addFunction("SetControlPoint", &dota::CNewParticleEffect::SetControlPoint)
+        .endClass()
+     .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<CBaseHandle>("CBaseHandle")
+         .addFunction("ToInt", &CBaseHandle::ToInt)
         .endClass()
      .endNamespace();
 
