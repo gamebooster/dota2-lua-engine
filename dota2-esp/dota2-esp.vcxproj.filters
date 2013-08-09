@@ -99,6 +99,9 @@
     <ClCompile Include="dota\DotaHud.cpp">
       <Filter>Source Files\dota</Filter>
     </ClCompile>
+    <ClCompile Include="dota\DotaParticleManager.cpp">
+      <Filter>Source Files\dota</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="tools\Injector.exe">

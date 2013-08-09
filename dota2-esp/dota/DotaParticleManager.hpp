@@ -105,6 +105,4 @@ public:
   static ParticleManager* instance_;
 };
 
-ParticleManager* ParticleManager::instance_ = nullptr;
-
 }

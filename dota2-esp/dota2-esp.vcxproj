@@ -182,6 +182,7 @@
     <ClCompile Include="dota\DotaGlobal.cpp" />
     <ClCompile Include="dota\DotaHud.cpp" />
     <ClCompile Include="dota\DotaItem.cpp" />
+    <ClCompile Include="dota\DotaParticleManager.cpp" />
     <ClCompile Include="lua\lua_engine.cpp" />
     <ClCompile Include="lua\lua_global.cpp" />
     <ClCompile Include="lua\lua_state.cpp" />

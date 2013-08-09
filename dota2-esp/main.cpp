@@ -213,35 +213,32 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
       dota::BaseNPCHero* hero = (dota::BaseNPCHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(dota_player->GetAssignedHero());
       if (hero == nullptr) continue;
 
-            if (team != local_team) {
+      if (team != local_team) {
+        dota::UnitInventory* inventory = hero->GetInventory();
+        if (inventory == nullptr) continue;
 
-      dota::UnitInventory* inventory = hero->GetInventory();
-      if (inventory == nullptr) continue;
+        for (int i = 0; i < 6; i++ ) {
+          dota::DotaItem* item = inventory->GetItemInSlot(i);
+          if (item == nullptr) continue;
 
-      for (int i = 0; i < 6; i++ ) {
-        dota::DotaItem* item = inventory->GetItemInSlot(i);
-        if (item == nullptr) continue;
+          CBaseHandle item_handle = item->GetRefEHandle();
 
-        CBaseHandle item_handle = item->GetRefEHandle();
+          if (items.count(item_handle) == 0) {
+            dota::CDotaGameManager* game_manager = dota::CDotaGameManager::GetInstance();
+            if (game_manager == nullptr) return;
 
-        if (items.count(item_handle) == 0) {
-          std::wstring message = L" bought ";
+            KeyValues* item_data = game_manager->GetItemDataByItemID(item->GetItemId());
 
-          dota::CDotaGameManager* game_manager = dota::CDotaGameManager::GetInstance();
-          if (game_manager == nullptr) return;
+            const char* hero_name = dota::DotaPlayerResource::GetPlayerSelectedHero(player_id);
+            hero_name = StringAfterPrefix(hero_name, "npc_dota_hero_");
+            const char* item_name = item_data->GetString("AbilityName");
+            item_name = StringAfterPrefix(item_name, "item_");
+            dota::DotaSFHudOverlay::GetInstance()->ShowSpecItemPickup(hero_name, item_name);
 
-          KeyValues* item_data = game_manager->GetItemDataByItemID(item->GetItemId());
-
-          const char* hero_name = dota::DotaPlayerResource::GetPlayerSelectedHero(player_id);
-          hero_name = StringAfterPrefix(hero_name, "npc_dota_hero_");
-          const char* item_name = item_data->GetString("AbilityName");
-          item_name = StringAfterPrefix(item_name, "item_");
-          dota::DotaSFHudOverlay::GetInstance()->ShowSpecItemPickup(hero_name, item_name);
-
-          items.insert(item_handle);
-        } 
+            items.insert(item_handle);
+          } 
+        }
       }
-            }
 
       int health = hero->GetHealth();
 
@@ -250,7 +247,7 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
       float mana = hero->GetMana();
 
       int barWidth = 100;
-      int lifeWidth = (int)(mana*100/manaMax);
+      int lifeWidth = (mana * 100 / manaMax);
 
       Vector vecScreen;
       int xpos, ypos;
