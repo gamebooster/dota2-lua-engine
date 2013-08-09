@@ -24,8 +24,13 @@ dota.GetLocalHero()
 dota.FindEntities()
 dota.AddPaintHook()
 dota.AddEventListener()
+dota.AddConsoleCommand()
 
 dota.PlayerResource
 dota.DrawUtils
 dota.GlobalInstanceManager
 ```
+
+## Examples
+
+You can find multiple example-scripts in `scripts`.
