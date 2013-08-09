@@ -1,6 +1,5 @@
 local items = {}
 local hook = nil
-local game_start_hook = nil
 
 function AddToSet(set, key)
     set[key] = true
@@ -12,10 +11,6 @@ end
 
 function SetContains(set, key)
     return set[key] ~= nil
-end
-
-function OnGameStart()
-  items = {}
 end
 
 function OnPaint()
@@ -49,5 +44,4 @@ end
 
 function Initialize()
   hook = dota.AddPaintHook(OnPaint)
-  game_start_hook = dota.AddEventListener("dota_player_pick_hero", OnGameStart)
 end

@@ -24,12 +24,10 @@ static utils::VtableHook* client_hook;
 static utils::VtableHook* input_hook;
 static HANDLE thread = nullptr;
 
-static std::set<CBaseHandle> illusions;
-void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface);
+
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName );
 bool __fastcall IsKeyDown(void* thisptr, int edx, int key_code );
 
-static bool active_thread = true;
 bool simulate_shift_down = false;
 DWORD WINAPI LastHitThread( LPVOID lpArguments );
 
@@ -118,51 +116,8 @@ DWORD WINAPI LastHitThread( LPVOID lpArguments ) {
       }
     }
     Sleep(50);
-  } while (active_thread);
+  } while (1);
   return 1;
-}
-
-void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface) {
-
-  int offset_counter = 0;
-
-  dota::DotaPlayerResource* player_resource = dota::DotaPlayerResource::GetPlayerResource();
-  if (player_resource == nullptr) return;
-
-  dota::DotaPlayer* local_player = (dota::DotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
-  if (local_player == nullptr) return;
-
-  dota::BaseNPCHero* local_hero = (dota::BaseNPCHero*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(local_player->GetAssignedHero());
-  if (local_hero == nullptr) return;
-
-  dota::DotaChat* chat = dota::DotaChat::GetInstance();
-  if (chat == nullptr) return;
-
-  int local_player_id = local_player->GetPlayerId();
-  int local_team =  player_resource->GetTeam(local_player_id);
-
-  for (int i = 1; i < GlobalInstanceManager::GetClientEntityList()->GetHighestEntityIndex(); i++ ) {
-    dota::BaseEntity *base_entity = GlobalInstanceManager::GetClientEntityList()->GetClientEntity(i);
-    if (base_entity == nullptr) continue;
-
-    const char* class_name = base_entity->GetClientClass()->GetName();
-    if (class_name == nullptr) continue;
-
-    if (StringHasPrefix(class_name, "CDOTA_Unit_Hero_")) {
-      dota::BaseNPCHero* hero = (dota::BaseNPCHero*)base_entity;
-      if (hero == nullptr) continue;
-
-      CBaseHandle hero_handle = hero->GetRefEHandle();
-
-      if (hero->IsIllusion() && illusions.count(hero_handle) == 0) {
-        dota::CNewParticleEffect* ghost_effect = hero->GetParticleProp()->Create("ghost", 1, -1);
-        Vector vector2(200, 0, 0);
-        ghost_effect->SetControlPoint(1, vector2);
-        illusions.insert(hero_handle);
-      }
-    }
-  }
-
 }
 
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName ) {
@@ -170,8 +125,6 @@ void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName 
   client_hook->GetMethod<OriginalFunction>(4)(thisptr, pMapName);
 
   lua::LuaEngine::GetInstance().UnloadScripts();
-
-  illusions.clear();
 }
 
 void FinalizeHook() {
