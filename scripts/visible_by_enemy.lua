@@ -1,15 +1,15 @@
 local effect = nil
 
 function OnPaint()
-  CheckVisbleByEnemyTeam()
-end
-
-function CheckVisbleByEnemyTeam()
   local local_hero = dota.GetLocalHero()
-  if local_hero:IsVisibleByEnemyTeam() and effect == nil then
-    effect = dota.CreateEntityParticle(local_hero, "rune_haste")
+  if local_hero:IsVisibleByEnemyTeam() then
+    if effect == nil then
+      effect = dota.CreateEntityParticle(local_hero, "rune_haste")
+    end
   else
-    effect = nil
+    if effect ~= nil then
+      effect = nil
+    end
   end
 end
 
