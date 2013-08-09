@@ -31,7 +31,7 @@ function OnPaint()
           local hero_name = dota.PlayerResource.GetPlayerSelectedHero(player:GetPlayerId())
           hero_name = string.gsub(hero_name, "npc_dota_hero_", "")
           local item_name = item:GetName()
-          item_name = string.gsub(hero_name, "item_", "")
+          item_name = string.gsub(item_name, "item_", "")
 
           dota.SFHudOverlay.GetInstance():ShowSpecItemPickup(hero_name, item_name)
 
