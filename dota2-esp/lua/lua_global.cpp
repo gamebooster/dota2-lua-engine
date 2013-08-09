@@ -160,8 +160,13 @@ namespace lua {
       if (class_name == nullptr) continue;
 
       if (StringHasPrefix(class_name, name)) {
-        table[count] = base_entity;
-        count++;
+        if (StringHasPrefix(class_name, "CDOTA_BaseNPC")) {
+          table[count] = (dota::BaseNPC*) base_entity;
+          count++;
+        } else {
+          table[count] = base_entity;
+          count++;
+        }
       }
     }
     return table;
@@ -507,7 +512,7 @@ namespace lua {
          .addFunction("GetAbsAngles", &dota::BaseEntity::GetAbsAngles)
          .addFunction("GetIndex", &dota::BaseEntity::GetIndex)
         .endClass()
-        .deriveClass <dota::BaseNPC, dota::BaseEntity> ("LuaBaseNPC")
+        .deriveClass <dota::BaseNPC, dota::BaseEntity> ("BaseNPC")
           .addFunction ("GetEffectiveInvisibilityLevel", &dota::BaseNPC::GetEffectiveInvisibilityLevel)
           .addFunction ("IsVisibleByEnemyTeam", &dota::BaseNPC::IsVisibleByEnemyTeam)
           .addFunction ("GetHealth", &dota::BaseNPC::GetHealth)
@@ -543,6 +548,7 @@ namespace lua {
         .endClass ()
         .deriveClass <dota::DotaPlayer, dota::BasePlayer> ("DotaPlayer")
           .addFunction ("GetAssignedHero", &dota::DotaPlayer::GetAssignedHero)
+          .addFunction ("PrepareUnitOrders", &dota::DotaPlayer::PrepareUnitOrders)
         .endClass ()
         .deriveClass <LuaDotaPlayer, dota::DotaPlayer> ("LuaDotaPlayer")
           .addFunction ("GetAssignedHero", &LuaDotaPlayer::LuaGetAssignedHero)

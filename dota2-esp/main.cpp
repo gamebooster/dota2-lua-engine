@@ -20,18 +20,15 @@
 
 #include "commands.hpp"
 
-static utils::VtableHook* client_hook;
-static utils::VtableHook* input_hook;
 static HANDLE thread = nullptr;
 
+static utils::VtableHook* client_hook;
+static utils::VtableHook* input_hook;
 
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName );
 bool __fastcall IsKeyDown(void* thisptr, int edx, int key_code );
 
 bool simulate_shift_down = false;
-DWORD WINAPI LastHitThread( LPVOID lpArguments );
-
-
 
 DWORD WINAPI InitializeHook( LPVOID lpArguments ) {
   while(utils::GetModuleHandleSafe("engine.dll" ) == nullptr
@@ -80,44 +77,6 @@ bool __fastcall IsKeyDown(void* thisptr, int edx, int key_code ) {
     if (simulate_shift_down) return true;
   }
   return input_hook->GetMethod<OriginalFunction>(18)(thisptr, key_code);
-}
-
-DWORD WINAPI LastHitThread( LPVOID lpArguments ) {
-  do {
-    dota::DotaPlayerResource* player_resource = dota::DotaPlayerResource::GetPlayerResource();
-    if (player_resource == nullptr) {
-      Sleep(500);
-      continue;
-    }
-
-    dota::DotaPlayer* local_player = (dota::DotaPlayer*)GlobalInstanceManager::GetClientTools()->GetLocalPlayer();
-    if (local_player == nullptr) {
-      Sleep(500);
-      continue;
-    }
-
-    int local_player_id = local_player->GetPlayerId();
-    int local_team =  player_resource->GetTeam(local_player_id);
-    dota::BaseNPC *local_hero = (dota::BaseNPC*)GlobalInstanceManager::GetClientEntityList()->GetClientEntity(local_player->GetAssignedHero());
-
-    for (int i = 1; i < GlobalInstanceManager::GetClientEntityList()->GetHighestEntityIndex(); i++ ) {
-      dota::BaseEntity *base_entity = GlobalInstanceManager::GetClientEntityList()->GetClientEntity(i);
-      if (base_entity == nullptr) continue;
-
-      const char* class_name = base_entity->GetClientClass()->GetName();
-
-      if (strcmp(class_name, "CDOTA_BaseNPC_Creep_Lane") == 0) { // CDOTA_BaseNPC_Creep
-        dota::BaseNPC* creep = (dota::BaseNPC*) base_entity;
-
-        if (creep && local_hero->IsEntityLastHittable(creep) && local_hero->IsEntityInRange(creep, local_hero->GetAttackRange())) {
-          local_player->PrepareUnitOrders(4, i);
-          Sleep(100);
-        }
-      }
-    }
-    Sleep(50);
-  } while (1);
-  return 1;
 }
 
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName ) {

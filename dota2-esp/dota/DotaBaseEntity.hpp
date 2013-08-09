@@ -48,8 +48,10 @@ namespace dota {
     }
     int GetIndex() {
       PVOID pNetworkable = (PVOID)(this + 0x8);
-      typedef int ( __thiscall* OriginalFn )( PVOID );
-      return utils::GetVtableFunction<OriginalFn>( pNetworkable, 9 )( pNetworkable );
+      typedef void ( __thiscall* OriginalFn )( PVOID, PVOID );
+      int entindex;
+      utils::GetVtableFunction<OriginalFn>( pNetworkable, 10 )( pNetworkable, &entindex );
+      return entindex;
     }
   };
 
