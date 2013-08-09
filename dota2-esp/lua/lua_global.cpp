@@ -57,10 +57,6 @@ namespace lua {
     }
 
     virtual ~HookManager() {
-      if (hook_) {
-        hook_->Unhook();
-        delete hook_;
-      }
     }
     protected:
      utils::VtableHook* hook_;

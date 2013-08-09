@@ -19,12 +19,10 @@
 
 #include "commands.hpp"
 
-static utils::VtableHook* panel_hook;
 static utils::VtableHook* client_hook;
 static utils::VtableHook* input_hook;
 static HANDLE thread = nullptr;
 
-static std::set<CBaseHandle> items;
 static std::set<CBaseHandle> illusions;
 void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface);
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName );
@@ -44,9 +42,6 @@ DWORD WINAPI InitializeHook( LPVOID lpArguments ) {
   }
 
   GlobalAddressRetriever::GetInstance();
-
-  panel_hook = new utils::VtableHook(dota::Hud::GetInstance()->FindElement("CHudHealthBars"), 0x34);
-  panel_hook->HookMethod(CHudHealthBars_Paint, 107);
 
   client_hook = new utils::VtableHook(GlobalInstanceManager::GetClient());
   client_hook->HookMethod(LevelInitPreEntity, 4);
@@ -127,8 +122,6 @@ DWORD WINAPI LastHitThread( LPVOID lpArguments ) {
 }
 
 void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface) {
-  typedef void ( __thiscall* OriginalFunction )(PVOID, PVOID);
-  panel_hook->GetMethod<OriginalFunction>(107)(thisptr, guipaintsurface);
 
   int offset_counter = 0;
 
@@ -175,16 +168,10 @@ void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName 
   typedef void ( __thiscall* OriginalFunction )(void*, char const*);
   client_hook->GetMethod<OriginalFunction>(4)(thisptr, pMapName);
 
-  items.clear();
   illusions.clear();
 }
 
 void FinalizeHook() {
-
-  if (panel_hook != nullptr) {
-    panel_hook->Unhook();
-    delete panel_hook;
-  }
   if (client_hook != nullptr) {
     client_hook->Unhook();
     delete client_hook;
@@ -193,9 +180,8 @@ void FinalizeHook() {
     input_hook->Unhook();
     delete input_hook;
   }
-  active_thread = false;
-  commands::Unregister();
 
+  commands::Unregister();
   Sleep(500);
 }
 
