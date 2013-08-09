@@ -1,4 +1,5 @@
 local effect = nil
+local hook = nil
 
 function OnPaint()
   local local_hero = dota.GetLocalHero()
@@ -9,10 +10,11 @@ function OnPaint()
   else
     if effect ~= nil then
       effect = nil
+      collectgarbage()
     end
   end
 end
 
 function Initialize()
-  dota.AddPaintHook(OnPaint);
+  hook = dota.AddPaintHook(OnPaint)
 end

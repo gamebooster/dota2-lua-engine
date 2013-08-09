@@ -151,7 +151,8 @@
       </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>xcopy /y "$(ProjectDir)config.yaml" "$(OutDir)"</Command>
+      <Command>xcopy /y "$(ProjectDir)config.yaml" "$(OutDir)"
+xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
