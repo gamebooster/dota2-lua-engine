@@ -337,6 +337,38 @@ namespace lua {
 
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
+        .beginClass<dota::EconItemView>("EconItemView")
+          .addStaticFunction("Create", &dota::EconItemView::Create)
+          .addFunction("Init", &dota::EconItemView::Init)
+        .endClass()
+      .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<dota::UnitAnnouncer>("UnitAnnouncer")
+          .addFunction("SetAnnouncerItem", &dota::UnitAnnouncer::SetAnnouncerItem)
+        .endClass()
+      .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<dota::Hud>("Hud")
+          .addStaticFunction("SelectHudSkin", &dota::Hud::SelectHudSkin)
+        .endClass()
+      .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<dota::GameRules>("GameRules")
+          .addStaticFunction("GetInstance", &dota::GameRules::GetInstance)
+          .addFunction("GetAnnouncer", &dota::GameRules::GetAnnouncer)
+          .addFunction("GetGameTime", &dota::GameRules::GetGameTime)
+          .addFunction("GetKillingSpreeAnnouncer", &dota::GameRules::GetKillingSpreeAnnouncer)
+        .endClass()
+      .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
         .beginClass<dota::DotaSFHudOverlay>("SFHudOverlay")
           .addStaticFunction("GetInstance", &dota::DotaSFHudOverlay::GetInstance)
           .addFunction("ShowSpecItemPickup", &dota::DotaSFHudOverlay::ShowSpecItemPickup)
