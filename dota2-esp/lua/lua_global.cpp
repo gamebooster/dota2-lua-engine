@@ -39,6 +39,9 @@ namespace lua {
   };
   class HookManager {
    public:
+     HookManager(void* object, int index) : hook_(object, index) {
+
+     }
     void AddListener(HookListener* listener) {
       callbacks_.push_back(listener);
     }
@@ -59,7 +62,7 @@ namespace lua {
     virtual ~HookManager() {
     }
     protected:
-     utils::VtableHook* hook_;
+     utils::VtableHook hook_;
      std::list<HookListener*> callbacks_;
   };
   class PaintHookManager : public HookManager {
@@ -69,18 +72,14 @@ namespace lua {
        return instance;
     }
    private:
-     PaintHookManager() {
-       hook_ = new utils::VtableHook(dota::Hud::GetInstance()->FindElement("CHudHealthBars") , 0x34);
-       hook_->HookMethod(CHudHealthBars_Paint, 107);
+     PaintHookManager() : HookManager(dota::Hud::GetInstance()->FindElement("CHudHealthBars") , 0x34) {
+       hook_.HookMethod(CHudHealthBars_Paint, 107);
      }
-     ~PaintHookManager() {
-       hook_->Unhook();
-       delete hook_;
-     }
+
      static void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface) {
        typedef void ( __thiscall* OriginalFunction )(PVOID, PVOID);
        static PaintHookManager& hook_manager = PaintHookManager::GetInstance();
-       hook_manager.hook_->GetMethod<OriginalFunction>(107)(thisptr, guipaintsurface);
+       hook_manager.hook_.GetMethod<OriginalFunction>(107)(thisptr, guipaintsurface);
        
        hook_manager.CallListener();
      }

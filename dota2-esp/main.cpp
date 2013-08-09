@@ -15,7 +15,8 @@
 #include "source-sdk\game_event_listener.h"
 #include "source-sdk\global_instance_manager.h"
 
-#include "lua/lua_global.hpp"
+#include "lua\lua_global.hpp"
+#include "lua\lua_engine.hpp"
 
 #include "commands.hpp"
 
@@ -167,6 +168,8 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName ) {
   typedef void ( __thiscall* OriginalFunction )(void*, char const*);
   client_hook->GetMethod<OriginalFunction>(4)(thisptr, pMapName);
+
+  lua::LuaEngine::GetInstance().UnloadScripts();
 
   illusions.clear();
 }

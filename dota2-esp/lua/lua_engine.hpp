@@ -8,6 +8,7 @@ namespace lua {
   public:
     void LoadScript(std::string name);
     void UnloadScript(std::string name);
+    void UnloadScripts();
     void ExecuteScript(std::string name);
     static LuaEngine& GetInstance();
 

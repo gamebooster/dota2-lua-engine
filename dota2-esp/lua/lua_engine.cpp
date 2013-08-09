@@ -28,4 +28,9 @@ namespace lua {
 
 
   LuaEngine::LuaEngine() {}
+
+  void LuaEngine::UnloadScripts() {
+    scripts_.clear();
+  }
+
 }
