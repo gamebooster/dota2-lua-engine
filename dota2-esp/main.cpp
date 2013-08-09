@@ -167,28 +167,6 @@ void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurfa
         illusions.insert(hero_handle);
       }
     }
-
-    if (V_stricmp("CDOTAPlayer", class_name) == 0) { // CDOTAPlayer
-      dota::DotaPlayer *dota_player = (dota::DotaPlayer *) base_entity;
-      int player_id = dota_player->GetPlayerId();
-
-      if (player_id < 0 || player_id > 10) return;
-
-      const char* player_name = player_resource->GetPlayerName(player_id);
-      int level = player_resource->GetLevel(player_id);
-      int gold = player_resource->GetUnreliableGold(player_id) + player_resource->GetReliableGold(player_id);
-      int lasthits = player_resource->GetLastHitCount(player_id);
-      int team = player_resource->GetTeam(player_id);
-
-      if (team != local_team) {
-        sourcesdk::DrawUtils::GetInstance().DrawString(5, 400 + offset_counter  * 30, 255,255,255,255, false, "%d", level);
-        sourcesdk::DrawUtils::GetInstance().DrawString(25, 400 + offset_counter * 30, 255,255,255,255, false, "%s", player_name);
-        sourcesdk::DrawUtils::GetInstance().DrawString(5, 400 + offset_counter  * 30 + 15, 255,255,255,255, false, "%d", gold);
-        sourcesdk::DrawUtils::GetInstance().DrawString(40, 400 + offset_counter  * 30 + 15, 255,255,255,255, false, "%d", lasthits);
-
-        offset_counter++;
-      }
-    }
   }
 
 }

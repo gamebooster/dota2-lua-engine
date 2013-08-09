@@ -77,6 +77,10 @@ namespace lua {
        hook_ = new utils::VtableHook(dota::Hud::GetInstance()->FindElement("CHudHealthBars") , 0x34);
        hook_->HookMethod(CHudHealthBars_Paint, 107);
      }
+     ~PaintHookManager() {
+       hook_->Unhook();
+       delete hook_;
+     }
      static void __fastcall CHudHealthBars_Paint(void* thisptr, int edx, void* guipaintsurface) {
        typedef void ( __thiscall* OriginalFunction )(PVOID, PVOID);
        static PaintHookManager& hook_manager = PaintHookManager::GetInstance();
@@ -322,6 +326,12 @@ namespace lua {
         .beginClass<dota::DotaPlayerResource>("PlayerResource")
           .addStaticFunction("GetPlayerResource", &dota::DotaPlayerResource::GetPlayerResource)
           .addStaticFunction("GetPlayerSelectedHero", &dota::DotaPlayerResource::GetPlayerSelectedHero)
+          .addFunction("GetPlayerName", &dota::DotaPlayerResource::GetPlayerName)
+          .addFunction("GetLevel", &dota::DotaPlayerResource::GetLevel)
+          .addFunction("GetUnreliableGold", &dota::DotaPlayerResource::GetUnreliableGold)
+          .addFunction("GetLastHitCount", &dota::DotaPlayerResource::GetLastHitCount)
+          .addFunction("GetTeam", &dota::DotaPlayerResource::GetTeam)
+          .addFunction("GetReliableGold", &dota::DotaPlayerResource::GetReliableGold)
         .endClass()
       .endNamespace();
 
