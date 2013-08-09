@@ -78,6 +78,12 @@ static:
       signature: "51 E8 ? ? ? ? E9 ? ? ? ? 68 ? ? ? ? 68 ? ? ? ?"
     - 
       commands: 
+        offset: 3
+        relative: 0
+      name: "SFHudOverlay::SendRoshanPopup"
+      signature: "0F 5B C0 E8 ? ? ? ? B0 01"
+    - 
+      commands: 
         relative: 0
       name: "Minimap::CreateLocationPing"
       signature: "E8 ? ? ? ? 83 C4 10 B0 01 8B E5"

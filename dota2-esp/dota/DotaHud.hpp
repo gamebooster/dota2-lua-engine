@@ -71,6 +71,16 @@ class DotaSFHudOverlay {
       call address
     }
   }
+  void SendRoshanPopup(bool alive, float time) {
+    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("SFHudOverlay::SendRoshanPopup");
+
+    __asm {
+      mov edi, this
+      movss xmm0, time
+      push alive
+      call address
+    }
+  }
  private:
   static DotaSFHudOverlay* instance_;
 };

@@ -372,6 +372,7 @@ namespace lua {
         .beginClass<dota::DotaSFHudOverlay>("SFHudOverlay")
           .addStaticFunction("GetInstance", &dota::DotaSFHudOverlay::GetInstance)
           .addFunction("ShowSpecItemPickup", &dota::DotaSFHudOverlay::ShowSpecItemPickup)
+          .addFunction("SendRoshanPopup", &dota::DotaSFHudOverlay::SendRoshanPopup)
         .endClass()
       .endNamespace();
 
