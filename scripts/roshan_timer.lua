@@ -2,9 +2,13 @@ local on_roshan_hook
 local kill_time = 0
 local hook
 
+function SendRoshanPopup(kill_time)
+  dota.SFHudOverlay.GetInstance():SendRoshanPopup(false, kill_time + 600)  
+end
+
 function OnRoshanKill()
   kill_time = dota.GameRules.GetInstance():GetGameTime()
-  dota.SFHudOverlay.GetInstance():SendRoshanPopup(false, kill_time + 600)
+  SendRoshanPopup(kill_time)
 end
 
 function OnPaint()
@@ -14,14 +18,14 @@ function OnPaint()
   local current_time = dota.GameRules.GetInstance():GetGameTime()
   local difference = math.floor(current_time - kill_time)
   
-  if difference == (60 * 8) then
-    dota.SFHudOverlay.GetInstance():SendRoshanPopup(false, kill_time + 600)
+  if difference == 480 then
+    SendRoshanPopup(kill_time)
     kill_time = kill_time - 1
-  elseif difference == (60 * 9) + 30 then
-    dota.SFHudOverlay.GetInstance():SendRoshanPopup(false, kill_time + 600)
+  elseif difference == 570 then
+    SendRoshanPopup(kill_time)
     kill_time = kill_time - 1
-  elseif difference >= (60 * 10) then
-    dota.SFHudOverlay.GetInstance():SendRoshanPopup(false, kill_time + 600)
+  elseif difference >= 600 then
+    SendRoshanPopup(kill_time)
     kill_time = 0
   end
 end
