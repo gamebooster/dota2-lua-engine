@@ -17,7 +17,7 @@ function OnPaint()
     local last_hits   = player_resource:GetLastHitCount(player_id)
     local team        = player:GetTeamIndex()
 
-    if team == local_team then
+    if team ~= local_team then
       dota.DrawUtils.DrawString(5, 400 + offset_counter  * 30, 255,255,255,255, false, level);
       dota.DrawUtils.DrawString(25, 400 + offset_counter * 30, 255,255,255,255, false, player_name);
       dota.DrawUtils.DrawString(5, 400 + offset_counter  * 30 + 15, 255,255,255,255, false, gold);
