@@ -205,6 +205,6 @@ inline ConCommandBase * ICvar::Iterator::Get( void )
 //-----------------------------------------------------------------------------
 
 // These are marked DLL_EXPORT for Linux.
-static ICvar *g_pCVar;
+extern ICvar *g_pCVar;
 
 #endif // ICVAR_H

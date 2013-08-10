@@ -21,6 +21,7 @@
 
 static HANDLE thread = nullptr;
 static utils::VtableHook* client_hook;
+ICvar *g_pCVar;
 
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* pMapName );
 

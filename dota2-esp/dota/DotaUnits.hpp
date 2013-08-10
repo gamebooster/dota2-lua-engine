@@ -113,7 +113,7 @@ public:
     if (health <= 0) return false;
     int damage = GetDamageMin() + GetBonusDamage();
     float reduced_damage = damage - ((damage * entity->GetPhysicalArmorReduction()) / 100);
-    return health / damage < 1;
+    return health / reduced_damage < 1;
   }
 
   float GetPhysicalArmorReduction() {

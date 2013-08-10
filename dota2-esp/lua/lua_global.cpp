@@ -256,7 +256,7 @@ namespace lua {
   typedef void(*MsgSignature)(const tchar* msg, ...); 
   template<MsgSignature T>
   int  LogWrapper(lua_State *L) {
-    int argc = lua_gettop(L);
+    lua_gettop(L);
     T(lua_tostring(L, 1));
     return 0;
   }

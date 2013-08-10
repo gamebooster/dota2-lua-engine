@@ -14,7 +14,6 @@ int NetVarManager::GetOffsetFromTable(const char* class_name, const char* var_na
     RecvProp* prop = table->GetProp(i);
     if( !prop ) continue;
 
-    RecvTable* child = prop->GetDataTable();
     if( !strcmp( table->GetName(), class_name ) && !strcmp(prop->GetName(), var_name)) {
       offset += prop->GetOffset();
       break;
