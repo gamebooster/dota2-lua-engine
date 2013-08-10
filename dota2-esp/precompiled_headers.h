@@ -17,7 +17,7 @@
 #include <string>
 #include <stdint.h>
 
-#include "..\lua\src\lua.hpp"
+#include "..\LuaJIT\src\lua.hpp"
 #include "..\LuaBridge\LuaBridge.h"
 
 #include <memory>

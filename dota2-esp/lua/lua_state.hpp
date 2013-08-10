@@ -1,7 +1,7 @@
 #pragma once
 
 #include "..\utils\utils.h"
-#include "..\..\lua\src\lua.hpp"
+#include "..\..\LuaJIT\src\lua.hpp"
 #include "..\..\LuaBridge\LuaBridge.h"
 #include "lua_game_event_listener.hpp"
 

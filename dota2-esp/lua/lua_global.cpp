@@ -214,7 +214,6 @@ namespace lua {
       GlobalInstanceManager::GetCVar()->RegisterConCommand(&command_);
     }
     ~ConsoleCommand() {
-      Warning("Unregister ConsoleCommand\n");
       GlobalInstanceManager::GetCVar()->UnregisterConCommand(&command_);
       ConsoleCommand::callbacks_.erase(command_.GetName());
     }
