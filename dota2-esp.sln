@@ -4,13 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dota2-esp", "dota2-esp\dota2-esp.vcxproj", "{3276CB29-82A0-4B6D-8D62-3B8508B15340}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3FEE4127-D5E4-4F74-A5F6-B3EE7DFFBA57} = {3FEE4127-D5E4-4F74-A5F6-B3EE7DFFBA57}
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC} = {0F21DB52-3554-417C-B1DB-ABD4F59935DC}
 		{E1DA8DB8-FB4C-4B14-91A6-98BCED6B9720} = {E1DA8DB8-FB4C-4B14-91A6-98BCED6B9720}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tier1", "hl2sdk-dota\tier1\tier1.vcxproj", "{E1DA8DB8-FB4C-4B14-91A6-98BCED6B9720}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua", "lua\lua.vcxproj", "{0F21DB52-3554-417C-B1DB-ABD4F59935DC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SignaturePatternResolver", "SignaturePatternResolver\SignaturePatternResolver\SignaturePatternResolver.vcxproj", "{3FEE4127-D5E4-4F74-A5F6-B3EE7DFFBA57}"
 EndProject
@@ -56,20 +53,6 @@ Global
 		{E1DA8DB8-FB4C-4B14-91A6-98BCED6B9720}.Release|x64.ActiveCfg = Release|Win32
 		{E1DA8DB8-FB4C-4B14-91A6-98BCED6B9720}.Release|x86.ActiveCfg = Release|Win32
 		{E1DA8DB8-FB4C-4B14-91A6-98BCED6B9720}.Release|x86.Build.0 = Release|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Debug|Win32.Build.0 = Debug|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Debug|x64.ActiveCfg = Debug|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Debug|x86.ActiveCfg = Debug|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Debug|x86.Build.0 = Debug|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Release|Win32.ActiveCfg = Release|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Release|Win32.Build.0 = Release|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Release|x64.ActiveCfg = Release|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Release|x86.ActiveCfg = Release|Win32
-		{0F21DB52-3554-417C-B1DB-ABD4F59935DC}.Release|x86.Build.0 = Release|Win32
 		{3FEE4127-D5E4-4F74-A5F6-B3EE7DFFBA57}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{3FEE4127-D5E4-4F74-A5F6-B3EE7DFFBA57}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{3FEE4127-D5E4-4F74-A5F6-B3EE7DFFBA57}.Debug|Win32.ActiveCfg = Debug|Win32
