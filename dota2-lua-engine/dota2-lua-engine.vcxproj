@@ -183,7 +183,7 @@ xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
     <ProjectReference />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="commands.cpp" />
+    <ClCompile Include="commands.cc" />
     <ClCompile Include="dota\DotaChat.cpp" />
     <ClCompile Include="dota\DotaGlobal.cpp" />
     <ClCompile Include="dota\DotaHud.cpp" />
@@ -196,7 +196,7 @@ xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="source-sdk\global_instance_manager.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="main.cc" />
     <ClCompile Include="dota\DotaPlayerResource.cpp" />
     <ClCompile Include="source-sdk\draw_utils.cpp" />
     <ClCompile Include="source-sdk\netvar.cpp" />
@@ -220,7 +220,7 @@ xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="commands.hpp" />
+    <ClInclude Include="commands.h" />
     <ClInclude Include="dota\DotaBaseEntity.hpp" />
     <ClInclude Include="dota\DotaChat.h" />
     <ClInclude Include="dota\DotaConstants.h" />

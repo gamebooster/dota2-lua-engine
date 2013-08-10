@@ -1,0 +1,1 @@
+%~dp0\cpplint.bat main.cc commands.h commands.cc

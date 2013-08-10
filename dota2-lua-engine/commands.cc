@@ -1,6 +1,6 @@
 // Copyright 2013 Karl Skomski - Public Domain
 
-#include "dota2-esp/commands.h"
+#include "dota2-lua-engine/commands.h"
 
 #include "source-sdk/global_instance_manager.h"
 #include "lua/lua_engine.hpp"

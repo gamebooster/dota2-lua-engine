@@ -45,9 +45,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source-sdk\draw_utils.cpp">
       <Filter>Source Files\source-sdk</Filter>
     </ClCompile>
@@ -68,9 +65,6 @@
     </ClCompile>
     <ClCompile Include="source-sdk\netvar.cpp">
       <Filter>Source Files\source-sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="commands.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dota\DotaGlobal.cpp">
       <Filter>Source Files\dota</Filter>
@@ -101,6 +95,12 @@
     </ClCompile>
     <ClCompile Include="dota\DotaParticleManager.cpp">
       <Filter>Source Files\dota</Filter>
+    </ClCompile>
+    <ClCompile Include="commands.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -152,9 +152,6 @@
     <ClInclude Include="lua\lua_global.hpp">
       <Filter>Header Files\lua</Filter>
     </ClInclude>
-    <ClInclude Include="commands.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="precompiled_headers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -199,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="dota\DotaBaseEntity.hpp">
       <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="commands.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

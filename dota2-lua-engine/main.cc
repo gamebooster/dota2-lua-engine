@@ -10,7 +10,7 @@
 
 #include "lua/lua_engine.hpp"
 
-#include "commands.hpp"
+#include "dota2-lua-engine/commands.h"
 
 static HANDLE thread = nullptr;
 static utils::VtableHook* client_hook;

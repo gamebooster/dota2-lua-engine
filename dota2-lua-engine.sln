@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dota2-esp", "dota2-esp\dota2-esp.vcxproj", "{3276CB29-82A0-4B6D-8D62-3B8508B15340}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dota2-lua-engine", "dota2-lua-engine\dota2-lua-engine.vcxproj", "{3276CB29-82A0-4B6D-8D62-3B8508B15340}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3FEE4127-D5E4-4F74-A5F6-B3EE7DFFBA57} = {3FEE4127-D5E4-4F74-A5F6-B3EE7DFFBA57}
 		{E1DA8DB8-FB4C-4B14-91A6-98BCED6B9720} = {E1DA8DB8-FB4C-4B14-91A6-98BCED6B9720}
