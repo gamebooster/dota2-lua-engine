@@ -1,9 +1,9 @@
-#include "precompiled_headers.h"
+// Copyright 2013 Karl Skomski - Public Domain
 
-#include "dota2-esp\commands.hpp"
+#include "dota2-esp/commands.h"
 
-#include "source-sdk\global_instance_manager.h"
-#include "lua\lua_engine.hpp"
+#include "source-sdk/global_instance_manager.h"
+#include "lua/lua_engine.hpp"
 
 
 namespace commands {
@@ -41,13 +41,19 @@ namespace commands {
   }
 
   void Register() {
-    GlobalInstanceManager::GetCVar()->RegisterConCommand(&lua_loadscript_command);
-    GlobalInstanceManager::GetCVar()->RegisterConCommand(&lua_unloadscript_command);
-    GlobalInstanceManager::GetCVar()->RegisterConCommand(&lua_executescript_command);
+    GlobalInstanceManager::GetCVar()
+      ->RegisterConCommand(&lua_loadscript_command);
+    GlobalInstanceManager::GetCVar()
+      ->RegisterConCommand(&lua_unloadscript_command);
+    GlobalInstanceManager::GetCVar()
+      ->RegisterConCommand(&lua_executescript_command);
   }
   void Unregister() {
-    GlobalInstanceManager::GetCVar()->UnregisterConCommand(&lua_loadscript_command);
-    GlobalInstanceManager::GetCVar()->UnregisterConCommand(&lua_unloadscript_command);
-    GlobalInstanceManager::GetCVar()->UnregisterConCommand(&lua_executescript_command);
+    GlobalInstanceManager::GetCVar()
+      ->UnregisterConCommand(&lua_loadscript_command);
+    GlobalInstanceManager::GetCVar()
+      ->UnregisterConCommand(&lua_unloadscript_command);
+    GlobalInstanceManager::GetCVar()
+      ->UnregisterConCommand(&lua_executescript_command);
   }
-}
+}  // namespace commands

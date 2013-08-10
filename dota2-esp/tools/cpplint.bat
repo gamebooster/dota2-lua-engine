@@ -1,0 +1,1 @@
+%~dp0\cpplint.py --filter=-build/header_guard %1 %2 %3

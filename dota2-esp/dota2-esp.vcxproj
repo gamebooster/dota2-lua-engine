@@ -141,6 +141,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderOutputFile>$(IntDir)precompiled.pch</PrecompiledHeaderOutputFile>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <ForcedIncludeFiles>precompiled_headers.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <PreLinkEvent>
       <Command>
