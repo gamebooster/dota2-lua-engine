@@ -1,10 +1,12 @@
 #pragma once
 
+#include <boost\exception\all.hpp>
+
 #include "..\..\SignaturePatternResolver\SignaturePatternResolver\signature_pattern_retriever.h"
 #include "utils.h"
 
 class GlobalAddressRetriever {
-public:
+ public:
   static GlobalAddressRetriever& GetInstance();
 
   uint32_t GetStaticAddress(std::string name) {
@@ -20,7 +22,7 @@ private:
     try {
       static_addresses_.LoadSignatures(utils::GetModuleDirectory() + "config.yaml");
     } catch( boost::exception &e) {
-      utils::Log("hook: GlobalAddressRetrieverError");
+      utils::Log("hook: GlobalAddressRetrieverError %s", boost::get_error_info<boost::errinfo_file_name>(e));
     } catch (...) {
       utils::Log("hook: GlobalAddressRetrieverError");
     }
@@ -32,7 +34,7 @@ private:
     try {
       dynamic_addresses_.LoadSignatures(utils::GetModuleDirectory() + "config.yaml");
     } catch( boost::exception &e) {
-      utils::Log("hook: GlobalAddressRetrieverError");
+      utils::Log("hook: GlobalAddressRetrieverError %s", boost::get_error_info<boost::errinfo_file_name>(e));
     } catch (...) {
       utils::Log("hook: GlobalAddressRetrieverError");
     }

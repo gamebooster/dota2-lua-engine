@@ -15,7 +15,14 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <string>
+
+#ifdef _MSC_VER
+#pragma warning (push)
+#pragma warning (disable : 4005) // macro redefinition
 #include <stdint.h>
+#pragma warning (push)
+#pragma warning (default : 4005)
+#endif
 
 #include "..\LuaJIT\src\lua.hpp"
 #include "..\LuaBridge\LuaBridge.h"

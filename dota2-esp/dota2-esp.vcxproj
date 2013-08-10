@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3276CB29-82A0-4B6D-8D62-3B8508B15340}</ProjectGuid>
     <RootNamespace>hookdll</RootNamespace>
-    <ProjectName>dota2-esp</ProjectName>
+    <ProjectName>dota2-lua-engine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -73,8 +73,8 @@
     <LibraryPath>C:\Users\bogus\Documents\GitHub\dxhook-master\AntTweakBar\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>..\LuaJIT\src\;..\Release;..\hl2sdk-dota\lib\public;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\boost_1_54_0;..\hl2sdk-dota\public;$(IncludePath)</IncludePath>
+    <LibraryPath>..\SignaturePatternResolver\SignaturePatternResolver\libyaml;..\LuaJIT\src\;..\Release;..\hl2sdk-dota\lib\public;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir);$(ProjectDir);C:\boost_1_54_0;..\hl2sdk-dota\public;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)64</TargetName>
@@ -135,8 +135,12 @@
       <Optimization>Full</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <BrowseInformation>true</BrowseInformation>
-      <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>precompiled_headers.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>$(IntDir)precompiled.pch</PrecompiledHeaderOutputFile>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <PreLinkEvent>
       <Command>
@@ -187,7 +191,9 @@ xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
     <ClCompile Include="lua\lua_engine.cpp" />
     <ClCompile Include="lua\lua_global.cpp" />
     <ClCompile Include="lua\lua_state.cpp" />
-    <ClCompile Include="precompiled_headers.cpp" />
+    <ClCompile Include="precompiled_headers.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="source-sdk\global_instance_manager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="dota\DotaPlayerResource.cpp" />
@@ -199,7 +205,6 @@ xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
     <ClCompile Include="utils\vmthooks.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="config.yaml">
       <DeploymentContent>true</DeploymentContent>
     </None>

@@ -283,7 +283,7 @@ class EntityList {
 class Vgui_IInput {
 public:
   bool IsKeyDown( int key_code ) {
-    typedef int ( __thiscall* OriginalFn )( PVOID, int );
+    typedef bool ( __thiscall* OriginalFn )( PVOID, int );
     return utils::GetVtableFunction<OriginalFn>( this, 18 )( this, key_code );
   }
 };

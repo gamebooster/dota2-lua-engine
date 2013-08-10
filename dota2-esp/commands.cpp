@@ -1,17 +1,14 @@
 #include "precompiled_headers.h"
 
-#include "commands.hpp"
+#include "dota2-esp\commands.hpp"
+
 #include "source-sdk\global_instance_manager.h"
-#include "dota\DotaGlobal.h"
-#include "dota\DotaItem.h"
 #include "lua\lua_engine.hpp"
 
-extern bool simulate_shift_down;
 
 namespace commands {
-  CON_COMMAND( set_var, "Change cvar value" ) {
-    if ( args.ArgC() < 3 )
-    {
+  CON_COMMAND(set_var, "Change cvar value") {
+    if (args.ArgC() < 3) {
       Msg("Usage: set_var <cvarname> <value>\n");
       return;
     }
@@ -19,27 +16,24 @@ namespace commands {
     temp->SetValue(atoi(args.Arg(2)));
   }
 
-  CON_COMMAND( lua_loadscript, "Load lua script" ) {
-    if ( args.ArgC() < 2 )
-    {
+  CON_COMMAND(lua_loadscript, "Load lua script") {
+    if (args.ArgC() < 2) {
       Msg("Usage: lua_loadscript <script_name>\n");
       return;
     }
     lua::LuaEngine::GetInstance().LoadScript(args.Arg(1));
   }
 
-  CON_COMMAND( lua_unloadscript, "Unload lua script" ) {
-    if ( args.ArgC() < 2 )
-    {
+  CON_COMMAND(lua_unloadscript, "Unload lua script") {
+    if (args.ArgC() < 2) {
       Msg("Usage: lua_unloadscript <script_name>\n");
       return;
     }
     lua::LuaEngine::GetInstance().UnloadScript(args.Arg(1));
   }
 
-  CON_COMMAND( lua_executescript, "Execute lua script" ) {
-    if ( args.ArgC() < 2 )
-    {
+  CON_COMMAND(lua_executescript, "Execute lua script") {
+    if (args.ArgC() < 2) {
       Msg("Usage: lua_executescript <script_name>\n");
       return;
     }

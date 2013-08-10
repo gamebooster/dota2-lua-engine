@@ -113,7 +113,6 @@
     <None Include="tools\dota-inject.bat">
       <Filter>tools</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
     <None Include="config.yaml" />
   </ItemGroup>
   <ItemGroup>

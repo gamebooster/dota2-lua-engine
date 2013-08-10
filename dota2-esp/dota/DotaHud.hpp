@@ -11,7 +11,7 @@ class CHudElement {
 
 class Hud {
 public:
-  static void SelectHudSkin(EconItemView* item, bool unknown0) {
+  static void SelectHudSkin(EconItemView* item, int unknown0) {
     uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("Hud::SelectHudSkin");
 
     __asm {
@@ -71,7 +71,7 @@ class DotaSFHudOverlay {
       call address
     }
   }
-  void SendRoshanPopup(bool alive, float time) {
+  void SendRoshanPopup(int alive, float time) {
     uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("SFHudOverlay::SendRoshanPopup");
 
     __asm {
