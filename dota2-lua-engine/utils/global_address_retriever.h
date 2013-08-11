@@ -2,7 +2,7 @@
 
 #include <boost\exception\all.hpp>
 
-#include "..\..\SignaturePatternResolver\SignaturePatternResolver\signature_pattern_retriever.h"
+#include "address-retriever\address-retriever\signature_pattern_retriever.h"
 #include "utils.h"
 
 class GlobalAddressRetriever {

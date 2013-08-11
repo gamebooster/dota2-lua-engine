@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SignaturePatternResolver", "SignaturePatternResolver\SignaturePatternResolver.vcxproj", "{3FEE4127-D5E4-4F74-A5F6-B3EE7DFFBA57}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "address-retriever", "address-retriever\address-retriever.vcxproj", "{3FEE4127-D5E4-4F74-A5F6-B3EE7DFFBA57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

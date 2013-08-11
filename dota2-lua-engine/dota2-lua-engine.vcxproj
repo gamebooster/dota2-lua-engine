@@ -73,7 +73,7 @@
     <LibraryPath>C:\Users\bogus\Documents\GitHub\dxhook-master\AntTweakBar\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>..\SignaturePatternResolver\SignaturePatternResolver\libyaml;..\LuaJIT\src\;..\Release;..\hl2sdk-dota\lib\public;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\address-retriever\address-retriever\libyaml;..\LuaJIT\src\;..\Release;..\hl2sdk-dota\lib\public;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir);$(ProjectDir);C:\boost_1_54_0;..\hl2sdk-dota\public;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -126,7 +126,7 @@
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vstdlib.lib;tier0.lib;tier1.lib;lua51.lib;SignaturePatternResolver.lib;libyaml-cppmd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vstdlib.lib;tier0.lib;tier1.lib;lua51.lib;address-retriever.lib;libyaml-cppmd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <MASM />
     <MASM />

@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3FEE4127-D5E4-4F74-A5F6-B3EE7DFFBA57}</ProjectGuid>
     <RootNamespace>SignaturePatternResolver</RootNamespace>
+    <ProjectName>address-retriever</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
