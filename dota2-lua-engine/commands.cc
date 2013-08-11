@@ -3,7 +3,7 @@
 #include "dota2-lua-engine/commands.h"
 
 #include "source-sdk/global_instance_manager.h"
-#include "lua/lua_engine.hpp"
+#include "lua/lua_engine.h"
 
 
 namespace commands {

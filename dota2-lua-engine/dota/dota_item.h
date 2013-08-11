@@ -1,7 +1,7 @@
 #pragma  once
-#include "..\precompiled_headers.h"
-#include "..\utils\global_address_retriever.hpp"
-#include "..\utils\utils.h"
+
+#include "utils/global_address_retriever.h"
+#include "utils/utils.h"
 
 namespace dota {
 
@@ -32,4 +32,4 @@ public:
   }
 };
 
-}
+}  // namespace dota

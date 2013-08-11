@@ -1,6 +1,6 @@
 #include "precompiled_headers.h"
 
-#include "lua_engine.hpp"
+#include "lua_engine.h"
 
 namespace lua {
  LuaEngine& LuaEngine::GetInstance() {

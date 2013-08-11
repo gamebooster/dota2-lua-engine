@@ -1,5 +1,3 @@
-#include "precompiled_headers.h"
-
 #include "utils.h"
 
 #include <stdint.h>

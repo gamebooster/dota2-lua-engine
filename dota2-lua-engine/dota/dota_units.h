@@ -1,11 +1,11 @@
 #pragma once
 
-#include "..\utils\global_address_retriever.hpp"
-#include "DotaParticle.hpp"
-#include "DotaModifierManager.hpp"
-#include "DotaConstants.h"
-#include "DotaPlayer.hpp"
-#include "DotaBaseEntity.hpp"
+#include "utils/global_address_retriever.h"
+#include "dota/dota_particle.h"
+#include "dota/dota_modifiermanager.h"
+#include "dota/dota_constants.h"
+#include "dota/dota_player.h"
+#include "dota/dota_baseentity.h"
 
 namespace dota {
 

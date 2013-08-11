@@ -1,6 +1,4 @@
-#include "precompiled_headers.h"
-
-#include "lua_state.hpp"
+#include "lua/lua_state.h"
 
 namespace lua {
   static void Deleter(lua_State* state) {
@@ -40,4 +38,4 @@ namespace lua {
       Warning("booster-lua: %s \n", "default lua exception");
     }
   }
-}
+}  // namespace lua

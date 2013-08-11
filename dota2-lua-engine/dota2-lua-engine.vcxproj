@@ -184,26 +184,26 @@ xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="commands.cc" />
-    <ClCompile Include="dota\DotaChat.cpp" />
-    <ClCompile Include="dota\DotaGlobal.cpp" />
-    <ClCompile Include="dota\DotaHud.cpp" />
-    <ClCompile Include="dota\DotaItem.cpp" />
-    <ClCompile Include="dota\DotaParticleManager.cpp" />
-    <ClCompile Include="lua\lua_engine.cpp" />
-    <ClCompile Include="lua\lua_global.cpp" />
-    <ClCompile Include="lua\lua_state.cpp" />
-    <ClCompile Include="precompiled_headers.cpp">
+    <ClCompile Include="dota\dota_chat.cc" />
+    <ClCompile Include="dota\dota_global.cc" />
+    <ClCompile Include="dota\dota_hud.cc" />
+    <ClCompile Include="dota\dota_item.cc" />
+    <ClCompile Include="dota\dota_particlemanager.cc" />
+    <ClCompile Include="lua\lua_engine.cc" />
+    <ClCompile Include="lua\lua_global.cc" />
+    <ClCompile Include="lua\lua_state.cc" />
+    <ClCompile Include="precompiled_headers.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="source-sdk\global_instance_manager.cpp" />
+    <ClCompile Include="source-sdk\global_instance_manager.cc" />
     <ClCompile Include="main.cc" />
-    <ClCompile Include="dota\DotaPlayerResource.cpp" />
-    <ClCompile Include="source-sdk\draw_utils.cpp" />
-    <ClCompile Include="source-sdk\netvar.cpp" />
-    <ClCompile Include="source-sdk\SDK.cpp" />
-    <ClCompile Include="utils\global_address_retriever.cpp" />
-    <ClCompile Include="utils\utils.cpp" />
-    <ClCompile Include="utils\vmthooks.cpp" />
+    <ClCompile Include="dota\dota_playerresource.cc" />
+    <ClCompile Include="source-sdk\draw_utils.cc" />
+    <ClCompile Include="source-sdk\netvar.cc" />
+    <ClCompile Include="source-sdk\source_sdk.cc" />
+    <ClCompile Include="utils\global_address_retriever.cc" />
+    <ClCompile Include="utils\utils.cc" />
+    <ClCompile Include="utils\vmthooks.cc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.yaml">
@@ -221,31 +221,31 @@ xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commands.h" />
-    <ClInclude Include="dota\DotaBaseEntity.hpp" />
-    <ClInclude Include="dota\DotaChat.h" />
-    <ClInclude Include="dota\DotaConstants.h" />
-    <ClInclude Include="dota\DotaGameRules.hpp" />
-    <ClInclude Include="dota\DotaGlobal.h" />
-    <ClInclude Include="dota\DotaHud.hpp" />
-    <ClInclude Include="dota\DotaItem.h" />
-    <ClInclude Include="dota\DotaMinimap.hpp" />
-    <ClInclude Include="dota\DotaModifierManager.hpp" />
-    <ClInclude Include="dota\DotaParticle.hpp" />
-    <ClInclude Include="dota\DotaParticleManager.hpp" />
-    <ClInclude Include="dota\DotaPlayer.hpp" />
-    <ClInclude Include="dota\DotaPlayerResource.h" />
-    <ClInclude Include="dota\DotaUnits.hpp" />
-    <ClInclude Include="lua\lua_engine.hpp" />
-    <ClInclude Include="lua\lua_game_event_listener.hpp" />
-    <ClInclude Include="lua\lua_global.hpp" />
-    <ClInclude Include="lua\lua_state.hpp" />
+    <ClInclude Include="dota\dota_baseentity.h" />
+    <ClInclude Include="dota\dota_chat.h" />
+    <ClInclude Include="dota\dota_constants.h" />
+    <ClInclude Include="dota\dota_gamerules.h" />
+    <ClInclude Include="dota\dota_global.h" />
+    <ClInclude Include="dota\dota_hud.h" />
+    <ClInclude Include="dota\dota_item.h" />
+    <ClInclude Include="dota\dota_minimap.h" />
+    <ClInclude Include="dota\dota_modifiermanager.h" />
+    <ClInclude Include="dota\dota_particle.h" />
+    <ClInclude Include="dota\dota_particlemanager.h" />
+    <ClInclude Include="dota\dota_player.h" />
+    <ClInclude Include="dota\dota_playerresource.h" />
+    <ClInclude Include="dota\dota_units.h" />
+    <ClInclude Include="lua\lua_engine.h" />
+    <ClInclude Include="lua\lua_game_event_listener.h" />
+    <ClInclude Include="lua\lua_global.h" />
+    <ClInclude Include="lua\lua_state.h" />
     <ClInclude Include="precompiled_headers.h" />
     <ClInclude Include="source-sdk\game_event_listener.h" />
     <ClInclude Include="source-sdk\global_instance_manager.h" />
     <ClInclude Include="source-sdk\netvar.h" />
     <ClInclude Include="source-sdk\draw_utils.h" />
-    <ClInclude Include="source-sdk\SDK.h" />
-    <ClInclude Include="utils\global_address_retriever.hpp" />
+    <ClInclude Include="source-sdk\source_sdk.h" />
+    <ClInclude Include="utils\global_address_retriever.h" />
     <ClInclude Include="utils\utils.h" />
     <ClInclude Include="utils\vmthooks.h" />
   </ItemGroup>

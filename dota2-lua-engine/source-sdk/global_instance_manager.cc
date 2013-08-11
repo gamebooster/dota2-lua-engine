@@ -1,5 +1,3 @@
-#include "precompiled_headers.h"
-
 #include "global_instance_manager.h"
 
 CHLClient* GlobalInstanceManager::chlclient_ = nullptr;

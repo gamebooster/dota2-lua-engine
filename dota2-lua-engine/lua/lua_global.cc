@@ -1,24 +1,19 @@
-#include "precompiled_headers.h"
+#include "lua/lua_global.h"
 
-#include "lua_global.hpp"
+#include "source-sdk/source_sdk.h"
+#include "source-sdk/global_instance_manager.h"
 
-#include <functional>
-#include <algorithm>
+#include "dota/dota_global.h"
+#include "dota/dota_constants.h"
+#include "dota/dota_particlemanager.h"
+#include "dota/dota_playerresource.h"
 
-#include "..\source-sdk\SDK.h"
-#include "..\source-sdk\global_instance_manager.h"
+#include "dota/dota_units.h"
+#include "utils/utils.h"
+#include "utils/vmthooks.h"
+#include "source-sdk/draw_utils.h"
 
-#include "..\dota\DotaGlobal.h"
-#include "..\dota\DotaConstants.h"
-#include "..\dota\DotaParticleManager.hpp"
-#include "..\dota\DotaPlayerResource.h"
-
-#include "..\dota\DotaUnits.hpp"
-#include "..\utils\utils.h"
-#include "..\utils\vmthooks.h"
-#include "..\source-sdk\draw_utils.h"
-
-#include "..\..\LuaBridge\RefCountedPtr.h"
+#include "LuaBridge/RefCountedPtr.h"
 
 #undef CreateEvent
 
@@ -594,4 +589,4 @@ namespace lua {
         .endClass()
       .endNamespace();
   }
-}
+}  // namespace lua

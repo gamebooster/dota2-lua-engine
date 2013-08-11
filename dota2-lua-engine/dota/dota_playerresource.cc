@@ -1,14 +1,13 @@
 #include "precompiled_headers.h"
 
-#include "DotaPlayerResource.h"
+#include "dota_playerresource.h"
 
-#include "..\utils\utils.h"
-#include "..\source-sdk\SDK.h"
-#include "..\source-sdk\netvar.h"
-#include "..\utils\global_address_retriever.hpp"
+#include "utils/utils.h"
+#include "source-sdk/source_sdk.h"
+#include "source-sdk/netvar.h"
+#include "utils/global_address_retriever.h"
 
 namespace dota {
-
   DotaPlayerResource* DotaPlayerResource::GetPlayerResource() {
     return *(DotaPlayerResource**)GlobalAddressRetriever::GetInstance().GetDynamicAddress("PlayerResource");
   }
@@ -91,4 +90,4 @@ namespace dota {
     }
     return name;
   }
-}
+}  // namespace dota

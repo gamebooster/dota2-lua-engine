@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\source-sdk\SDK.h"
+#include "source-sdk/source_sdk.h"
 
 namespace dota {
   class BaseEntity {

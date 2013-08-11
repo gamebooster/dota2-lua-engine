@@ -24,8 +24,10 @@
 #pragma warning (default : 4005)
 #endif
 
-#include "..\LuaJIT\src\lua.hpp"
-#include "..\LuaBridge\LuaBridge.h"
+#include "LuaJIT/src/lua.hpp"
+#include "LuaBridge/LuaBridge.h"
 
 #include <memory>
 #include <set>
+#include <functional>
+#include <algorithm>

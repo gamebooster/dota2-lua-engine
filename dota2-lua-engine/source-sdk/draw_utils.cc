@@ -1,5 +1,3 @@
-#include "precompiled_headers.h"
-
 #include "draw_utils.h"
 #include "global_instance_manager.h"
 
@@ -147,4 +145,4 @@ bool DrawUtils::WorldToScreenNew( Vector& vIn, Vector& vOut ) {
 	return false;
 }
 
-}
+}  // namespace sourcesdk

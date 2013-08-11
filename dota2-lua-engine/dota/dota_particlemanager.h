@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DotaGlobal.h"
-#include "..\utils\global_address_retriever.hpp"
+#include "dota/dota_global.h"
+#include "utils/global_address_retriever.h"
 
 namespace dota {
 

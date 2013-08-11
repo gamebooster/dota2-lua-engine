@@ -1,14 +1,14 @@
 // Copyright 2013 Karl Skomski - Public Domain
 
-#include "source-sdk/SDK.h"
+#include "source-sdk/source_sdk.h"
 
 #include "utils/utils.h"
 #include "utils/vmthooks.h"
-#include "utils/global_address_retriever.hpp"
+#include "utils/global_address_retriever.h"
 
 #include "source-sdk/global_instance_manager.h"
 
-#include "lua/lua_engine.hpp"
+#include "lua/lua_engine.h"
 
 #include "dota2-lua-engine/commands.h"
 

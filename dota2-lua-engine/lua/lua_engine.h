@@ -1,5 +1,5 @@
-#include "lua_state.hpp"
-#include "lua_global.hpp"
+#include "lua/lua_state.h"
+#include "lua/lua_global.h"
 
 #include <map>
 

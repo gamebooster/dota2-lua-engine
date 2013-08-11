@@ -1,12 +1,10 @@
-#include "precompiled_headers.h"
+#include "dota/dota_chat.h"
 
-#include "DotaChat.h"
+#include "utils/utils.h"
+#include "source-sdk/source_sdk.h"
+#include "dota/dota_global.h"
 
-#include "..\utils\utils.h"
-#include "..\source-sdk\SDK.h"
-#include "DotaGlobal.h"
-
-#include "..\utils\global_address_retriever.hpp"
+#include "utils/global_address_retriever.h"
 
 namespace dota {
 
@@ -36,4 +34,4 @@ namespace dota {
     
     EventPrintInternal(this, message, unknown);
   }
-}
+}  // namespace dota

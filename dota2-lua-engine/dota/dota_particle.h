@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\utils\global_address_retriever.hpp"
+#include "utils/global_address_retriever.h"
 
 namespace dota {
 

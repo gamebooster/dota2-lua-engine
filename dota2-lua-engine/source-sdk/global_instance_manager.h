@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SDK.h"
+#include "source-sdk/source_sdk.h"
 #include "..\utils\utils.h"
 
 class GlobalInstanceManager {

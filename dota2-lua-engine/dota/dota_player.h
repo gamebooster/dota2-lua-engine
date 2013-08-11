@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DotaBaseEntity.hpp"
-#include "DotaUnits.hpp"
+#include "dota/dota_baseentity.h"
+#include "dota/dota_units.h"
 
 namespace dota {
 

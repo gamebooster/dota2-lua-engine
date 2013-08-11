@@ -1,5 +1,3 @@
-#include "precompiled_headers.h"
-
 #include "netvar.h"
 #include "global_instance_manager.h"
 
@@ -102,4 +100,4 @@ int NetVarManager::GetNetVarOffsetL(const char* class_name, const char* var_name
   return offset;
 }
 
-}
+}  // namespace sourcesdk

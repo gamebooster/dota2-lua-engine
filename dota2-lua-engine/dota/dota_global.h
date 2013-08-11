@@ -1,15 +1,15 @@
 #pragma once
 
-#include "..\source-sdk\SDK.h"
+#include "source-sdk/source_sdk.h"
 
-#include "..\source-sdk\global_instance_manager.h"
-#include "..\utils\global_address_retriever.hpp"
+#include "source-sdk/global_instance_manager.h"
+#include "utils/global_address_retriever.h"
 
-#include "DotaItem.h"
-#include "DotaHud.hpp"
-#include "DotaGameRules.hpp"
-#include "DotaPlayer.hpp"
-#include "DotaParticle.hpp"
+#include "dota/dota_item.h"
+#include "dota/dota_hud.h"
+#include "dota/dota_gamerules.h"
+#include "dota/dota_player.h"
+#include "dota/dota_particle.h"
 
 namespace dota {
 
@@ -72,4 +72,4 @@ public:
   }
 };
 
-}
+}  // namespace dota
