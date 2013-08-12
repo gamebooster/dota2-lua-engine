@@ -1,18 +1,17 @@
 // Copyright 2013 Karl Skomski - GPL v3
-#include "precompiled_headers.h"
-
-#include "lua_engine.h"
+#include <string>
+#include "lua/lua_engine.h"
 
 namespace lua {
- LuaEngine& LuaEngine::GetInstance() {
+  LuaEngine& LuaEngine::GetInstance() {
     static LuaEngine  instance;
     return instance;
   }
   void LuaEngine::LoadScript(std::string name) {
     UnloadScript(name);
 
-   RegisterGlobalFunctions(scripts_[name]);
-   scripts_[name].LoadFile(name);
+    RegisterGlobalFunctions(scripts_[name]);
+    scripts_[name].LoadFile(name);
   }
   void LuaEngine::UnloadScript(std::string name) {
     std::map<std::string, LuaState>::const_iterator it = scripts_.find(name);
@@ -27,11 +26,9 @@ namespace lua {
     }
   }
 
-
   LuaEngine::LuaEngine() {}
 
   void LuaEngine::UnloadScripts() {
     scripts_.clear();
   }
-
-}
+}  // namespace lua

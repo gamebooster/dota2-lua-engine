@@ -12,4 +12,4 @@ namespace dota {
     const char* const kMapShutdown = "dota_player_pick_hero";
     const char* const kDotaPlayerPickHero = "dota_player_pick_hero";
   }
-}
+}  // namespace dota

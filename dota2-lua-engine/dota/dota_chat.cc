@@ -10,11 +10,16 @@
 namespace dota {
 
   DotaChat* DotaChat::GetInstance() {
-    return (DotaChat*)Hud::GetInstance()->FindSFElement("CDOTA_SF_Hud_Chat");
+    return reinterpret_cast<DotaChat*>(
+      Hud::GetInstance()->FindSFElement("CDOTA_SF_Hud_Chat"));
   }
 
-  void DotaChat::MessagePrintf(int area, wchar_t const* message, int player_index, int priority, float time) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("DotaChat::MessagePrintf");
+  void DotaChat::MessagePrintf(int area,
+                               wchar_t const* message,
+                               int player_index, int priority, float time) {
+    uint32_t address =
+      GlobalAddressRetriever::GetInstance()
+        .GetStaticAddress("DotaChat::MessagePrintf");
 
     __asm {
       push time
@@ -28,11 +33,13 @@ namespace dota {
   }
 
   void DotaChat::EventPrintf(wchar_t const* message, int unknown) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("DotaChat::EventPrintf");
+    uint32_t address =
+      GlobalAddressRetriever::GetInstance()
+        .GetStaticAddress("DotaChat::EventPrintf");
 
     void (__stdcall *EventPrintInternal)(void*, wchar_t const*, int) =
       reinterpret_cast<void(__stdcall*)(void*, wchar_t const*, int)>(address);
-    
+
     EventPrintInternal(this, message, unknown);
   }
 }  // namespace dota

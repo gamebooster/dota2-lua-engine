@@ -6,9 +6,10 @@
 namespace dota {
 
 class CNewParticleEffect {
-public:
+ public:
   void SetControlPoint(int index, Vector const& vector) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("CNewParticleEffect::SetControlPoint");
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("CNewParticleEffect::SetControlPoint");
     Vector local_vector = vector;
 
     __asm {
@@ -21,17 +22,22 @@ public:
 };
 
 class ParticleProperty {
-public:
+ public:
   void StopEmissionAndDestroyImmediately(CNewParticleEffect* effect) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("ParticleProperty::StopEmissionAndDestroyImmediately");
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("ParticleProperty::StopEmissionAndDestroyImmediately");
     __asm {
       mov eax, effect
       mov ecx, this
       call address
     }
   }
-  CNewParticleEffect* Create(char const* name, int particle_attachment, int attachment_point, Vector vector = vec3_origin) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("ParticleProperty::Create");
+  CNewParticleEffect* Create(char const* name,
+                             int particle_attachment,
+                             int attachment_point,
+                             Vector vector = vec3_origin) {
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("ParticleProperty::Create");
 
     CNewParticleEffect* effect = nullptr;
 
@@ -55,4 +61,4 @@ public:
   }
 };
 
-}
+}  // namespace dota

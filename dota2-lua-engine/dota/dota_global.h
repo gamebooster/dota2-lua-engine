@@ -15,61 +15,70 @@
 namespace dota {
 
 class GameSystemsRetriever {
-public:
+ public:
   GameSystemsRetriever() {
-    game_systems_ = (CUtlVector<IGameSystem*>*)GlobalAddressRetriever::GetInstance().GetDynamicAddress("GameSystemsRetriever");
+    game_systems_ = (CUtlVector<IGameSystem*>*)
+      GlobalAddressRetriever::GetInstance()
+        .GetDynamicAddress("GameSystemsRetriever");
   }
 
   IGameSystem* FindByName(const char* name) {
     for (int i = 0; i < game_systems_->Count(); i++) {
-      if (strcmp((*game_systems_)[i]->Name(), name) == 0) return (*game_systems_)[i];
+      if (strcmp((*game_systems_)[i]->Name(), name) == 0) {
+        return (*game_systems_)[i];
+      }
     }
     return nullptr;
   }
   void DumpSystems() {
     for (int i = 0; i < game_systems_->Count(); i++) {
-      utils::Log("hook: %s 0x%x", (*game_systems_)[i]->Name(), (*game_systems_)[i]);
+      utils::Log("hook: %s 0x%x",
+                 (*game_systems_)[i]->Name(), (*game_systems_)[i]);
     }
   }
-private:
+
+ private:
   static CUtlVector<IGameSystem*>* game_systems_;
 };
 
 class CDotaGameManager {
-public:
+ public:
   static CDotaGameManager* GetInstance() {
     if (instance_ == nullptr) {
-      instance_ = (CDotaGameManager*)GameSystemsRetriever().FindByName("CDOTAGameManager");
+      instance_ = reinterpret_cast<CDotaGameManager*>(
+        GameSystemsRetriever().FindByName("CDOTAGameManager"));
     }
     return instance_;
   }
 
   KeyValues* GetItemDataByItemID(int item_id) {
-    KeyValues* items = *(KeyValues**)(this + 0x1c);
+    KeyValues* items = *reinterpret_cast<KeyValues**>(this + 0x1c);
 
     if (items == nullptr) return nullptr;
     KeyValues* sub = nullptr;
-    for (sub = items->GetFirstSubKey(); ; sub = sub->GetNextKey() ) {
+    for (sub = items->GetFirstSubKey(); ; sub = sub->GetNextKey()) {
       if (sub == nullptr) break;
-      if (sub->GetInt("ID", 0) == item_id ) return sub;
+      if (sub->GetInt("ID", 0) == item_id) return sub;
     }
     return nullptr;
   }
-private:
+ private:
   static CDotaGameManager* instance_;
 };
 
 class CCommandBuffer {
-public:
+ public:
   static CCommandBuffer* GetInstance() {
-    return (CCommandBuffer*)GlobalAddressRetriever::GetInstance().GetDynamicAddress("CommandBuffer");
+    return reinterpret_cast<CCommandBuffer*>(
+      GlobalAddressRetriever::GetInstance()
+        .GetDynamicAddress("CommandBuffer"));
   }
 
   void SetWaitDelayTime(int delay) {
-    *(int*)(this + 0x8040) = delay;
+    *reinterpret_cast<int*>(this + 0x8040) = delay;
   }
   void SetWaitEnabled(bool enabled) {
-    *(bool*)(this + 0x8049) = enabled;
+    *reinterpret_cast<bool*>(this + 0x8049) = enabled;
   }
 };
 

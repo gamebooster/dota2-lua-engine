@@ -6,7 +6,7 @@
 namespace dota {
 
 class ModifierManager {
-public:
+ public:
   int GetModifierDefaultParams() {
     return GlobalAddressRetriever::GetInstance()
       .GetDynamicAddress("ModifierDefaultParams");

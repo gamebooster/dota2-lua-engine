@@ -5,4 +5,4 @@
 
 namespace lua {
   void RegisterGlobalFunctions(LuaState& state);
-}
+}  // namespace lua

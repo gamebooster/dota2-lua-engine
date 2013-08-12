@@ -6,14 +6,13 @@
 
 namespace dota {
 
-class CHudElement {
-
-};
+class CHudElement {};
 
 class Hud {
-public:
+ public:
   static void SelectHudSkin(EconItemView* item, int unknown0) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("Hud::SelectHudSkin");
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("Hud::SelectHudSkin");
 
     __asm {
       push unknown0
@@ -23,25 +22,30 @@ public:
   }
   static Hud* GetInstance() {
     if (instance_ == nullptr) {
-      instance_ = (Hud*)GlobalAddressRetriever::GetInstance().GetDynamicAddress("Hud");
+      instance_ = reinterpret_cast<Hud*>(
+        GlobalAddressRetriever::GetInstance().GetDynamicAddress("Hud"));
     }
     return instance_;
   }
   CHudElement* FindSFElement(const char* name) {
-    int list = *(int*)(this + 0x44);
+    int list = *reinterpret_cast<int*>(this + 0x44);
 
 
     for (int i = 0; i < 64; i++) {
       const char* current_name = *(const char**)(list + 0x10 + (0x18 * i));
 
       if (current_name == nullptr) break;
-      if (strcmp(name, current_name) == 0) return *(CHudElement**)(list + 0x10 + (0x18 * i) + 0x4);
+      if (strcmp(name, current_name) == 0) {
+        return *reinterpret_cast<CHudElement**>(
+          list + 0x10 + (0x18 * i) + 0x4);
+      }
     }
 
     return nullptr;
   }
   CHudElement* FindElement(const char* name) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("Hud::FindElement");
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("Hud::FindElement");
 
     __asm {
       mov eax, name
@@ -49,6 +53,7 @@ public:
       call address
     }
   }
+
  private:
   static Hud* instance_;
 };
@@ -57,13 +62,15 @@ class DotaSFHudOverlay {
  public:
   static DotaSFHudOverlay* GetInstance() {
     if (instance_ == nullptr) {
-      instance_ = (DotaSFHudOverlay*)Hud::GetInstance()->FindSFElement("CDOTA_SF_Hud_Overlay");
+      instance_ = reinterpret_cast<DotaSFHudOverlay*>(
+        Hud::GetInstance()->FindSFElement("CDOTA_SF_Hud_Overlay"));
     }
     return instance_;
   }
 
   void ShowSpecItemPickup(const char* hero, const char* item) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("SFHudOverlay::ShowSpecItemPickup");
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("SFHudOverlay::ShowSpecItemPickup");
 
     __asm {
       mov eax, item
@@ -73,7 +80,8 @@ class DotaSFHudOverlay {
     }
   }
   void SendRoshanPopup(int alive, float time) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("SFHudOverlay::SendRoshanPopup");
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("SFHudOverlay::SendRoshanPopup");
 
     __asm {
       mov edi, this
@@ -82,8 +90,9 @@ class DotaSFHudOverlay {
       call address
     }
   }
+
  private:
   static DotaSFHudOverlay* instance_;
 };
 
-}
+}  // namespace dota

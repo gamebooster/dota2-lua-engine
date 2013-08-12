@@ -74,7 +74,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>..\address-retriever\address-retriever\libyaml;..\LuaJIT\src\;..\Release;..\hl2sdk-dota\lib\public;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir);$(ProjectDir);C:\boost_1_54_0;..\hl2sdk-dota\public;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir);$(ProjectDir);C:\boost_1_54_0;..\hl2sdk-dota;..\hl2sdk-dota\public;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)64</TargetName>

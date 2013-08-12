@@ -1,10 +1,8 @@
 // Copyright 2013 Karl Skomski - GPL v3
-
 #include "dota2-lua-engine/commands.h"
 
 #include "source-sdk/global_instance_manager.h"
 #include "lua/lua_engine.h"
-
 
 namespace commands {
   CON_COMMAND(set_var, "Change cvar value") {

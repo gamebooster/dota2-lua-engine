@@ -6,26 +6,32 @@
 namespace sourcesdk {
 
 class DrawUtils {
-public:
+ public:
   static DrawUtils& GetInstance() {
     static DrawUtils  instance;
 
     return instance;
   }
 
-	void DrawString( int x, int y, int r, int g, int b, int a, bool center, const char *text, ... );
-	void DrawRect( int x, int y, int w, int h, int r, int g, int b, int a );
-	void OutlineRect( int x, int y, int w, int h, int r, int g, int b, int a );
-	bool WorldToScreenNew( Vector& vIn, Vector& vOut );
-  bool GetVectorInScreenSpace( Vector pos, int& iX, int& iY, Vector *vecOffset = NULL );
-  int FrustumTransform( const matrix3x4_t& worldToSurface, const Vector& point, Vector& screen );
-  int HudTransform( const Vector& point, Vector& screen );
-private:
-  DrawUtils();
-	unsigned long font_;
+  void DrawString(int x, int y,
+                  int r, int g, int b, int a,
+                  bool center, const char *text, ...);
+  void DrawRect(int x, int y, int w, int h, int r, int g, int b, int a);
+  void OutlineRect(int x, int y, int w, int h, int r, int g, int b, int a);
 
-  DrawUtils(DrawUtils const&);
+  bool GetVectorInScreenSpace(
+    Vector pos, int& iX, int& iY, Vector *vecOffset = nullptr);
+  int FrustumTransform(const matrix3x4_t& worldToSurface,
+                       const Vector& point,
+                       Vector& screen);
+  int HudTransform(const Vector& point, Vector& screen);
+
+ private:
+  DrawUtils();
+  uint32_t font_;
+
+  explicit DrawUtils(DrawUtils const&);
   void operator=(DrawUtils const&);
 };
 
-}
+}  // namespace sourcesdk

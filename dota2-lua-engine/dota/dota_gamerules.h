@@ -10,10 +10,10 @@
 namespace dota {
 
 class GameRules {
-public:
+ public:
   static GameRules* GetInstance() {
-    return *(GameRules**)GlobalAddressRetriever::GetInstance()
-      .GetDynamicAddress("GameRules");
+    return *reinterpret_cast<GameRules**>(
+      GlobalAddressRetriever::GetInstance().GetDynamicAddress("GameRules"));
   }
   float GetGameTime() {
     int offset = sourcesdk::NetVarManager::GetInstance()
@@ -21,7 +21,7 @@ public:
         "DT_DOTAGamerulesProxy",
         "dota_gamerules_data",
         "m_fGameTime");
-    return *(float*)(this + offset);
+    return *reinterpret_cast<float*>(this + offset);
   }
   UnitAnnouncer* GetAnnouncer(int team_index) {
     uint32_t address = GlobalAddressRetriever::GetInstance()

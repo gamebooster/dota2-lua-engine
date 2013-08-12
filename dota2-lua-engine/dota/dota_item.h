@@ -7,9 +7,10 @@
 namespace dota {
 
 class EconItemView {
-public:
+ public:
   void Init(int item_id, int unknown0, int unknown1, int unknown2) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("EconItemView::Init");
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("EconItemView::Init");
 
     __asm {
       push unknown2
@@ -21,15 +22,16 @@ public:
     }
   }
   static EconItemView* Create() {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("EconItemView::Create");
-    
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("EconItemView::Create");
+
     void* store = malloc(0x100);
     __asm {
       mov esi, store
       call address
     }
 
-    return (EconItemView*)store;
+    return reinterpret_cast<EconItemView*>(store);
   }
 };
 

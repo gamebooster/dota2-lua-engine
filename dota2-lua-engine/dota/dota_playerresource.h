@@ -22,4 +22,4 @@ namespace dota {
 
      static DotaPlayerResource* GetPlayerResource();
   };
-}
+}  // namespace dota

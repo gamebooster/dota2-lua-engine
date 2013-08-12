@@ -6,14 +6,13 @@
 
 namespace dota {
 
-class ParticleManagerSystem {
-
-};
+class ParticleManagerSystem {};
 
 class ParticleManager {
-public:
+ public:
   static void PrecacheParticleSystem(const char* name) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("ParticleManager::PrecacheParticleSystem");
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("ParticleManager::PrecacheParticleSystem");
 
     __asm {
       mov esi, name
@@ -22,7 +21,8 @@ public:
   }
 
   void DestroyParticle(int particle_index, int stop_emission = 0) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("ParticleManager::DestroyParticle");
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("ParticleManager::DestroyParticle");
 
     __asm {
       mov ecx, this
@@ -33,7 +33,8 @@ public:
   }
 
   int CreateParticle(const char* name, int attachment, BaseEntity* entity) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("ParticleManager::CreateParticle");
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("ParticleManager::CreateParticle");
 
     int particle_index = 0;
 
@@ -53,8 +54,11 @@ public:
 
     return particle_index;
   }
-  void SetParticleControl(int particle_index, int index, Vector& vector) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("ParticleManager::SetParticleControl");
+  void SetParticleControl(int particle_index,
+                          int index,
+                          const Vector& vector) {
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("ParticleManager::SetParticleControl");
 
     float x = vector.x;
     float y = vector.y;
@@ -70,8 +74,14 @@ public:
       call address
     }
   }
-  void SetParticleControlEnt(int particle_index, int unknown0, void* entity, int unknown1, const char* attached, Vector& vector) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("ParticleManager::SetParticleControlEnt");
+  void SetParticleControlEnt(int particle_index,
+                             int unknown0,
+                             void* entity,
+                             int unknown1,
+                             const char* attached,
+                             const Vector& vector) {
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("ParticleManager::SetParticleControlEnt");
 
     float x = vector.x;
     float y = vector.y;
@@ -91,7 +101,8 @@ public:
     }
   }
   void ReleaseParticleIndex(int particle_index) {
-    uint32_t address = GlobalAddressRetriever::GetInstance().GetStaticAddress("ParticleManager::ReleaseParticleIndex");
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("ParticleManager::ReleaseParticleIndex");
 
     __asm {
       push this
@@ -101,13 +112,15 @@ public:
   }
   static ParticleManager* ParticleManager::GetInstance() {
     if (instance_ == nullptr) {
-      unsigned long system = (unsigned long)GameSystemsRetriever().FindByName("CDOTA_ParticleManagerSystem");
-      instance_ = (ParticleManagerSystem*)(system);
+      IGameSystem* system =
+        GameSystemsRetriever().FindByName("CDOTA_ParticleManagerSystem");
+      instance_ = reinterpret_cast<ParticleManagerSystem*>(system);
     }
-    return *(ParticleManager**)(instance_ + 0xC);
+    return *reinterpret_cast<ParticleManager**>(instance_ + 0xC);
   }
+
  private:
   static ParticleManagerSystem* instance_;
 };
 
-}
+}  // namespace dota

@@ -3,6 +3,7 @@
 #include "lua/lua_global.h"
 
 #include <map>
+#include <string>
 
 namespace lua {
   class LuaEngine {
@@ -17,7 +18,7 @@ namespace lua {
     std::map<std::string, LuaState> scripts_;
 
     LuaEngine();
-    LuaEngine(LuaEngine const&);
+    explicit LuaEngine(LuaEngine const&);
     void operator=(LuaEngine const&);
   };
 }  // namespace lua
