@@ -3,7 +3,7 @@ local kill_time = 0
 local hook
 
 function SendRoshanPopup(kill_time)
-  dota.SFHudOverlay.GetInstance():SendRoshanPopup(false, kill_time + 600)  
+  dota.SFHudOverlay.GetInstance():SendRoshanPopup(0, kill_time + 600)  
 end
 
 function OnRoshanKill()

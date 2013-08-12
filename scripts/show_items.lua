@@ -16,26 +16,32 @@ end
 function OnPaint()
   local players = dota.FindEntities(dota.kDotaPlayer)
   local local_player = dota.GetLocalPlayer()
+  local local_hero = dota.GetLocalHero()
 
   for _,player in ipairs(players) do
     local hero = player:GetAssignedHero()
+    if hero == nil then
+      return
+    end
     
-    local inventory = hero:GetInventory()
-    for i = 0, 6, 1 do
-      local item = inventory:GetItemInSlot(i)
-      if item ~= nil then
-      
-        local item_handle = item:GetRefEHandle():ToInt()
+    if hero:GetTeamIndex() ~= local_hero:GetTeamIndex() then
+      local inventory = hero:GetInventory()
+      for i = 0, 6, 1 do
+        local item = inventory:GetItemInSlot(i)
+        if item ~= nil then
+        
+          local item_handle = item:GetRefEHandle():ToInt()
 
-        if SetContains(items, item_handle) == false then
-          local hero_name = dota.PlayerResource.GetPlayerSelectedHero(player:GetPlayerId())
-          hero_name = string.gsub(hero_name, "npc_dota_hero_", "")
-          local item_name = item:GetName()
-          item_name = string.gsub(item_name, "item_", "")
+          if SetContains(items, item_handle) == false then
+            local hero_name = dota.PlayerResource.GetPlayerSelectedHero(player:GetPlayerId())
+            hero_name = string.gsub(hero_name, "npc_dota_hero_", "")
+            local item_name = item:GetName()
+            item_name = string.gsub(item_name, "item_", "")
 
-          dota.SFHudOverlay.GetInstance():ShowSpecItemPickup(hero_name, item_name)
+            dota.SFHudOverlay.GetInstance():ShowSpecItemPickup(hero_name, item_name)
 
-          AddToSet(items, item_handle)
+            AddToSet(items, item_handle)
+          end
         end
       end
     end
