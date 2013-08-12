@@ -1,4 +1,4 @@
-// Copyright 2013 Karl Skomski - Public Domain
+// Copyright 2013 Karl Skomski - GPL v3
 
 #include "source-sdk/source_sdk.h"
 
