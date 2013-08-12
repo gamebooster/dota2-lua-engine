@@ -1,3 +1,4 @@
+// Copyright 2013 Karl Skomski - GPL v3
 #include "lua/lua_state.h"
 #include "lua/lua_global.h"
 
@@ -19,4 +20,4 @@ namespace lua {
     LuaEngine(LuaEngine const&);
     void operator=(LuaEngine const&);
   };
-}
+}  // namespace lua

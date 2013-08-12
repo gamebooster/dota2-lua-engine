@@ -1,3 +1,4 @@
+// Copyright 2013 Karl Skomski - GPL v3
 #include "lua/lua_global.h"
 
 #include "source-sdk/source_sdk.h"

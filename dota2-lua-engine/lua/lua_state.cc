@@ -1,3 +1,4 @@
+// Copyright 2013 Karl Skomski - GPL v3
 #include "lua/lua_state.h"
 
 namespace lua {

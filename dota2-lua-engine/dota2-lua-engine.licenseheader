@@ -1,0 +1,13 @@
+extensions: designer.cs generated.cs
+extensions: .cs .cpp .h .cc
+// Copyright 2013 Karl Skomski - GPL v3
+extensions: .aspx .ascx
+<%-- 
+Copyright 2013 Karl Skomski - GPL v3
+--%>
+extensions: .vb
+'Copyright 2013 Karl Skomski - GPL v3
+extensions:  .xml .config .xsd
+<!--
+Copyright 2013 Karl Skomski - GPL v3
+-->

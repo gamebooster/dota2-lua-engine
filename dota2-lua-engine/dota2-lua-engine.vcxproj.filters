@@ -114,6 +114,7 @@
       <Filter>tools</Filter>
     </None>
     <None Include="config.yaml" />
+    <None Include="dota2-lua-engine.licenseheader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source-sdk\draw_utils.h">

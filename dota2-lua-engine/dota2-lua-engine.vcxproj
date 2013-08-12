@@ -209,6 +209,7 @@ xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
     <None Include="config.yaml">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="dota2-lua-engine.licenseheader" />
     <None Include="tools\dota-eject.bat">
       <DeploymentContent>true</DeploymentContent>
     </None>

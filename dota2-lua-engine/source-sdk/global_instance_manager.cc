@@ -1,3 +1,4 @@
+// Copyright 2013 Karl Skomski - GPL v3
 #include "global_instance_manager.h"
 
 CHLClient* GlobalInstanceManager::chlclient_ = nullptr;

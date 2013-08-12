@@ -1,3 +1,4 @@
+// Copyright 2013 Karl Skomski - GPL v3
 #pragma once
 
 #include "dota/dota_baseentity.h"

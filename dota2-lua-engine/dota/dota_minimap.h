@@ -1,3 +1,4 @@
+// Copyright 2013 Karl Skomski - GPL v3
 #pragma  once
 #include "..\source-sdk\SDK.h"
 #include "..\utils\global_address_retriever.hpp"

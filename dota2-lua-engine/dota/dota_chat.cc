@@ -1,3 +1,4 @@
+// Copyright 2013 Karl Skomski - GPL v3
 #include "dota/dota_chat.h"
 
 #include "utils/utils.h"
