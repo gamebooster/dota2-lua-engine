@@ -1,6 +1,8 @@
 // Copyright 2013 Karl Skomski - GPL v3
 #pragma once
 
+#include "dota_player.h"
+
 namespace dota {
   class DotaPlayerResource {
    public:
@@ -19,6 +21,7 @@ namespace dota {
      int GetTeam(int index);
 
      static const char* GetPlayerSelectedHero(int index);
+     static DotaPlayer* GetPlayerByPlayerId(int id);
 
      static DotaPlayerResource* GetPlayerResource();
   };

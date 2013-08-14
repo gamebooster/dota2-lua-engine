@@ -5,6 +5,13 @@
 
 namespace dota {
 
+class DotaBuff {
+ public:
+  const char* GetName() {
+    return *(const char**)(this + 0xC);
+  }
+};
+
 class ModifierManager {
  public:
   int GetModifierDefaultParams() {
@@ -28,6 +35,23 @@ class ModifierManager {
     }
 
     return constant;
+  }
+
+  int GetCurrentBuffCount() {
+    return *(int*)(this + 0x14);
+  }
+
+  DotaBuff* GetBuffByIndex(int index) {
+   int max_buff_index = GetCurrentBuffCount();
+   uint32_t buff_array = *(uint32_t*)(this + 0x8);
+
+    if (max_buff_index > index) {
+      DotaBuff* buff = *(DotaBuff**)(buff_array + 0x4 * index);
+      if (buff != nullptr && !(*(char*)(buff + 0x10) & 1)) {
+        return buff;
+      }
+    }
+    return nullptr;
   }
 };
 

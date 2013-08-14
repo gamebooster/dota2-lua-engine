@@ -3,6 +3,11 @@ dynamic:
   client.dll:
     - 
       commands: 
+        offset: 6
+      name: DotaInput
+      signature: "F3 0F 5C C2 8B 15 ? ? ? ?"
+    - 
+      commands: 
         offset: 4
       name: PlayerResource
       signature: "77 0F 8B 15 ? ? ? ? 8B 44 24 1C"
@@ -192,3 +197,8 @@ static:
         relative: 0
       name: "ParticleManager::ReleaseParticleIndex"
       signature: "E8 ? ? ? ? 8B 44 24 34 99"
+    - 
+      commands:
+        relative: 0
+      name: "DOTABaseAbility::OnExecute"
+      signature: "E8 ? ? ? ? 84 C0 75 13 8B 75 08"

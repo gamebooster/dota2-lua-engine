@@ -13,6 +13,9 @@
 #include "dota/dota_constants.h"
 #include "dota/dota_particlemanager.h"
 #include "dota/dota_playerresource.h"
+#include "dota/dota_modifiermanager.h"
+#include "dota/dota_chat.h"
+#include "dota/dota_input.h"
 
 #include "dota/dota_units.h"
 #include "utils/utils.h"
@@ -22,6 +25,46 @@
 #include "LuaBridge/RefCountedPtr.h"
 
 #undef CreateEventA
+
+template <>
+struct luabridge::Stack <wchar_t const*> {
+  static inline void push(lua_State* L, wchar_t const* unicode) {
+    if (unicode == nullptr) {
+      lua_pushnil(L);
+      return;
+    }
+
+    char ansi[1024];
+    utils::ConvertUnicodeToANSI(unicode, ansi, sizeof(ansi));
+    lua_pushstring(L, ansi);
+  }
+
+  static inline wchar_t const* get(lua_State* L, int index) {
+    if (lua_isnil(L, index)) return nullptr;
+    const char* normal = luaL_checkstring(L, index);
+    wchar_t* converted = new wchar_t[1024];
+    utils::ConvertANSIToUnicode(normal, converted, 1024);
+    return converted;
+  }
+};
+
+template <>
+struct luabridge::Stack <void*> {
+  static inline void push(lua_State* L, void* pointer) {
+    if (pointer == nullptr) {
+      lua_pushnil(L);
+      return;
+    }
+
+    lua_pushlightuserdata(L, pointer);
+  }
+
+  static inline void* get(lua_State* L, int index) {
+    if (lua_isnil(L, index)) return nullptr;
+
+    return lua_touserdata(L, index);
+  }
+};
 
 namespace lua {
 
@@ -289,6 +332,14 @@ namespace lua {
     }
   }
 
+  static uint32_t GetAddress(void* object) {
+    return (uint32_t) object;
+  }
+
+  static void ExecuteCommand(const char* name) {
+    GlobalInstanceManager::GetEngineClient()->ClientCmd_Unrestricted(name);
+  }
+
 
   typedef void(*MsgSignature)(const tchar* msg, ...);
   template<MsgSignature T>
@@ -303,6 +354,7 @@ namespace lua {
         .addCFunction("Msg", LogWrapper<Msg>)
         .addCFunction("Warning", LogWrapper<Warning>)
         .addCFunction("Error", LogWrapper<Error>)
+        .addFunction("GetAddress", &GetAddress)
       .endNamespace();
 
     luabridge::getGlobalNamespace(state)
@@ -341,6 +393,7 @@ namespace lua {
         .addFunction("GetLocalHero", &GetLocalHero)
         .addFunction("CreateParticle", &CreateParticle)
         .addFunction("CreateEntityParticle", &CreateEntityParticle)
+        .addFunction("ExecuteCommand", &ExecuteCommand)
         .addVariable("kDotaPlayer", &kDotaPlayer, false)
         .addVariable("kDotaBaseNPC", &kDotaBaseNPC, false)
         .addVariable("kDotaBaseNPCHero", &kDotaBaseNPCHero, false)
@@ -357,6 +410,16 @@ namespace lua {
         .endClass()
       .endNamespace();
 
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<dota::DotaChat>("Chat")
+          .addStaticFunction("GetInstance", &dota::DotaChat::GetInstance)
+          .addFunction("EventPrintf", &dota::DotaChat::EventPrintf)
+          .addFunction("MessagePrintf", &dota::DotaChat::MessagePrintf)
+        .endClass()
+      .endNamespace();
+
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
         .beginClass<dota::DotaPlayerResource>("PlayerResource")
@@ -364,6 +427,8 @@ namespace lua {
             &dota::DotaPlayerResource::GetPlayerResource)
           .addStaticFunction("GetPlayerSelectedHero",
             &dota::DotaPlayerResource::GetPlayerSelectedHero)
+          .addStaticFunction("GetPlayerByPlayerId",
+            &dota::DotaPlayerResource::GetPlayerByPlayerId)
           .addFunction("GetPlayerName",
             &dota::DotaPlayerResource::GetPlayerName)
           .addFunction("GetLevel", &dota::DotaPlayerResource::GetLevel)
@@ -607,6 +672,34 @@ namespace lua {
 
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
+        .beginClass<dota::DotaInput>("Input")
+         .addStaticFunction("GetInstance", &dota::DotaInput::GetInstance)
+         .addFunction("Get3dPositionUnderCursor",
+             &dota::DotaInput::Get3dPositionUnderCursor)
+         .addFunction("GetEntityUnderCursor",
+             &dota::DotaInput::GetEntityUnderCursor)
+        .endClass()
+     .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<dota::DotaBuff>("Buff")
+         .addFunction("GetName", &dota::DotaBuff::GetName)
+        .endClass()
+     .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<dota::ModifierManager>("ModifierManager")
+         .addFunction("GetCurrentBuffCount", &dota::ModifierManager::GetCurrentBuffCount)
+         .addFunction("GetBuffByIndex", &dota::ModifierManager::GetBuffByIndex)
+         .addFunction("GetModifier_Constant_Additive_Internal",
+              &dota::ModifierManager::GetModifier_Constant_Additive_Internal)
+        .endClass()
+     .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
         .beginClass<dota::BaseEntity>("BaseEntity")
          .addFunction("GetRefEHandle", &dota::BaseEntity::GetRefEHandle)
          .addFunction("GetClientClass", &dota::BaseEntity::GetClientClass)
@@ -635,6 +728,8 @@ namespace lua {
           .addFunction("GetInventory", &dota::BaseNPC::GetInventory)
           .addFunction("GetModifierManager",
               &dota::BaseNPC::GetModifierManager)
+          .addFunction("GetAbilityByDisplayedIndex",
+              &dota::BaseNPC::GetAbilityByDisplayedIndex)
           .addFunction("GetPhysicalArmor",
               &dota::BaseNPC::GetPhysicalArmor)
           .addFunction("IsEntityLastHittable",
@@ -650,7 +745,24 @@ namespace lua {
         .deriveClass <dota::BaseNPCHero, dota::BaseNPC> ("BaseNPCHero")
           .addFunction("IsIllusion", &dota::BaseNPCHero::IsIllusion)
         .endClass()
-        .deriveClass <dota::DotaItem, dota::BaseEntity> ("DotaItem")
+         .deriveClass <dota::DotaAbility, dota::BaseEntity> ("DotaAbility")
+         .addFunction("GetCooldownLengthFloat", &dota::DotaAbility::GetCooldownLengthFloat)
+         .addFunction("GetCooldownLengthInteger", &dota::DotaAbility::GetCooldownLengthInteger)
+         .addFunction("InAbilityPhase", &dota::DotaAbility::InAbilityPhase)
+         .addFunction("IsActivated", &dota::DotaAbility::IsActivated)
+         .addFunction("IsHidden", &dota::DotaAbility::IsHidden)
+         .addFunction("GetLevel", &dota::DotaAbility::GetLevel)
+         .addFunction("GetOverrideCastPoint", &dota::DotaAbility::GetOverrideCastPoint)
+         .addFunction("GetChannelStartTime", &dota::DotaAbility::GetChannelStartTime)
+         .addFunction("GetAutoCastState", &dota::DotaAbility::GetAutoCastState)
+         .addFunction("GetCastRange", &dota::DotaAbility::GetCastRange)
+         .addFunction("GetManaCost", &dota::DotaAbility::GetManaCost)
+         .addFunction("GetCooldown", &dota::DotaAbility::GetCooldown)
+         .addFunction("CanBeExecuted", &dota::DotaAbility::CanBeExecuted)
+         .addFunction("GetAbilityType", &dota::DotaAbility::GetAbilityType)
+         .addFunction("OnExecute", &dota::DotaAbility::OnExecute)
+        .endClass()
+        .deriveClass <dota::DotaItem, dota::DotaAbility> ("DotaItem")
           .addFunction("GetName", &dota::DotaItem::GetName)
           .addFunction("GetItemId", &dota::DotaItem::GetItemId)
           .addFunction("GetRequiresCharges",
@@ -669,6 +781,17 @@ namespace lua {
           .addFunction("GetAssignedHero", &dota::DotaPlayer::GetAssignedHero)
           .addFunction("PrepareUnitOrders",
               &dota::DotaPlayer::PrepareUnitOrders)
+          .addFunction("MoveToPosition", &dota::DotaPlayer::MoveToPosition)
+          .addFunction("MoveToEntity", &dota::DotaPlayer::MoveToEntity)
+          .addFunction("AttackEntity", &dota::DotaPlayer::AttackEntity)
+          .addFunction("AttackPosition", &dota::DotaPlayer::AttackPosition)
+          .addFunction("ToggleAbility", &dota::DotaPlayer::ToggleAbility)
+          .addFunction("CreateDoubleTapCastOrder", &dota::DotaPlayer::CreateDoubleTapCastOrder)
+          .addFunction("Stop", &dota::DotaPlayer::Stop)
+          .addFunction("HoldPosition", &dota::DotaPlayer::HoldPosition)
+          .addFunction("AttemptToUpgrade", &dota::DotaPlayer::AttemptToUpgrade)
+          .addFunction("UseGlyph", &dota::DotaPlayer::UseGlyph)
+          .addFunction("UseBuyback", &dota::DotaPlayer::UseBuyback)
         .endClass()
         .deriveClass <LuaDotaPlayer, dota::DotaPlayer> ("LuaDotaPlayer")
           .addFunction("GetAssignedHero", &LuaDotaPlayer::LuaGetAssignedHero)

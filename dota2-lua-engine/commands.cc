@@ -22,7 +22,7 @@ namespace commands {
     lua::LuaEngine::GetInstance().LoadScript(args.Arg(1));
   }
 
-  CON_COMMAND(lua_unloadscript, "Unload lua script") {
+  CON_COMMAND(lua_unload, "Unload lua script") {
     if (args.ArgC() < 2) {
       Msg("Usage: lua_unloadscript <script_name>\n");
       return;
@@ -30,28 +30,29 @@ namespace commands {
     lua::LuaEngine::GetInstance().UnloadScript(args.Arg(1));
   }
 
-  CON_COMMAND(lua_executescript, "Execute lua script") {
+  CON_COMMAND(lua_execute, "Execute lua script") {
     if (args.ArgC() < 2) {
       Msg("Usage: lua_executescript <script_name>\n");
       return;
     }
+    lua::LuaEngine::GetInstance().LoadScript(args.Arg(1));
     lua::LuaEngine::GetInstance().ExecuteScript(args.Arg(1));
   }
 
   void Register() {
+    //GlobalInstanceManager::GetCVar()
+    //  ->RegisterConCommand(&lua_loadscript_command);
     GlobalInstanceManager::GetCVar()
-      ->RegisterConCommand(&lua_loadscript_command);
+      ->RegisterConCommand(&lua_unload_command);
     GlobalInstanceManager::GetCVar()
-      ->RegisterConCommand(&lua_unloadscript_command);
-    GlobalInstanceManager::GetCVar()
-      ->RegisterConCommand(&lua_executescript_command);
+      ->RegisterConCommand(&lua_execute_command);
   }
   void Unregister() {
+    //GlobalInstanceManager::GetCVar()
+    //  ->UnregisterConCommand(&lua_loadscript_command);
     GlobalInstanceManager::GetCVar()
-      ->UnregisterConCommand(&lua_loadscript_command);
+      ->UnregisterConCommand(&lua_unload_command);
     GlobalInstanceManager::GetCVar()
-      ->UnregisterConCommand(&lua_unloadscript_command);
-    GlobalInstanceManager::GetCVar()
-      ->UnregisterConCommand(&lua_executescript_command);
+      ->UnregisterConCommand(&lua_execute_command);
   }
 }  // namespace commands

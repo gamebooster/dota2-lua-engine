@@ -1,0 +1,139 @@
+// Copyright 2013 Karl Skomski - GPL v3
+#pragma once
+
+#include "source-sdk/global_instance_manager.h"
+#include "source-sdk/netvar.h"
+#include "utils/global_address_retriever.h"
+#include "dota/dota_particle.h"
+#include "dota/dota_modifiermanager.h"
+#include "dota/dota_constants.h"
+#include "dota/dota_player.h"
+#include "dota/dota_baseentity.h"
+
+namespace dota {
+
+class DotaAbility : public BaseEntity {
+public:
+  float GetCooldown() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_fCooldown");
+    return *reinterpret_cast<float*>(this + offset);
+  }
+  int GetLevel() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_iLevel");
+    return *reinterpret_cast<int*>(this + offset);
+  }
+  float GetOverrideCastPoint() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_flOverrideCastPoint");
+    return *reinterpret_cast<float*>(this + offset);
+  }
+  float GetChannelStartTime() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_flChannelStartTime");
+    return *reinterpret_cast<float*>(this + offset);
+  }
+  bool GetAutoCastState() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_bAutoCastState");
+    return *reinterpret_cast<bool*>(this + offset);
+  }
+  int GetManaCost() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_iManaCost");
+    return *reinterpret_cast<int*>(this + offset);
+  }
+  int GetCooldownLengthInteger() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_iCooldownLength");
+    return *reinterpret_cast<int*>(this + offset);
+  }
+  float GetCooldownLengthFloat() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_flCooldownLength");
+    return *reinterpret_cast<float*>(this + offset);
+  }
+  bool InAbilityPhase() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_bInAbilityPhase");
+    return *reinterpret_cast<bool*>(this + offset);
+  }
+  bool IsActivated() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_bActivated");
+    return *reinterpret_cast<bool*>(this + offset);
+  }
+  bool IsHidden() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_bHidden");
+    return *reinterpret_cast<bool*>(this + offset);
+  }
+  int GetCastRange() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTABaseAbility", "m_iCastRange");
+    return *reinterpret_cast<int*>(this + offset);
+  }
+  int CanBeExecuted() {
+    typedef int ( __thiscall* OriginalFn )(void* thisptr);
+    return utils::GetVtableFunction<OriginalFn>(this, 200)(this);
+  }
+  int GetAbilityType() {
+    typedef int ( __thiscall* OriginalFn )(void* thisptr);
+    return utils::GetVtableFunction<OriginalFn>(this, 204)(this);
+  }
+  void OnExecute(BaseEntity* target, int quick_cast) {
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("DOTABaseAbility::OnExecute");
+
+    if (target == nullptr) return;
+
+    __asm {
+      push quick_cast
+        push target
+        mov eax, this
+        call address
+    }
+  }
+};
+
+class DotaItem : public DotaAbility {
+public:
+  const char* GetName() {
+    int offset = 0x778;
+    return *reinterpret_cast<const char**>(
+      *reinterpret_cast<int*>(this + offset));
+  }
+  int GetItemId() {
+    int offset = 0x778;
+    return *reinterpret_cast<int*>(
+      (*reinterpret_cast<int*>(this + offset)) + 0x3c);
+  }
+  bool GetRequiresCharges() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTA_Item", "m_bRequiresCharges");
+    return *reinterpret_cast<bool*>(this + offset);
+  }
+  int GetCurrentCharges() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTA_Item", "m_iCurrentCharges");
+    return *reinterpret_cast<int*>(this + offset);
+  }
+  int GetInitialCharges() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTA_Item", "m_iInitialCharges");
+    return *reinterpret_cast<int*>(this + offset);
+  }
+  int GetPurchaser() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTA_Item", "m_hPurchaser");
+    return *reinterpret_cast<int*>(this + offset);
+  }
+  float GetPurchaseTime() {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTA_Item", "m_flPurchaseTime");
+    return *reinterpret_cast<float*>(this + offset);
+  }
+};
+
+}  // namespace dota

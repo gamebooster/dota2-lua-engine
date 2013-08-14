@@ -1,6 +1,8 @@
 // Copyright 2013 Karl Skomski - GPL v3
 #pragma once
 
+#include "source-sdk/global_instance_manager.h"
+#include "source-sdk/netvar.h"
 #include "utils/global_address_retriever.h"
 #include "dota/dota_particle.h"
 #include "dota/dota_modifiermanager.h"
@@ -9,45 +11,6 @@
 #include "dota/dota_baseentity.h"
 
 namespace dota {
-
-class DotaItem : public BaseEntity {
- public:
-  const char* GetName() {
-    int offset = 0x778;
-    return *reinterpret_cast<const char**>(
-      *reinterpret_cast<int*>(this + offset));
-  }
-  int GetItemId() {
-    int offset = 0x778;
-    return *reinterpret_cast<int*>(
-      (*reinterpret_cast<int*>(this + offset)) + 0x3c);
-  }
-  bool GetRequiresCharges() {
-    int offset = sourcesdk::NetVarManager::GetInstance()
-      .GetNetVarOffset("DT_DOTA_Item", "m_bRequiresCharges");
-    return *reinterpret_cast<bool*>(this + offset);
-  }
-  int GetCurrentCharges() {
-    int offset = sourcesdk::NetVarManager::GetInstance()
-      .GetNetVarOffset("DT_DOTA_Item", "m_iCurrentCharges");
-    return *reinterpret_cast<int*>(this + offset);
-  }
-  int GetInitialCharges() {
-    int offset = sourcesdk::NetVarManager::GetInstance()
-      .GetNetVarOffset("DT_DOTA_Item", "m_iInitialCharges");
-    return *reinterpret_cast<int*>(this + offset);
-  }
-  int GetPurchaser() {
-    int offset = sourcesdk::NetVarManager::GetInstance()
-      .GetNetVarOffset("DT_DOTA_Item", "m_hPurchaser");
-    return *reinterpret_cast<int*>(this + offset);
-  }
-  float GetPurchaseTime() {
-    int offset = sourcesdk::NetVarManager::GetInstance()
-      .GetNetVarOffset("DT_DOTA_Item", "m_flPurchaseTime");
-    return *reinterpret_cast<float*>(this + offset);
-  }
-};
 
 class UnitInventory {
  public:
@@ -59,6 +22,7 @@ class UnitInventory {
         ->GetClientEntityFromHandle(handle));
   }
 };
+
 
 class BaseNPC : public BaseEntity {
  public:
@@ -114,6 +78,16 @@ class BaseNPC : public BaseEntity {
     int offset = sourcesdk::NetVarManager::GetInstance()
       .GetNetVarOffset("DT_DOTA_BaseNPC", "m_Inventory");
     return reinterpret_cast<UnitInventory*>(this + offset);
+  }
+  DotaAbility* GetAbilityByDisplayedIndex(int index) {
+    int offset = sourcesdk::NetVarManager::GetInstance()
+      .GetNetVarOffset("DT_DOTA_BaseNPC", "m_hAbilities");
+    int handle = *reinterpret_cast<int*>(this + offset + index * 4);
+
+    DotaAbility* ability = reinterpret_cast<DotaAbility*>(
+      GlobalInstanceManager::GetClientEntityList()
+        ->GetClientEntityFromHandle(handle));
+    return ability;
   }
   ModifierManager* GetModifierManager() {
     int offset = sourcesdk::NetVarManager::GetInstance()

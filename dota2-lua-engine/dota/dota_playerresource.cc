@@ -5,6 +5,7 @@
 #include "source-sdk/source_sdk.h"
 #include "source-sdk/netvar.h"
 #include "utils/global_address_retriever.h"
+#include "source-sdk/global_instance_manager.h"
 
 namespace dota {
   DotaPlayerResource* DotaPlayerResource::GetPlayerResource() {
@@ -75,6 +76,16 @@ namespace dota {
     int offset = sourcesdk::NetVarManager::GetInstance()
       .GetNetVarOffset("DT_DOTA_PlayerResource", "m_iUnreliableGold");
     return *reinterpret_cast<int*>(this + offset + index * 4);
+  }
+
+  DotaPlayer* DotaPlayerResource::GetPlayerByPlayerId(int id) {
+    for (int i = 1; i < 32; i++) {
+      DotaPlayer* player = reinterpret_cast<DotaPlayer*>(
+        GlobalInstanceManager::GetClientEntityList()->GetClientEntity(i));
+      if (player == nullptr) continue;
+      if (player->GetPlayerId() == id) return player;
+    }
+    return nullptr;
   }
 
   const char* DotaPlayerResource::GetPlayerName(int index) {

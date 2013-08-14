@@ -31,6 +31,5 @@
 #include "public/basehandle.h"
 #include "public/igameevents.h"
 
-
 #include "LuaJIT/src/lua.hpp"
 #include "LuaBridge/LuaBridge.h"
