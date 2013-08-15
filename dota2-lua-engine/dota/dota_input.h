@@ -1,6 +1,7 @@
 // Copyright 2013 Karl Skomski - GPL v3
 #pragma once
 
+#include "source-sdk/source_sdk.h"
 #include "utils/global_address_retriever.h"
 #include "source-sdk/global_instance_manager.h"
 #include "dota/dota_baseentity.h"
@@ -33,6 +34,14 @@ namespace dota {
       }
       return GlobalInstanceManager::GetClientEntityList()
         ->GetClientEntityFromHandle(*reinterpret_cast<int*>(this + 0x220));
+    }
+
+    Vector GetFullscreenMousePos() {
+      int w, x, y, z;
+      typedef void ( __thiscall* OriginalFn )(void* thisptr,
+                                              int* w, int* x, int* y, int* z);
+      utils::GetVtableFunction<OriginalFn>(this, 23)(this, &w, &x, &y, &z);
+      return Vector(x, y, z);
     }
    private:
      static DotaInput* instance_;

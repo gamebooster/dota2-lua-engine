@@ -11,6 +11,7 @@
 #include "dota/dota_baseentity.h"
 
 namespace dota {
+  class BaseNPC;
 
 class DotaAbility : public BaseEntity {
 public:
@@ -24,6 +25,7 @@ public:
       .GetNetVarOffset("DT_DOTABaseAbility", "m_iLevel");
     return *reinterpret_cast<int*>(this + offset);
   }
+
   float GetOverrideCastPoint() {
     int offset = sourcesdk::NetVarManager::GetInstance()
       .GetNetVarOffset("DT_DOTABaseAbility", "m_flOverrideCastPoint");
@@ -73,6 +75,14 @@ public:
     int offset = sourcesdk::NetVarManager::GetInstance()
       .GetNetVarOffset("DT_DOTABaseAbility", "m_iCastRange");
     return *reinterpret_cast<int*>(this + offset);
+  }
+  BaseNPC* GetCaster() {
+    int handle = *reinterpret_cast<int*>(this + 0x148);
+    if (handle == -1) return nullptr;
+
+    return reinterpret_cast<BaseNPC*>(
+      GlobalInstanceManager::GetClientEntityList()
+        ->GetClientEntityFromHandle(handle));
   }
   int CanBeExecuted() {
     typedef int ( __thiscall* OriginalFn )(void* thisptr);

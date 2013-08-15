@@ -10,7 +10,7 @@ namespace lua {
   LuaState::LuaState() : state_(luaL_newstate(), Deleter) {
     luaL_openlibs(state_.get());
   }
-  void LuaState::LoadFile(std::string name) {
+  bool LuaState::LoadFile(std::string name) {
     std::string module_dir = utils::GetModuleDirectory();
     module_dir += name;
 
@@ -18,7 +18,9 @@ namespace lua {
     if (status != 0) {
       Warning("booster-lua: %s \n",  lua_tostring(state_.get(), -1));
       lua_pop(state_.get(), 1);
+      return false;
     }
+    return true;
   }
 
   void LuaState::ExecuteProgram() {

@@ -22,33 +22,36 @@ end
 function OnPaint()
   local count = modifier_manager:GetCurrentBuffCount()
 
-  for i = 0, 16 do
-    local ability = dota.GetLocalHero():GetAbilityByDisplayedIndex(i)
-    if ability ~= nil then
-      dota.DrawUtils.DrawString(5, 600 + i * 30, 255,255,255,255, false,
-        ability:GetAbilityType() .. " " .. tostring(ability:InAbilityPhase()));
-    end
-  end
-
   for i = 0, count - 1 do
-    --dota.DrawUtils.DrawString(5, 400 + i * 30, 255,255,255,255, false, modifier_manager:GetBuffByIndex(i):GetName());
+    dota.DrawUtils.DrawString(5, 400 + i * 30, 255,255,255,255, false, modifier_manager:GetBuffByIndex(i):GetName());
   end
   
-  
-  local vec = dota.Input.GetInstance():Get3dPositionUnderCursor()
-  dota.DrawUtils.DrawString(5, 300, 255,255,255,255, false, vec.x .. " " .. vec.y .. " " .. vec.z);
-  
-  local entity = dota.Input.GetInstance():GetEntityUnderCursor()
-  if entity ~= nil then
-    dota.DrawUtils.DrawString(5, 400, 255,255,255,255, false, entity:GetClientClass():GetName());
-  end
-  if BuffExist("modifier_pugna_life_drain") then
-    dota.ExecuteCommand("dota_item_execute 0;dota_item_execute 0;")
+  for i = 0, 16 do
+    local ability = local_hero:GetAbilityByDisplayedIndex(i)
+    if ability ~= nil then
+      dota.DrawUtils.DrawString(5, 400 + i * 30, 255,255,255,255, false, ability:CanBeExecuted());
+    end
   end
 end
 
 function MoveCommand()
-  dota.GetLocalPlayer():Move(dota.Vector(0,0,0))
+  return
+  dota.GetLocalPlayer():UseAbility(dota.GetLocalHero():GetAbilityByDisplayedIndex(1))
+  return
+  local players = dota.FindEntities(dota.kDotaPlayer)
+  local local_player = dota.GetLocalPlayer()
+  local local_hero = dota.GetLocalHero()
+
+  for _,player in ipairs(players) do
+    local hero = player:GetAssignedHero()
+    if hero == nil then
+      return
+    end
+    
+    if hero:GetTeamIndex() ~= local_hero:GetTeamIndex() and local_hero:IsEntityInRange(hero, dota.GetLocalHero():GetAbilityByDisplayedIndex(1):GetCastRange()) then
+      local_player:UseAbilityEntity(dota.GetLocalHero():GetAbilityByDisplayedIndex(4), hero)
+    end
+  end
 end
 
 function StopCommand()

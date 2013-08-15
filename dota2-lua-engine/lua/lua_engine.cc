@@ -11,7 +11,9 @@ namespace lua {
     UnloadScript(name);
 
     RegisterGlobalFunctions(scripts_[name]);
-    scripts_[name].LoadFile(name);
+    if (scripts_[name].LoadFile(name) == false) {
+      UnloadScript(name);
+    }
   }
   void LuaEngine::UnloadScript(std::string name) {
     std::map<std::string, LuaState>::const_iterator it = scripts_.find(name);

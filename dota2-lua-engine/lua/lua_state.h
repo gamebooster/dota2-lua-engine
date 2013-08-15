@@ -14,7 +14,7 @@ namespace lua {
    public:
     LuaState();
 
-    void LoadFile(std::string name);
+    bool LoadFile(std::string name);
     void ExecuteProgram();
     void AddListener(CLuaGameEventListener* listener);
 

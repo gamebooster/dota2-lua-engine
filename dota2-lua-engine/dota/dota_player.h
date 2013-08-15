@@ -25,13 +25,17 @@ class DotaPlayer : public BasePlayer {
      kMoveToEntity   = 2,
      kAttackPosition = 3,
      kAttackEntity   = 4,
-     kUpdgradeAbility = 11,
-     kHoldPosition = 10,
-     kDoubleTapAbility = 8,
+     kUseAbilityPosition = 5,
+     kUseAbilityEntity = 6,
+     kUseAbilityUnknown = 7,
+     kUseAbility = 8,
      kToggleAbility = 9,
+     kHoldPosition = 10,
+     kUpdgradeAbility = 11,
+     kAutocast = 20,
      kStop = 21,
+     kBuyback = 23,
      kGlyph = 24,
-     kBuyback = 23
    };
 
   static BaseEntity* GetLocalPlayerSelectedUnit() {
@@ -73,11 +77,27 @@ class DotaPlayer : public BasePlayer {
   void Stop() {
     PrepareUnitOrders(Order::kStop, 0, vec3_origin, 0, 0, 0, 0);
   }
+  void UseAbilityPosition(DotaAbility* ability, Vector target) {
+    PrepareUnitOrders(Order::kUseAbilityPosition, 0, target,
+      ability->GetIndex(), 3, ability->GetCaster(), 0);
+  }
+  void UseAbilityEntity(DotaAbility* ability, BaseEntity* target) {
+    PrepareUnitOrders(Order::kUseAbilityEntity, target->GetIndex(), vec3_origin,
+                      ability->GetIndex(), 3, ability->GetCaster(), 0);
+  }
+  void UseAbilityTree(DotaAbility* ability, BaseEntity* target) {
+    PrepareUnitOrders(Order::kUseAbilityUnknown, target->GetIndex(),
+                      vec3_origin, ability->GetIndex(), 0, 0, 0);
+  }
   void ToggleAbility(DotaAbility* ability) {
     PrepareUnitOrders(Order::kToggleAbility, 0, vec3_origin, ability->GetIndex(), 0, 0, 0);
   }
-  void CreateDoubleTapCastOrder(DotaAbility* ability) {
-    PrepareUnitOrders(Order::kDoubleTapAbility, 0, vec3_origin, ability->GetIndex(), 0, 0, 0);
+  void UseAbility(DotaAbility* ability) {
+    PrepareUnitOrders(Order::kUseAbility, 0, vec3_origin, ability->GetIndex(), 0, 0, 0);
+  }
+  void AbilityAutocast(DotaAbility* ability) {
+    PrepareUnitOrders(Order::kAutocast, 0, vec3_origin, ability->GetIndex(),
+                      0, 0, 0);
   }
   void UseGlyph() {
     PrepareUnitOrders(Order::kGlyph, 0, vec3_origin, 0, 2, 0, 0);

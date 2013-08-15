@@ -678,6 +678,8 @@ namespace lua {
              &dota::DotaInput::Get3dPositionUnderCursor)
          .addFunction("GetEntityUnderCursor",
              &dota::DotaInput::GetEntityUnderCursor)
+         .addFunction("GetFullscreenMousePos",
+             &dota::DotaInput::GetFullscreenMousePos)
         .endClass()
      .endNamespace();
 
@@ -786,12 +788,15 @@ namespace lua {
           .addFunction("AttackEntity", &dota::DotaPlayer::AttackEntity)
           .addFunction("AttackPosition", &dota::DotaPlayer::AttackPosition)
           .addFunction("ToggleAbility", &dota::DotaPlayer::ToggleAbility)
-          .addFunction("CreateDoubleTapCastOrder", &dota::DotaPlayer::CreateDoubleTapCastOrder)
+          .addFunction("UseAbility", &dota::DotaPlayer::UseAbility)
           .addFunction("Stop", &dota::DotaPlayer::Stop)
           .addFunction("HoldPosition", &dota::DotaPlayer::HoldPosition)
           .addFunction("AttemptToUpgrade", &dota::DotaPlayer::AttemptToUpgrade)
           .addFunction("UseGlyph", &dota::DotaPlayer::UseGlyph)
           .addFunction("UseBuyback", &dota::DotaPlayer::UseBuyback)
+          .addFunction("UseAbilityPosition", &dota::DotaPlayer::UseAbilityPosition)
+          .addFunction("UseAbilityEntity", &dota::DotaPlayer::UseAbilityEntity)
+          .addFunction("UseAbilityTree", &dota::DotaPlayer::UseAbilityTree)
         .endClass()
         .deriveClass <LuaDotaPlayer, dota::DotaPlayer> ("LuaDotaPlayer")
           .addFunction("GetAssignedHero", &LuaDotaPlayer::LuaGetAssignedHero)
