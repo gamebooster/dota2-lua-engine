@@ -11,7 +11,7 @@ function OnPaint()
 
   local ult_ability = local_hero:GetAbilityByDisplayedIndex(3)
   local threshold = ult_ability:GetLevelSpecialValueFor("kill_threshold")
-  if threshold == 0 or ult_ability:CanBeExecuted() != -1 then
+  if threshold == 0 or ult_ability:CanBeExecuted() ~= -1 then
     return
   end
 
