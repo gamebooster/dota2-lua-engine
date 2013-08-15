@@ -763,6 +763,7 @@ namespace lua {
          .addFunction("CanBeExecuted", &dota::DotaAbility::CanBeExecuted)
          .addFunction("GetAbilityType", &dota::DotaAbility::GetAbilityType)
          .addFunction("OnExecute", &dota::DotaAbility::OnExecute)
+         .addFunction("GetLevelSpecialValueFor", &dota::DotaAbility::GetLevelSpecialValueFor)
         .endClass()
         .deriveClass <dota::DotaItem, dota::DotaAbility> ("DotaItem")
           .addFunction("GetName", &dota::DotaItem::GetName)

@@ -88,6 +88,25 @@ public:
     typedef int ( __thiscall* OriginalFn )(void* thisptr);
     return utils::GetVtableFunction<OriginalFn>(this, 200)(this);
   }
+  int GetLevelSpecialValueFor(const char* key) {
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("DOTABaseAbility::GetLevelSpecialValueFor");
+
+    if (key == nullptr) return 0;
+    int level = GetLevel();
+    if (level == 0) return 0;
+
+    int value_struct = 0;
+    __asm {
+      push key
+      mov eax, this
+      call address
+      mov [value_struct], eax
+    }
+    int special_value = *reinterpret_cast<int*>(
+      value_struct + 0x18 + (level - 1) * 0x10);
+    return special_value;
+  }
   int GetAbilityType() {
     typedef int ( __thiscall* OriginalFn )(void* thisptr);
     return utils::GetVtableFunction<OriginalFn>(this, 204)(this);

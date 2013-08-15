@@ -202,3 +202,8 @@ static:
         relative: 0
       name: "DOTABaseAbility::OnExecute"
       signature: "E8 ? ? ? ? 84 C0 75 13 8B 75 08"
+    - 
+      commands:
+        relative: 0
+      name: "DOTABaseAbility::GetLevelSpecialValueFor"
+      signature: "E8 ? ? ? ? 3B C3 74 55"
