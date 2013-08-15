@@ -9,9 +9,8 @@ Start a match than execute `dota2-esp\tools\dota-inject.bat`
 ## Commands
 
 ```
-$ lua_loadscript <file_name>
-$ lua_executescript <file_name>
-$ lua_unloadscript <file_name>
+$ lua_execute <file_name>
+$ lua_unload <file_name>
 ```
 
 ## API
