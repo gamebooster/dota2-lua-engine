@@ -10,6 +10,30 @@ class DotaBuff {
   const char* GetName() {
     return *(const char**)(this + 0xC);
   }
+  int GetStackCount() {
+    typedef int ( __thiscall* OriginalFn )(void* thisptr);
+    return utils::GetVtableFunction<OriginalFn>(this, 17)(this);
+  }
+  float GetDieTime() {
+    typedef float ( __thiscall* OriginalFn )(void* thisptr);
+    return utils::GetVtableFunction<OriginalFn>(this, 20)(this);
+  }
+  float GetDuration() {
+    typedef float ( __thiscall* OriginalFn )(void* thisptr);
+    return utils::GetVtableFunction<OriginalFn>(this, 21)(this);
+  }
+  const char* GetTexture() {
+    typedef const char* ( __thiscall* OriginalFn )(void* thisptr);
+    return utils::GetVtableFunction<OriginalFn>(this, 22)(this);
+  }
+  float GetRemainingTime() {
+    typedef float ( __thiscall* OriginalFn )(void* thisptr);
+    return utils::GetVtableFunction<OriginalFn>(this, 23)(this);
+  }
+  float GetElapsedTime() {
+    typedef float ( __thiscall* OriginalFn )(void* thisptr);
+    return utils::GetVtableFunction<OriginalFn>(this, 24)(this);
+  }
 };
 
 class ModifierManager {

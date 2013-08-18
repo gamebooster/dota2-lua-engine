@@ -105,6 +105,9 @@
     <ClCompile Include="dota\dota_input.cc">
       <Filter>Source Files\dota</Filter>
     </ClCompile>
+    <ClCompile Include="dota\dota_projectilemanager.cc">
+      <Filter>Source Files\dota</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="tools\Injector.exe">
@@ -208,6 +211,9 @@
       <Filter>Header Files\dota</Filter>
     </ClInclude>
     <ClInclude Include="dota\dota_input.h">
+      <Filter>Header Files\dota</Filter>
+    </ClInclude>
+    <ClInclude Include="dota\dota_projectilemanager.h">
       <Filter>Header Files\dota</Filter>
     </ClInclude>
   </ItemGroup>

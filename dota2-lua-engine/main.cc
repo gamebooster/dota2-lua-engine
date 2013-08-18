@@ -11,6 +11,7 @@
 #include "lua/lua_engine.h"
 
 #include "dota2-lua-engine/commands.h"
+#include "dota/dota_global.h"
 
 static HANDLE thread = nullptr;
 static utils::VtableHook* client_hook;
@@ -33,6 +34,8 @@ DWORD WINAPI InitializeHook(void* arguments) {
 
   g_pCVar = reinterpret_cast<ICvar*>(GlobalInstanceManager::GetCVar());
   commands::Register();
+
+  dota::GameSystemsRetriever().DumpSystems();
 
   return 1;
 }

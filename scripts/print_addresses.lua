@@ -23,7 +23,9 @@ function OnPaint()
   local count = modifier_manager:GetCurrentBuffCount()
 
   for i = 0, count - 1 do
-    dota.DrawUtils.DrawString(5, 400 + i * 30, 255,255,255,255, false, modifier_manager:GetBuffByIndex(i):GetName());
+    local buff = odifier_manager:GetBuffByIndex(i)
+    dota.DrawUtils.DrawString(5, 200 + i * 30, 255,255,255,255, false, buff:GetName());
+    dota.DrawUtils.DrawString(5, 205 + i * 30, 255,255,255,255, false, buff:GetTexture());
   end
   
   for i = 0, 16 do
@@ -34,32 +36,6 @@ function OnPaint()
   end
 end
 
-function MoveCommand()
-  return
-  dota.GetLocalPlayer():UseAbility(dota.GetLocalHero():GetAbilityByDisplayedIndex(1))
-  return
-  local players = dota.FindEntities(dota.kDotaPlayer)
-  local local_player = dota.GetLocalPlayer()
-  local local_hero = dota.GetLocalHero()
-
-  for _,player in ipairs(players) do
-    local hero = player:GetAssignedHero()
-    if hero == nil then
-      return
-    end
-    
-    if hero:GetTeamIndex() ~= local_hero:GetTeamIndex() and local_hero:IsEntityInRange(hero, dota.GetLocalHero():GetAbilityByDisplayedIndex(1):GetCastRange()) then
-      local_player:UseAbilityEntity(dota.GetLocalHero():GetAbilityByDisplayedIndex(4), hero)
-    end
-  end
-end
-
-function StopCommand()
-  dota.GetLocalPlayer():Stop()
-end
-
 function Initialize()
   hook = dota.AddPaintHook(OnPaint)
-  move_command = dota.AddConsoleCommand("move_player", MoveCommand);
-  stop_command = dota.AddConsoleCommand("stop_player", StopCommand);
 end

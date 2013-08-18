@@ -190,6 +190,7 @@ xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
     <ClCompile Include="dota\dota_input.cc" />
     <ClCompile Include="dota\dota_item.cc" />
     <ClCompile Include="dota\dota_particlemanager.cc" />
+    <ClCompile Include="dota\dota_projectilemanager.cc" />
     <ClCompile Include="lua\lua_engine.cc" />
     <ClCompile Include="lua\lua_global.cc" />
     <ClCompile Include="lua\lua_state.cc" />
@@ -238,6 +239,7 @@ xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
     <ClInclude Include="dota\dota_particlemanager.h" />
     <ClInclude Include="dota\dota_player.h" />
     <ClInclude Include="dota\dota_playerresource.h" />
+    <ClInclude Include="dota\dota_projectilemanager.h" />
     <ClInclude Include="dota\dota_units.h" />
     <ClInclude Include="lua\lua_engine.h" />
     <ClInclude Include="lua\lua_game_event_listener.h" />

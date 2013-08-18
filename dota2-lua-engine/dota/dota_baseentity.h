@@ -4,6 +4,18 @@
 #include "source-sdk/source_sdk.h"
 
 namespace dota {
+  class BaseTempEntity {
+   public:
+     ClientClass* GetClientClass() {
+       void* networkable = reinterpret_cast<void*>(this + 0x4);
+       typedef ClientClass* ( __thiscall* OriginalFn )( void* );
+       return utils::GetVtableFunction<OriginalFn>(networkable, 2)
+         (networkable);
+     }
+     const char* GetName() {
+       return *reinterpret_cast<const char**>(this + 0x30);
+     }
+  };
   class BaseEntity {
   public:
     const CBaseHandle& GetRefEHandle() {
@@ -57,5 +69,7 @@ namespace dota {
       return entindex;
     }
   };
+
+
 
 }  // namespace dota

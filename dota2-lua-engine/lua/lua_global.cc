@@ -16,6 +16,7 @@
 #include "dota/dota_modifiermanager.h"
 #include "dota/dota_chat.h"
 #include "dota/dota_input.h"
+#include "dota/dota_projectilemanager.h"
 
 #include "dota/dota_units.h"
 #include "utils/utils.h"
@@ -333,13 +334,34 @@ namespace lua {
   }
 
   static uint32_t GetAddress(void* object) {
-    return (uint32_t) object;
+    return *(uint32_t*)((uint32_t)object + 0x4);
   }
 
   static void ExecuteCommand(const char* name) {
     GlobalInstanceManager::GetEngineClient()->ClientCmd_Unrestricted(name);
   }
 
+  class LuaProjectile : public dota::Projectile {
+   public:
+    dota::BaseEntity* GetTarget() {
+      return GlobalInstanceManager::GetClientEntityList()
+        ->GetClientEntityFromHandle(targetHandle);
+    }
+    dota::BaseEntity* GetSource() {
+      return GlobalInstanceManager::GetClientEntityList()
+        ->GetClientEntityFromHandle(sourceHandle);
+    }
+  };
+
+  class LuaProjectileManager : public dota::ProjectileManager {
+   public:
+    static LuaProjectileManager* GetLuaInstance() {
+      return reinterpret_cast<LuaProjectileManager*>(GetInstance());
+    }
+    LuaProjectile* GetLuaProjectileByIndex(int index) {
+      return reinterpret_cast<LuaProjectile*>(GetProjectileByIndex(index));
+    }
+  };
 
   typedef void(*MsgSignature)(const tchar* msg, ...);
   template<MsgSignature T>
@@ -687,6 +709,50 @@ namespace lua {
       .beginNamespace("dota")
         .beginClass<dota::DotaBuff>("Buff")
          .addFunction("GetName", &dota::DotaBuff::GetName)
+         .addFunction("GetStackCount", &dota::DotaBuff::GetStackCount)
+         .addFunction("GetDieTime", &dota::DotaBuff::GetDieTime)
+         .addFunction("GetDuration", &dota::DotaBuff::GetDuration)
+         .addFunction("GetTexture", &dota::DotaBuff::GetTexture)
+         .addFunction("GetRemainingTime", &dota::DotaBuff::GetRemainingTime)
+         .addFunction("GetElapsedTime", &dota::DotaBuff::GetElapsedTime)
+        .endClass()
+     .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<dota::Projectile>("Projectile")
+         .addData("speed", &dota::Projectile::speed)
+         .addData("target", &dota::Projectile::target)
+         .addData("position", &dota::Projectile::position)
+         .addData("flag0", &dota::Projectile::flag0)
+         .addData("flag1", &dota::Projectile::flag1)
+         .addData("flag2", &dota::Projectile::flag2)
+         .addData("flag3", &dota::Projectile::flag3)
+         .addData("unknown1", &dota::Projectile::unknown1)
+         .addData("unknown2", &dota::Projectile::unknown2)
+         .addData("entity", &dota::Projectile::entity)
+        .endClass()
+        .deriveClass<LuaProjectile, dota::Projectile>("LuaProjectile")
+         .addFunction("GetTarget", &LuaProjectile::GetTarget)
+         .addFunction("GetSource", &LuaProjectile::GetSource)
+        .endClass()
+     .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<dota::BaseTempEntity>("BaseTempEntity")
+         .addFunction("GetClientClass",
+             &dota::BaseTempEntity::GetClientClass)
+         .addFunction("GetName",
+             &dota::BaseTempEntity::GetName)
+        .endClass()
+     .endNamespace();
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<LuaProjectileManager>("ProjectileManager")
+         .addStaticFunction("GetInstance", &LuaProjectileManager::GetLuaInstance)
+         .addFunction("GetProjectileByIndex",
+             &LuaProjectileManager::GetLuaProjectileByIndex)
         .endClass()
      .endNamespace();
 
