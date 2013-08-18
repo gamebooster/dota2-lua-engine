@@ -1,6 +1,7 @@
 local effect = nil
 local hook = nil
 local draw_utils = dota.DrawUtils.GetInstance()
+local font = draw_utils:CreateFont("Arial", 22, 500)
 
 function OnPaint()
   local players = dota.FindEntities(dota.kDotaPlayer)
@@ -18,13 +19,17 @@ function OnPaint()
     local origin = hero:GetAbsOrigin()
     local screen = dota.DrawUtils.GetVectorInScreenSpace(origin)
     if screen.x > 0 then
-      draw_utils:DrawRect(screen.x - 45, screen.y - 45, bar_width, 10, 0, 0, 0, 255)
-      draw_utils:DrawRect(screen.x - 45, screen.y - 45, life_width,10, 0, 128, 255, 255)
-
+      draw_utils:DrawRect(screen.x - 45, screen.y - 45, bar_width,
+                          20, 0, 0, 0, 255)
+      draw_utils:DrawRect(screen.x - 45, screen.y - 45, life_width,
+                          20, 0, 128, 255, 255)
+      dota.DrawUtils.DrawString(font, screen.x - 45 + (bar_width/2), screen.y -  46,
+                                255, 255, 255, true, mana .. " / " .. max_mana)
+                          
       --draw_utils:OutlineRect(screen.x - 46, screen.y - 46, bar_width + 2, 12, 0, 0, 0, 255)
 
-      dota.DrawUtils.DrawString(screen.x - 45 + (bar_width/2), screen.y -  48, 255, 255, 255, 255, true, mana .. " / " .. max_mana)
-      dota.DrawUtils.DrawString(screen.x - 45 + (bar_width/2), screen.y - 100, 255, 255, 255, 255, true, health)
+      dota.DrawUtils.DrawString(font, screen.x - 45 + (bar_width/2), screen.y - 100,
+                                255, 255, 255, true, health)
     end  
   end
 end

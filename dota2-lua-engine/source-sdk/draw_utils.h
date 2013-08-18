@@ -12,8 +12,8 @@ class DrawUtils {
 
     return instance;
   }
-
-  void DrawString(int x, int y,
+  int DrawUtils::CreateFont(const char* name, int tall, int weight);
+  void DrawString(int font, int x, int y,
                   int r, int g, int b, int a,
                   bool center, const char *text, ...);
   void DrawRect(int x, int y, int w, int h, int r, int g, int b, int a);
@@ -28,7 +28,6 @@ class DrawUtils {
 
  private:
   DrawUtils();
-  uint32_t font_;
 
   explicit DrawUtils(DrawUtils const&);
   void operator=(DrawUtils const&);

@@ -4,40 +4,59 @@
 
 namespace sourcesdk {
 
-  DrawUtils::DrawUtils() :
-    font_(GlobalInstanceManager::GetSurface()->CreateFont()) {
-      GlobalInstanceManager::GetSurface()
-        ->SetFontGlyphSet(font_, "Tahoma", 14, 500, 0, 0, 0x200);
+  enum EFontFlags {
+    FONTFLAG_NONE,
+    FONTFLAG_ITALIC = 0x001,
+    FONTFLAG_UNDERLINE = 0x002,
+    FONTFLAG_STRIKEOUT = 0x004,
+    FONTFLAG_SYMBOL = 0x008,
+    FONTFLAG_ANTIALIAS = 0x010,
+    FONTFLAG_GAUSSIANBLUR = 0x020,
+    FONTFLAG_ROTARY = 0x040,
+    FONTFLAG_DROPSHADOW = 0x080,
+    FONTFLAG_ADDITIVE = 0x100,
+    FONTFLAG_OUTLINE = 0x200,
+    FONTFLAG_CUSTOM = 0x400
+  };
+
+  DrawUtils::DrawUtils() {
+}
+int DrawUtils::CreateFont(const char* name, int tall, int weight) {
+  int font = GlobalInstanceManager::GetSurface()->CreateFont();
+  GlobalInstanceManager::GetSurface()
+    ->SetFontGlyphSet(font, name, tall, weight, 0, 0,
+    EFontFlags::FONTFLAG_ANTIALIAS | EFontFlags::FONTFLAG_OUTLINE);
+  return font;
 }
 
-void DrawUtils::DrawString(
+void DrawUtils::DrawString(int font,
     int x, int y,
     int r, int g, int b, int a, bool center, const char *text, ... ) {
   if (text == nullptr) return;
 
   va_list va_alist;
   char szBuffer[1024] = { '\0' };
-  wchar_t szString[1024] = { '\0' };
+  wchar_t w_text[1024] = { '\0' };
 
   va_start(va_alist, text);
   vsprintf_s(szBuffer, text, va_alist);
   va_end(va_alist);
 
-  wsprintfW(szString, L"%S", szBuffer);
+  wsprintfW(w_text, L"%S", szBuffer);
 
   if (center) {
     int text_wide, text_tall;
-    GlobalInstanceManager::GetSurface()->GetTextSize(
-      font_, szString, text_wide, text_tall);
+    GlobalInstanceManager::GetSurface()->GetTextSize(font, w_text,
+                                                     text_wide, text_tall);
 
     x-= (text_wide/2);
   }
 
-  GlobalInstanceManager::GetSurfaceNew()->DrawSetTextFont(font_);
+  GlobalInstanceManager::GetSurfaceNew()->DrawSetTextFont(font);
   GlobalInstanceManager::GetSurfaceNew()->DrawSetTextPos(x, y);
   GlobalInstanceManager::GetSurfaceNew()->DrawSetTextColor(r, g, b, a);
   GlobalInstanceManager::GetSurfaceNew()
-    ->DrawPrintText(szString, wcslen(szString));
+    ->DrawPrintText(w_text, wcslen(w_text));
 }
 
 void DrawUtils::DrawRect(

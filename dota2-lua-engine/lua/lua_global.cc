@@ -319,10 +319,10 @@ namespace lua {
 
   std::map<std::string, luabridge::LuaRef> ConsoleCommand::callbacks_;
 
-  static void DrawString(
-    int x, int y, int r, int g, int b, int a, bool center, const char* text) {
-    sourcesdk::DrawUtils::GetInstance().DrawString(
-      x, y, r, g, b, a, center, text);
+  static void DrawString(int font,
+    int x, int y, int r, int g, int b, bool center, const char* text) {
+    sourcesdk::DrawUtils::GetInstance().DrawString(font,
+      x, y, r, g, b, 255, center, text);
   }
   static Vector GetVectorInScreenSpace(Vector vec) {
     int x, y;
@@ -429,6 +429,7 @@ namespace lua {
           .addStaticFunction("GetVectorInScreenSpace", &GetVectorInScreenSpace)
           .addFunction("OutlineRect", &sourcesdk::DrawUtils::OutlineRect)
           .addStaticFunction("DrawString", &DrawString)
+          .addFunction("CreateFont", &sourcesdk::DrawUtils::CreateFont)
         .endClass()
       .endNamespace();
 

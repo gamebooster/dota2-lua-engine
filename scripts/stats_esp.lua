@@ -1,5 +1,6 @@
 local hook = nil
 local player_resource = dota.PlayerResource.GetPlayerResource()
+local font = dota.DrawUtils.GetInstance():CreateFont("Arial", 18, 500)
 
 function OnPaint()
   local players = dota.FindEntities(dota.kDotaPlayer)
@@ -18,10 +19,10 @@ function OnPaint()
     local team        = player:GetTeamIndex()
 
     if team ~= local_team then
-      dota.DrawUtils.DrawString(5, 400 + offset_counter  * 30, 255,255,255,255, false, level);
-      dota.DrawUtils.DrawString(25, 400 + offset_counter * 30, 255,255,255,255, false, player_name);
-      dota.DrawUtils.DrawString(5, 400 + offset_counter  * 30 + 15, 255,255,255,255, false, gold);
-      dota.DrawUtils.DrawString(60, 400 + offset_counter  * 30 + 15, 255,255,255,255, false, last_hits);
+      dota.DrawUtils.DrawString(font, 5, 400 + offset_counter  * 30, 255,255,255, false, level);
+      dota.DrawUtils.DrawString(font, 25, 400 + offset_counter * 30, 255,255,255, false, player_name);
+      dota.DrawUtils.DrawString(font ,5, 400 + offset_counter  * 30 + 15, 255,255,255, false, gold);
+      dota.DrawUtils.DrawString(font, 60, 400 + offset_counter  * 30 + 15, 255,255,255, false, last_hits);
       
       offset_counter = offset_counter + 1
     end
