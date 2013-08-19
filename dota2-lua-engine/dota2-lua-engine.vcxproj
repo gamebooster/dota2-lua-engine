@@ -73,8 +73,8 @@
     <LibraryPath>C:\Users\bogus\Documents\GitHub\dxhook-master\AntTweakBar\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>..\address-retriever\address-retriever\libyaml;..\LuaJIT\src\;..\Release;..\hl2sdk-dota\lib\public;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir);$(ProjectDir);C:\boost_1_54_0;..\hl2sdk-dota;..\hl2sdk-dota\public;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)protobuf-2.5.0\vsprojects\Release;..\address-retriever\address-retriever\libyaml;..\LuaJIT\src\;..\Release;..\hl2sdk-dota\lib\public;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)protobuf\;$(SolutionDir)protobuf-2.5.0\src;$(SolutionDir)protobuf-2.5.0\vsprojects;$(SolutionDir)protobuf-2.5.0\vsprojects\Release;$(SolutionDir);$(ProjectDir);C:\boost_1_54_0;..\hl2sdk-dota;..\hl2sdk-dota\public;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)64</TargetName>
@@ -126,7 +126,7 @@
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vstdlib.lib;tier0.lib;tier1.lib;lua51.lib;address-retriever.lib;libyaml-cppmd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vstdlib.lib;tier0.lib;tier1.lib;lua51.lib;address-retriever.lib;libyaml-cppmd.lib;libprotobuf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <MASM />
     <MASM />
@@ -136,8 +136,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <BrowseInformation>true</BrowseInformation>
       <PrecompiledHeaderFile>precompiled_headers.h</PrecompiledHeaderFile>
-      <WarningLevel>Level4</WarningLevel>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderOutputFile>$(IntDir)precompiled.pch</PrecompiledHeaderOutputFile>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -183,6 +183,10 @@ xcopy /y "$(SolutionDir)scripts\*.lua" "$(OutDir)"</Command>
     <ProjectReference />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\protobuf\dota_clientmessages.pb.cc" />
+    <ClCompile Include="..\protobuf\dota_commonmessages.pb.cc" />
+    <ClCompile Include="..\protobuf\netmessages.pb.cc" />
+    <ClCompile Include="..\protobuf\networkbasetypes.pb.cc" />
     <ClCompile Include="commands.cc" />
     <ClCompile Include="dota\dota_chat.cc" />
     <ClCompile Include="dota\dota_global.cc" />

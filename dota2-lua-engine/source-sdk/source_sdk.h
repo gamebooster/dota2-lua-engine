@@ -2,6 +2,8 @@
 #pragma once
 
 #include "utils/utils.h"
+#include "protobuf/dota_clientmessages.pb.h"
+#include "vstdlib/random.h"
 
 typedef void* ( __cdecl* CreateInterface_t )( const char*, int* );
 typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
@@ -204,6 +206,13 @@ class EngineClient {
     typedef void ( __thiscall* OriginalFn )( PVOID, const char * );
     return utils::GetVtableFunction<OriginalFn>(this, 105)
       (this, chCommandString);
+  }
+  void SendClientMessage(int message_id,
+                         google::protobuf::Message const& message, bool now) {
+    typedef void ( __thiscall* OriginalFn )
+      (PVOID, int, google::protobuf::Message const&, bool );
+    utils::GetVtableFunction<OriginalFn>(this, 213)
+      (this, message_id, message, now);
   }
 };
 

@@ -35,14 +35,14 @@ void DrawUtils::DrawString(int font,
   if (text == nullptr) return;
 
   va_list va_alist;
-  char szBuffer[1024] = { '\0' };
+  char buffer[1024] = { '\0' };
   wchar_t w_text[1024] = { '\0' };
 
   va_start(va_alist, text);
-  vsprintf_s(szBuffer, text, va_alist);
+  vsprintf_s(buffer, text, va_alist);
   va_end(va_alist);
 
-  wsprintfW(w_text, L"%S", szBuffer);
+  wsprintfW(w_text, L"%S", buffer);
 
   if (center) {
     int text_wide, text_tall;

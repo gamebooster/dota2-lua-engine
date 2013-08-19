@@ -1,4 +1,4 @@
-// Copyright 2013 Karl Skomski - GPL v3
+﻿// Copyright 2013 Karl Skomski - GPL v3
 #include <list>
 #include <string>
 #include <map>
@@ -134,7 +134,6 @@ namespace lua {
        hook_manager.CallListener();
      }
   };
-
   class PaintHookListener : public HookListener {
   public:
     explicit PaintHookListener(luabridge::LuaRef callback) :
@@ -156,10 +155,6 @@ namespace lua {
     luabridge::LuaRef callback_;
   };
 
-  static int kDotaPlayer = 0;
-  static int kDotaBaseNPC = 1;
-  static int kDotaBaseNPCHero = 2;
-
   class LuaDotaPlayer : public dota::DotaPlayer {
   public:
     dota::BaseNPCHero* LuaGetAssignedHero() {
@@ -167,6 +162,84 @@ namespace lua {
         ->GetClientEntity(this->GetAssignedHero());
     }
   };
+  static LuaDotaPlayer* GetLocalPlayer() {
+    return reinterpret_cast<LuaDotaPlayer*>(
+      GlobalInstanceManager::GetClientTools()->GetLocalPlayer());
+  }
+
+  class ICreateMoveHookListener {
+  public:
+    virtual void NewEvent(float sample_time, dota::UserCMD* cmd) = 0;
+  };
+  class CreateMoveHookManager {
+   public:
+     CreateMoveHookManager() : hook_(dota::ClientMode::GetInstance()) {
+       hook_.HookMethod(ClientMode_CreateMove, 27);
+     }
+
+     void AddListener(ICreateMoveHookListener* listener) {
+       callbacks_.push_back(listener);
+     }
+
+     void RemoveListener(ICreateMoveHookListener* listener) {
+       std::list<ICreateMoveHookListener*>::iterator it = std::find(
+         callbacks_.begin(), callbacks_.end(), listener);
+       if (it != callbacks_.end()) {
+         callbacks_.erase(it);
+       }
+     }
+
+     void CallListener(float sample_time, dota::UserCMD* cmd) {
+       for (auto listener : callbacks_) {
+         listener->NewEvent(sample_time, cmd);
+       }
+     }
+
+    static CreateMoveHookManager& GetInstance() {
+      static CreateMoveHookManager instance;
+      return instance;
+    }
+
+    static bool __fastcall ClientMode_CreateMove(void* thisptr, int edx,
+                                                float sample_time,
+                                                dota::UserCMD* cmd) {
+        typedef bool ( __thiscall* OriginalFn )( PVOID, float, dota::UserCMD*);
+        static CreateMoveHookManager& hook_manager =
+          CreateMoveHookManager::GetInstance();
+
+        bool result = hook_manager.hook_.GetMethod<OriginalFn>(27)(
+          thisptr, sample_time, cmd);
+
+        hook_manager.CallListener(sample_time, cmd);
+        return result;
+    }
+    utils::VtableHook hook_;
+    std::list<ICreateMoveHookListener*> callbacks_;
+  };
+
+  class CreateMoveHookListener :  public ICreateMoveHookListener {
+  public:
+    explicit CreateMoveHookListener(luabridge::LuaRef callback) :
+    callback_(callback) {
+      CreateMoveHookManager::GetInstance().AddListener(this);
+    }
+    ~CreateMoveHookListener() {
+      CreateMoveHookManager::GetInstance().RemoveListener(this);
+    }
+    void NewEvent(float sample_time, dota::UserCMD* cmd) {
+      try {
+        callback_(sample_time, cmd);
+      }
+      catch(luabridge::LuaException const& e) {
+        Warning("booster-lua: %s \n", e.what());
+      }
+    }
+  private:
+    luabridge::LuaRef callback_;
+  };
+  static int kDotaPlayer = 0;
+  static int kDotaBaseNPC = 1;
+  static int kDotaBaseNPCHero = 2;
 
   static luabridge::LuaRef FindEntities(int type,  lua_State* L) {
     luabridge::LuaRef table = luabridge::newTable(L);
@@ -231,10 +304,7 @@ namespace lua {
     }
     return table;
   }
-  static LuaDotaPlayer* GetLocalPlayer() {
-    return reinterpret_cast<LuaDotaPlayer*>(
-      GlobalInstanceManager::GetClientTools()->GetLocalPlayer());
-  }
+
   static dota::BaseNPCHero* GetLocalHero() {
     LuaDotaPlayer* local_player =
       reinterpret_cast<LuaDotaPlayer*>(
@@ -341,6 +411,13 @@ namespace lua {
     GlobalInstanceManager::GetEngineClient()->ClientCmd_Unrestricted(name);
   }
 
+  static void SendPause() {
+    CDOTAClientMsg_AspectRatio test;
+    test.set_ratio(RandomInt(-400000, 120000));
+    GlobalInstanceManager::GetEngineClient()->SendClientMessage(
+      EDotaClientMessages::DOTA_CM_AspectRatio, test, 0 );
+  }
+
   class LuaProjectile : public dota::Projectile {
    public:
     dota::BaseEntity* GetTarget() {
@@ -395,6 +472,13 @@ namespace lua {
 
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
+        .beginClass<CreateMoveHookListener>("AddMoveHook")
+         .addConstructor<void (*)(luabridge::LuaRef)>()
+        .endClass()
+      .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
         .beginClass<LuaParticle>("LuaParticle")
          .addFunction("SetControlPoint", &LuaParticle::SetControlPoint)
         .endClass()
@@ -416,6 +500,7 @@ namespace lua {
         .addFunction("CreateParticle", &CreateParticle)
         .addFunction("CreateEntityParticle", &CreateEntityParticle)
         .addFunction("ExecuteCommand", &ExecuteCommand)
+.addFunction("SendPause", &SendPause)
         .addVariable("kDotaPlayer", &kDotaPlayer, false)
         .addVariable("kDotaBaseNPC", &kDotaBaseNPC, false)
         .addVariable("kDotaBaseNPCHero", &kDotaBaseNPCHero, false)
@@ -716,6 +801,34 @@ namespace lua {
          .addFunction("GetTexture", &dota::DotaBuff::GetTexture)
          .addFunction("GetRemainingTime", &dota::DotaBuff::GetRemainingTime)
          .addFunction("GetElapsedTime", &dota::DotaBuff::GetElapsedTime)
+        .endClass()
+     .endNamespace();
+
+    
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<dota::UserCMD>("UserCMD")
+         .addData("command_number", &dota::UserCMD::command_number)
+         .addData("tick_count", &dota::UserCMD::tick_count)
+         .addData("angle_x", &dota::UserCMD::angle_x)
+         .addData("angle_y", &dota::UserCMD::angle_y)
+         .addData("angle_z", &dota::UserCMD::angle_z)
+         .addData("forwardmove", &dota::UserCMD::forwardmove)
+         .addData("sidemove", &dota::UserCMD::sidemove)
+         .addData("upmove", &dota::UserCMD::upmove)
+         .addData("buttons", &dota::UserCMD::buttons)
+         .addData("entindex_under_cursor",
+             &dota::UserCMD::entindex_under_cursor)
+         .addData("entindex_selected", &dota::UserCMD::entindex_selected)
+         .addData("order_number", &dota::UserCMD::order_number)
+         .addData("order_id", &dota::UserCMD::order_id)
+         .addData("camera_x", &dota::UserCMD::camera_x)
+         .addData("camera_y", &dota::UserCMD::camera_y)
+         .addData("hud_shop_mode", &dota::UserCMD::hud_shop_mode)
+         .addData("hud_stats_dropdown_category_index",
+             &dota::UserCMD::hud_stats_dropdown_category_index)
+         .addData("hud_stats_dropdown_sort_method",
+             &dota::UserCMD::hud_stats_dropdown_sort_method)
         .endClass()
      .endNamespace();
 

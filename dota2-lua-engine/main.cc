@@ -18,6 +18,7 @@ static utils::VtableHook* client_hook;
 ICvar *g_pCVar;
 
 void __fastcall LevelInitPreEntity(void* thisptr, int edx, char const* map);
+static CUniformRandomStream* random;
 
 DWORD WINAPI InitializeHook(void* arguments) {
   while (utils::GetModuleHandleSafe("engine.dll") == nullptr
@@ -25,6 +26,11 @@ DWORD WINAPI InitializeHook(void* arguments) {
     ||  utils::GetModuleHandleSafe("steamclient.dll") == nullptr) {
     Sleep(100);
   }
+
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  random = new CUniformRandomStream;
+  InstallUniformRandomStream(random);
 
   // Preload addresses
   GlobalAddressRetriever::GetInstance();
@@ -53,6 +59,7 @@ void FinalizeHook() {
   }
   lua::LuaEngine::GetInstance().UnloadScripts();
   commands::Unregister();
+  google::protobuf::ShutdownProtobufLibrary();
 }
 
 int WINAPI DllMain(HINSTANCE instance, DWORD reason, PVOID reserved) {

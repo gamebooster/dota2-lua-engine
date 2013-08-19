@@ -28,6 +28,11 @@ dynamic:
       signature: "57 BE ? ? ? ? E8 ? ? ? ? 56"
     - 
       commands: 
+        offset: 2
+      name: ClientMode
+      signature: "8B 0D ? ? ? ? 56 57 8B B8 0C 04 00 00"
+    - 
+      commands: 
         offset: 3
       name: ModifierDefaultParams
       signature: "74 4E 68 ? ? ? ? 8D 55 F4"

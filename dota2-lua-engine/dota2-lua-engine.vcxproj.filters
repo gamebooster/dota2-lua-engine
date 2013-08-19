@@ -43,6 +43,9 @@
     <Filter Include="Source Files\lua">
       <UniqueIdentifier>{c1d6319b-d0db-4fd3-9d69-f330d473b320}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\protobuf">
+      <UniqueIdentifier>{5ff16b8d-4b26-4bfa-ad67-bdbd23ad66ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="commands.cc">
@@ -107,6 +110,18 @@
     </ClCompile>
     <ClCompile Include="dota\dota_projectilemanager.cc">
       <Filter>Source Files\dota</Filter>
+    </ClCompile>
+    <ClCompile Include="..\protobuf\dota_clientmessages.pb.cc">
+      <Filter>Source Files\protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\protobuf\dota_commonmessages.pb.cc">
+      <Filter>Source Files\protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\protobuf\netmessages.pb.cc">
+      <Filter>Source Files\protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\protobuf\networkbasetypes.pb.cc">
+      <Filter>Source Files\protobuf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

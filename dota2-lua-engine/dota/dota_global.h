@@ -82,4 +82,18 @@ class CCommandBuffer {
   }
 };
 
+class ClientMode {
+public:
+  static ClientMode* GetInstance() {
+    return *reinterpret_cast<ClientMode**>(
+      GlobalAddressRetriever::GetInstance()
+      .GetDynamicAddress("ClientMode"));
+  }
+  void CreateMove(float input_sample_time, UserCMD* cmd) {
+    typedef void ( __thiscall* OriginalFn )( PVOID, float, UserCMD*);
+    utils::GetVtableFunction<OriginalFn>(this, 27)
+      (this, input_sample_time, cmd);
+  }
+};
+
 }  // namespace dota
