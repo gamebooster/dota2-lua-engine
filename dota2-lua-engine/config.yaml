@@ -43,22 +43,7 @@ dynamic:
       name: CommandBuffer
       signature: "81 C7 ? ? ? ? 8B 87 ? ? ? ?"
 static: 
-  client.dll: 
-    - 
-      commands: 
-        relative: 0
-      name: "CNewParticleEffect::SetControlPoint"
-      signature: "E8 ? ? ? ? 83 44 24 10 04"
-    - 
-      commands:
-        relative: 0
-      name: "ParticleProperty::StopEmissionAndDestroyImmediately"
-      signature: "E8 ? ? ? ? C7 86 20 32 00 00 00 00 00 00"
-    - 
-      commands: 
-        relative: 0
-      name: "ParticleProperty::Create"
-      signature: "E8 ? ? ? ? 8D 0C 5B"
+  client.dll:
     - 
       commands: 
         relative: 0
@@ -81,11 +66,10 @@ static:
       name: "Hud::FindElement"
       signature: "89 15 ? ? ? ? E8 ? ? ? ? 8B 4D FC"
     - 
-      commands: 
-        offset: 1
+      commands:
         relative: 0
       name: "SFHudOverlay::ShowSpecItemPickup"
-      signature: "51 E8 ? ? ? ? E9 ? ? ? ? 68 ? ? ? ? 68 ? ? ? ?"
+      signature: "E8 ? ? ? ? E9 ? ? ? ? 8B C6 E8 ? ? ? ?"
     - 
       commands: 
         offset: 3
@@ -191,7 +175,7 @@ static:
       commands:
         relative: 0
       name: "ParticleManager::SetParticleControl"
-      signature: "E8 ? ? ? ? 8B 15 ? ? ? ? 52 EB 41"
+      signature: "E8 ? ? ? ? 83 EE 04"
     - 
       commands:
         relative: 0

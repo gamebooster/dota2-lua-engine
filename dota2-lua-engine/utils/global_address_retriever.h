@@ -26,14 +26,14 @@ class GlobalAddressRetriever {
       static_addresses_.LoadSignatures(
         utils::GetModuleDirectory() + "config.yaml");
     } catch(const boost::exception &e) {
-      utils::Log("hook: GlobalAddressRetrieverError %s",
-                 boost::get_error_info<boost::errinfo_file_name>(e));
+      Warning("hook: GlobalAddressRetrieverError %s \n",
+        boost::diagnostic_information(e));
     } catch(...) {
-      utils::Log("hook: GlobalAddressRetrieverError");
+      Warning("hook: GlobalAddressRetrieverError");
     }
 
     for (auto address : static_addresses_) {
-      utils::Log("hook: static: %s 0x%x",
+      Warning("hook: static: %s 0x%x \n",
                  address.first.c_str(),
                  address.second);
     }
@@ -42,14 +42,14 @@ class GlobalAddressRetriever {
       dynamic_addresses_.LoadSignatures(
         utils::GetModuleDirectory() + "config.yaml");
     } catch(const boost::exception &e) {
-      utils::Log("hook: GlobalAddressRetrieverError %s",
-                 boost::get_error_info<boost::errinfo_file_name>(e));
+      Warning("hook: GlobalAddressRetrieverError %s \n",
+        boost::diagnostic_information(e));
     } catch(...) {
-      utils::Log("hook: GlobalAddressRetrieverError");
+      Warning("hook: GlobalAddressRetrieverError");
     }
 
     for (auto address : dynamic_addresses_) {
-      utils::Log("hook: dynamic: %s 0x%x",
+      Warning("hook: dynamic: %s 0x%x \n",
                  address.first.c_str(),
                  address.second);
     }

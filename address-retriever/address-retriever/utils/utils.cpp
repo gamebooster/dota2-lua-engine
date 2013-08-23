@@ -36,6 +36,7 @@ __forceinline bool FindPatternCompare(const unsigned char* address, const unsign
 
 const unsigned char* FindPatternInternal(const unsigned char* address, size_t size, const unsigned char* signature, const char* mask) {
   for(size_t i = 0; i < size; i++) {
+    if (IsBadReadPtr(address + i, 4)) return nullptr;
     if(FindPatternCompare(address + i, signature, mask)) {
       return address + i;
     }

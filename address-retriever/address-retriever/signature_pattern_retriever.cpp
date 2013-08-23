@@ -39,10 +39,14 @@ void AddressRetriever::LoadSignatures(const std::string& file_path) {
           command_map[command.first.as<std::string>()] = command.second.as<int>();
         }
       }
-
-      uint32_t address = ProcessAddress(module_name, Signature(node["signature"].as<std::string>()), command_map);
+      uint32_t address = 0;
+      try {
+        address = ProcessAddress(module_name, Signature(node["signature"].as<std::string>()), command_map);
+      } catch (const boost::exception &e) {
+        BOOST_THROW_EXCEPTION(std::runtime_error("FindPatternError: " + node["name"].as<std::string>()));
+      }
       if (address == 0) {
-        BOOST_THROW_EXCEPTION(std::runtime_error("could not find address"));
+        BOOST_THROW_EXCEPTION(std::runtime_error("FindPatternError: " + node["name"].as<std::string>()));
       }
       addresses_[node["name"].as<std::string>()] = address;
     }
@@ -77,7 +81,7 @@ uint32_t InternalAddressRetriever::ProcessAddress(std::string module_name, Signa
   uint32_t address = (uint32_t)utils::FindPattern(module_name.c_str(), reinterpret_cast<const unsigned char*>(signature.pattern.c_str()), signature.mask.c_str());
 
   if (address == 0) {
-    BOOST_THROW_EXCEPTION(std::runtime_error("could not find pattern"));
+    BOOST_THROW_EXCEPTION(std::runtime_error("FindPatternError"));
   }
 
   for (auto command : commands) {

@@ -5,6 +5,8 @@
 
 namespace dota {
 
+// not used anymore
+
 class CNewParticleEffect {
  public:
   void SetControlPoint(int index, Vector const& vector) {

@@ -59,18 +59,12 @@ class ParticleManager {
                           const Vector& vector) {
     uint32_t address = GlobalAddressRetriever::GetInstance()
       .GetStaticAddress("ParticleManager::SetParticleControl");
-
-    float x = vector.x;
-    float y = vector.y;
-    float z = vector.z;
-
+    Vector vec = vector;
     __asm {
-      push z
-      push y
-      push x
+      push vec
       push index
-      mov eax, particle_index
-      mov edx, this
+      push particle_index
+      push this
       call address
     }
   }
