@@ -67,9 +67,10 @@ static:
       signature: "89 15 ? ? ? ? E8 ? ? ? ? 8B 4D FC"
     - 
       commands:
+        offset: 1
         relative: 0
       name: "SFHudOverlay::ShowSpecItemPickup"
-      signature: "E8 ? ? ? ? E9 ? ? ? ? 8B C6 E8 ? ? ? ?"
+      signature: "51 E8 ? ? ? ? E9 ? ? ? ? 8B CF"
     - 
       commands: 
         offset: 3
