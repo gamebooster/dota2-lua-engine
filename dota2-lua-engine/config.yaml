@@ -8,9 +8,9 @@ dynamic:
       signature: "F3 0F 5C C2 8B 15 ? ? ? ?"
     - 
       commands: 
-        offset: 4
+        offset: 2
       name: PlayerResource
-      signature: "77 0F 8B 15 ? ? ? ? 8B 44 24 1C"
+      signature: "8B 0D ? ? ? ? 8B 04 08 EB 02"
     - 
       commands: 
         offset: 2
@@ -70,7 +70,7 @@ static:
         offset: 1
         relative: 0
       name: "SFHudOverlay::ShowSpecItemPickup"
-      signature: "51 E8 ? ? ? ? E9 ? ? ? ? 8B CF"
+      signature: "51 E8 ? ? ? ? E9 ? ? ? ? 8B C6"
     - 
       commands: 
         offset: 3
@@ -131,13 +131,8 @@ static:
     - 
       commands: 
         relative: 0
-      name: "DotaPlayer::ShowRingEffect"
-      signature: "E8 ? ? ? ? EB 78 33 D2"
-    - 
-      commands: 
-        relative: 0
       name: "DotaPlayer::PrepareUnitOrders"
-      signature: "E8 ? ? ? ? 83 CF FF EB 1E"
+      signature: "E8 ? ? ? ? 8B 43 0C 47"
     - 
       commands: 
         relative: 0
