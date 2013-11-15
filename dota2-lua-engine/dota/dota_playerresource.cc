@@ -95,8 +95,9 @@ namespace dota {
     const char* name = nullptr;
 
     __asm {
-      mov esi, this
-      mov eax, index
+      mov edi, index
+
+      push this
       call address
       mov name, eax
     }

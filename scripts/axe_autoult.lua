@@ -2,6 +2,7 @@ local hook = nil
 local sleep = 0
 local local_hero = dota.GetLocalHero()
 local local_player = dota.GetLocalPlayer()
+local font = dota.DrawUtils.GetInstance():CreateFont("Arial", 18, 500)
  
 function OnPaint()
   if sleep > 0 then
@@ -11,7 +12,8 @@ function OnPaint()
 
   local ult_ability = local_hero:GetAbilityByDisplayedIndex(3)
   local threshold = ult_ability:GetLevelSpecialValueFor("kill_threshold")
-  if threshold == 0 or ult_ability:CanBeExecuted() ~= -1 then
+  dota.DrawUtils.DrawString(font, 5, 300, 255,255,255, false, "Ultimate: " .. ult_ability:CanBeExecuted() .. " " .. threshold)
+  if threshold == 0 or ult_ability:CanBeExecuted() ~= 1 then
     return
   end
 
@@ -25,10 +27,10 @@ function OnPaint()
     
     local health = hero:GetHealth()
     if hero:GetTeamIndex() ~= local_hero:GetTeamIndex() and
-       health <= threshold and health > 50 and
+       health <= threshold and health > 20 and
        local_hero:IsEntityInRange(hero, ult_ability:GetCastRange()) then
       local_player:UseAbilityEntity(ult_ability, hero)
-      sleep = 50
+      sleep = 10
     end
   end
 end

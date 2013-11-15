@@ -67,16 +67,15 @@ static:
       signature: "89 15 ? ? ? ? E8 ? ? ? ? 8B 4D FC"
     - 
       commands:
-        offset: 1
         relative: 0
       name: "SFHudOverlay::ShowSpecItemPickup"
-      signature: "51 E8 ? ? ? ? E9 ? ? ? ? 8B C6"
+      signature: "E8 ? ? ? ? E9 ? ? ? ? 3B 86 88 02 00 00"
     - 
       commands: 
         offset: 3
         relative: 0
       name: "SFHudOverlay::SendRoshanPopup"
-      signature: "0F 5B C0 E8 ? ? ? ? B0 01"
+      signature: "0F 5B C0 E8 ? ? ? ? 5F"
     - 
       commands: 
         relative: 0
@@ -103,15 +102,17 @@ static:
       name: "UnitAnnouncer::SetAnnouncerItem"
       signature: "E8 ? ? ? ? EB 2F 68"
     - 
-      commands: 
+      commands:
+        offset: 2
         relative: 0
       name: "DotaPlayerResource::GetPlayerSelectedHero"
-      signature: "E8 ? ? ? ? 8B 0D ? ? ? ? 8B 57 2C 50"
+      signature: "8B C6 E8 ? ? ? ? 8B 0D ? ? ? ? 8B 57 2C"
     - 
-      commands: 
+      commands:
+        offset: 2
         relative: 0
       name: "DotaPlayerResource::GetPlayerName"
-      signature: "E8 ? ? ? ? 8B 4D FC 89 45 C0"
+      signature: "8B FA E8 ? ? ? ? EB 23"
     - 
       commands:
         offset: 2
