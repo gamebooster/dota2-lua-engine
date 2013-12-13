@@ -10,16 +10,6 @@ class CHudElement {};
 
 class Hud {
  public:
-  static void SelectHudSkin(EconItemView* item, int unknown0) {
-    uint32_t address = GlobalAddressRetriever::GetInstance()
-      .GetStaticAddress("Hud::SelectHudSkin");
-
-    __asm {
-      push unknown0
-      mov esi, item
-      call address
-    }
-  }
   static Hud* GetInstance() {
     if (instance_ == nullptr) {
       instance_ = reinterpret_cast<Hud*>(
@@ -56,6 +46,32 @@ class Hud {
 
  private:
   static Hud* instance_;
+};
+
+class DotaSFActionPanel {
+public:
+  static DotaSFActionPanel* GetInstance() {
+    if (instance_ == nullptr) {
+      instance_ = reinterpret_cast<DotaSFActionPanel*>(
+        Hud::GetInstance()->FindSFElement("CDOTA_SF_Hud_ActionPanel"));
+    }
+    return instance_;
+  }
+
+  void LoadHUDSkin(EconItemView* item, int unknown) {
+    uint32_t address = GlobalAddressRetriever::GetInstance()
+      .GetStaticAddress("SFActionPanel::LoadHudSkin");
+
+    __asm {
+      mov eax, item
+      push unknown
+      push this
+      call address
+    }
+  }
+
+private:
+  static DotaSFActionPanel* instance_;
 };
 
 class DotaSFHudOverlay {

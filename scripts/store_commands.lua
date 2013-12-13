@@ -71,7 +71,7 @@ function OnHudCommand(item_id)
   local item = dota.EconItemView:Create()
   item:Init(item_id, 9999, 9999, 0)
   
-  dota.Hud.SelectHudSkin(item, 1)
+    dota.SFActionPanel.GetInstance():LoadHUDSkin(item, 1)
 end
 
 function Initialize()

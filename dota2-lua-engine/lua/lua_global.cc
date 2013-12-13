@@ -569,7 +569,6 @@ namespace lua {
     luabridge::getGlobalNamespace(state)
       .beginNamespace("dota")
         .beginClass<dota::Hud>("Hud")
-          .addStaticFunction("SelectHudSkin", &dota::Hud::SelectHudSkin)
         .endClass()
       .endNamespace();
 
@@ -593,6 +592,16 @@ namespace lua {
             &dota::DotaSFHudOverlay::ShowSpecItemPickup)
           .addFunction("SendRoshanPopup",
             &dota::DotaSFHudOverlay::SendRoshanPopup)
+        .endClass()
+      .endNamespace();
+
+    luabridge::getGlobalNamespace(state)
+      .beginNamespace("dota")
+        .beginClass<dota::DotaSFActionPanel>("SFActionPanel")
+          .addStaticFunction("GetInstance",
+          &dota::DotaSFActionPanel::GetInstance)
+          .addFunction("LoadHUDSkin",
+          &dota::DotaSFActionPanel::LoadHUDSkin)
         .endClass()
       .endNamespace();
 

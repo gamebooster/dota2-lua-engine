@@ -4,4 +4,5 @@
 namespace dota {
   Hud* Hud::instance_ = nullptr;
   DotaSFHudOverlay* DotaSFHudOverlay::instance_ = nullptr;
+  DotaSFActionPanel* DotaSFActionPanel::instance_ = nullptr;
 }  // namespace dota
