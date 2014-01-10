@@ -17,7 +17,7 @@ class EconItemView {
       push unknown1
       push unknown0
       push item_id
-      mov esi, this
+      mov ecx, this
       call address
     }
   }
@@ -27,7 +27,7 @@ class EconItemView {
 
     void* store = malloc(0x100);
     __asm {
-      mov esi, store
+      mov ecx, store
       call address
     }
 

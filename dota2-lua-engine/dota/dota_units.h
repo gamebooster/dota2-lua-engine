@@ -167,9 +167,9 @@ class UnitAnnouncer : public BaseNPC {
       .GetStaticAddress("UnitAnnouncer::SetAnnouncerItem");
 
     __asm {
-      mov ecx, item
-      mov esi, this
-      mov al, unknown0
+      push unknown0
+      push item
+      mov ecx, this
       call address
     }
   }

@@ -39,16 +39,16 @@ class ParticleManager {
     int particle_index = 0;
 
     __asm {
-      mov eax, this 
-      mov esi, [eax+ 0x48]
-      lea edx, [esi+1]
-      mov [eax+ 0x48], edx
-      mov [particle_index], esi
+      mov ecx, this
+      push ecx
       push entity
       push attachment
+      mov esi, [ecx+ 0x48]
+      push name
       push esi
-      push eax
-      mov eax, name
+      lea eax, [esi+1]
+      mov[particle_index], esi
+      mov [ecx+ 0x48], eax
       call address
     }
 
@@ -64,7 +64,7 @@ class ParticleManager {
       push vec
       push index
       push particle_index
-      push this
+      mov ecx, this
       call address
     }
   }
@@ -90,7 +90,7 @@ class ParticleManager {
       push entity
       push unknown0
       push particle_index
-      push this
+      mov ecx, this
       call address
     }
   }
@@ -99,8 +99,8 @@ class ParticleManager {
       .GetStaticAddress("ParticleManager::ReleaseParticleIndex");
 
     __asm {
-      push this
-      mov eax, particle_index
+      mov ecx, this
+      push particle_index
       call address
     }
   }

@@ -32,7 +32,7 @@ class GameSystemsRetriever {
   }
   void DumpSystems() {
     for (int i = 0; i < game_systems_->Count(); i++) {
-      utils::Log("hook: %s 0x%x",
+      Warning("hook: %s 0x%x \n",
                  (*game_systems_)[i]->Name(), (*game_systems_)[i]);
     }
   }

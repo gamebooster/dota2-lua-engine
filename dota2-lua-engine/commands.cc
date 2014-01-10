@@ -4,6 +4,10 @@
 #include "source-sdk/global_instance_manager.h"
 #include "lua/lua_engine.h"
 
+#include <string>
+#include <fstream>
+#include <streambuf>
+
 namespace commands {
   CON_COMMAND(set_var, "Change cvar value") {
     if (args.ArgC() < 3) {
@@ -11,6 +15,11 @@ namespace commands {
       return;
     }
     ConVar* temp = g_pCVar->FindVar(args.Arg(1));
+    if (temp == nullptr) {
+      Warning("set_var: Could not find cvar");
+      return;
+    }
+
     temp->SetValue(atoi(args.Arg(2)));
   }
 
@@ -41,6 +50,8 @@ namespace commands {
 
   void Register() {
     GlobalInstanceManager::GetCVar()
+      ->RegisterConCommand(&set_var_command);
+    GlobalInstanceManager::GetCVar()
       ->RegisterConCommand(&lua_load_command);
     GlobalInstanceManager::GetCVar()
       ->RegisterConCommand(&lua_unload_command);
@@ -48,6 +59,8 @@ namespace commands {
       ->RegisterConCommand(&lua_execute_command);
   }
   void Unregister() {
+    GlobalInstanceManager::GetCVar()
+      ->UnregisterConCommand(&set_var_command);
     GlobalInstanceManager::GetCVar()
       ->UnregisterConCommand(&lua_load_command);
     GlobalInstanceManager::GetCVar()

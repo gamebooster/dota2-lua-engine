@@ -114,7 +114,7 @@ class DotaPlayer : public BasePlayer {
     PrepareUnitOrders(Order::kAttackPosition, 0, target, 0, 0, 0, 0);
   }
   void AttackEntity(BaseEntity* target) {
-    PrepareUnitOrders(Order::kAttackEntity, target->GetIndex(),
+    PrepareUnitOrders(Order::kAttackEntity, target ? target->GetIndex() : 0,
                       vec3_origin, 0, 0, 0, 0);
   }
   void HoldPosition() {
@@ -128,11 +128,11 @@ class DotaPlayer : public BasePlayer {
       ability->GetIndex(), 3, ability->GetCaster(), 0);
   }
   void UseAbilityEntity(DotaAbility* ability, BaseEntity* target) {
-    PrepareUnitOrders(Order::kUseAbilityEntity, target->GetIndex(), vec3_origin,
+    PrepareUnitOrders(Order::kUseAbilityEntity, target ? target->GetIndex() : 0, vec3_origin,
                       ability->GetIndex(), 3, ability->GetCaster(), 0);
   }
   void UseAbilityTree(DotaAbility* ability, BaseEntity* target) {
-    PrepareUnitOrders(Order::kUseAbilityUnknown, target->GetIndex(),
+    PrepareUnitOrders(Order::kUseAbilityUnknown, target ? target->GetIndex() : 0,
                       vec3_origin, ability->GetIndex(), 0, 0, 0);
   }
   void ToggleAbility(DotaAbility* ability) {

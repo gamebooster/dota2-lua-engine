@@ -29,10 +29,10 @@ class GameRules {
     UnitAnnouncer* announcer;
 
     __asm {
-      mov ecx, team_index
-        mov eax, this
-        call address
-        mov announcer, eax
+      push team_index
+      mov ecx, this
+      call address
+      mov announcer, eax
     }
 
     return announcer;
@@ -44,10 +44,10 @@ class GameRules {
     UnitAnnouncer* announcer;
 
     __asm {
-      mov ecx, team_index
-        mov eax, this
-        call address
-        mov announcer, eax
+      push team_index
+      mov ecx, this
+      call address
+      mov announcer, eax
     }
 
     return announcer;

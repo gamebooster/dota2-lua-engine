@@ -38,8 +38,8 @@ class Hud {
       .GetStaticAddress("Hud::FindElement");
 
     __asm {
-      mov eax, name
-      mov esi, this
+      push name
+      mov ecx, this
       call address
     }
   }
@@ -63,9 +63,9 @@ public:
       .GetStaticAddress("SFActionPanel::LoadHudSkin");
 
     __asm {
-      mov eax, item
       push unknown
-      push this
+      push item
+      mov ecx, this
       call address
     }
   }
@@ -89,9 +89,9 @@ class DotaSFHudOverlay {
       .GetStaticAddress("SFHudOverlay::ShowSpecItemPickup");
 
     __asm {
-      mov eax, item
+      push item
       push hero
-      push this
+      mov ecx, this
       call address
     }
   }
@@ -100,7 +100,7 @@ class DotaSFHudOverlay {
       .GetStaticAddress("SFHudOverlay::SendRoshanPopup");
 
     __asm {
-      mov edi, this
+      mov ecx, this
       movss xmm0, time
       push alive
       call address

@@ -3,166 +3,112 @@ dynamic:
   client.dll:
     - 
       commands: 
-        offset: 6
+        offset: 1
       name: DotaInput
-      signature: "F3 0F 5C C2 8B 15 ? ? ? ?"
+      signature: "A1 ? ? ? ? B9 ? ? ? ? FF 90 98 00 00 00"
     - 
       commands: 
-        offset: 2
+        offset: 4
       name: PlayerResource
-      signature: "8B 0D ? ? ? ? 8B 04 08 EB 02"
+      signature: "74 4D 8B 35 ? ? ? ? 85 F6 74 67"
+    - 
+      commands: 
+        offset: 4
+      name: GameRules
+      signature: "74 4B 8B 0D ? ? ? ? 85 C9 74 06"
+    - 
+      commands: 
+        offset: 3
+      name: Hud
+      signature: "7C E9 B9 ? ? ? ?"
+    - 
+      commands: 
+        offset: 3
+      name: ClientMode
+      signature: "74 11 68 ? ? ? ? FF 15 ? ? ? ? 83 C4 04 5E 5D C3 8B 0D ? ? ? ? 8B B6 0C 04 00 00"
+    - 
+      commands: 
+        offset: 1
+      name: ModifierDefaultParams
+      signature: "68 ? ? ? ? 6A 17 8B C8"
     - 
       commands: 
         offset: 2
       name: GameSystemsRetriever
-      signature: "8B 0D ? ? ? ? 8B 0C 99"
-    - 
-      commands: 
-        offset: 2
-      name: GameRules
-      signature: "8B 0D ? ? ? ? 85 C9 74 08 8B 01 8B 10 6A 01 FF D2 56 C7 05"
-    - 
-      commands: 
-        offset: 2
-      name: Hud
-      signature: "57 BE ? ? ? ? E8 ? ? ? ? 56"
-    - 
-      commands: 
-        offset: 2
-      name: ClientMode
-      signature: "8B 0D ? ? ? ? 56 57 8B B8 0C 04 00 00"
-    - 
-      commands: 
-        offset: 3
-      name: ModifierDefaultParams
-      signature: "74 4E 68 ? ? ? ? 8D 55 F4"
+      signature: "8B 15 ? ? ? ? 85 C0 7E 0E"
+
   engine.dll: 
     - 
       commands: 
-        offset: 2
+        offset: 4
       name: CommandBuffer
-      signature: "81 C7 ? ? ? ? 8B 87 ? ? ? ?"
+      signature: "EB 5E FF 05 ? ? ? ?"
 static: 
   client.dll:
     - 
       commands: 
         relative: 0
       name: "GameRules::GetAnnouncer"
-      signature: "E8 ? ? ? ? 85 C0 74 1F 38 98 ? ? ? ?"
+      signature: "E8 ? ? ? ? 8B 0D ? ? ? ? 8B D8 83 79 30 00"
     - 
       commands: 
         relative: 0
       name: "GameRules::GetKillingSpreeAnnouncer"
-      signature: "E8 ? ? ? ? EB 3B 8B 0D"
-    - 
-      commands: 
-        relative: 0
-      name: "SFActionPanel::LoadHudSkin"
-      signature: "E8 ? ? ? ? 8B E5 5D C2 04 00 50"
-    - 
-      commands: 
-        offset: 6
-        relative: 0
-      name: "Hud::FindElement"
-      signature: "89 15 ? ? ? ? E8 ? ? ? ? 8B 4D FC"
+      signature: "E8 ? ? ? ? 8B F0 85 F6 0F 84 ? ? ? ? 80 BE DC 33 00 00 00"
     - 
       commands:
+        offset: 1
+        relative: 0
+      name: "SFActionPanel::LoadHudSkin"
+      signature: "50 E8 ? ? ? ? E9 ? ? ? ? E8 ? ? ? ?"
+    - 
+      commands: 
+        offset: 5
+        relative: 0
+      name: "Hud::FindElement"
+      signature: "68 ? ? ? ? E8 ? ? ? ? 8B 4D FC 68 ? ? ? ? 89 41 20"
+    - 
+      commands:
+        offset: 1
         relative: 0
       name: "SFHudOverlay::ShowSpecItemPickup"
-      signature: "E8 ? ? ? ? E9 ? ? ? ? 3B 86 88 02 00 00"
+      signature: "56 E8 ? ? ? ? E9 ? ? ? ? 3B 87 88 02 00 00"
     - 
       commands: 
-        offset: 3
+        offset: 1
         relative: 0
       name: "SFHudOverlay::SendRoshanPopup"
-      signature: "0F 5B C0 E8 ? ? ? ? 5F"
-    - 
-      commands: 
-        relative: 0
-      name: "Minimap::CreateLocationPing"
-      signature: "E8 ? ? ? ? 83 C4 10 B0 01 8B E5"
-    - 
-      commands: 
-        relative: 0
-      name: "ModifierManager::GetModifier_Constant_Additive_Internal"
-      signature: "E8 ? ? ? ? 83 BF ? ? ? ? ? 0F 57 C9"
-    - 
-      commands: 
-        relative: 0
-      name: "BaseNpc::GetAttackRange"
-      signature: "E8 ? ? ? ? 51 8B F3"
-    - 
-      commands: 
-        relative: 0
-      name: "BaseNpc::IsEntityInRange"
-      signature: "E8 ? ? ? ? 84 C0 75 36 8B 17"
+      signature: "50 E8 ? ? ? ? 5F B0 01 5E 5D"
     - 
       commands: 
         relative: 0
       name: "UnitAnnouncer::SetAnnouncerItem"
-      signature: "E8 ? ? ? ? EB 2F 68"
-    - 
-      commands:
-        offset: 2
-        relative: 0
-      name: "DotaPlayerResource::GetPlayerSelectedHero"
-      signature: "8B C6 E8 ? ? ? ? 8B 0D ? ? ? ? 8B 57 2C"
-    - 
-      commands:
-        offset: 2
-        relative: 0
-      name: "DotaPlayerResource::GetPlayerName"
-      signature: "8B FA E8 ? ? ? ? EB 23"
-    - 
-      commands:
-        offset: 2
-        relative: 0
-      name: "DotaChat::MessagePrintf"
-      signature: "33 C0 E8 ? ? ? ? 5F B0 01"
-    - 
-      commands: 
-        relative: 0
-      name: "DotaChat::EventPrintf"
-      signature: "E8 ? ? ? ? 33 D2 83 7C 24"
-    - 
-      commands: 
-        relative: 0
-      name: "DotaPlayer::GetLocalPlayerSelectedUnit"
-      signature: "E8 ? ? ? ? 85 C0 74 50 53"
+      signature: "E8 ? ? ? ? EB 32 C6 86 DC 33 00 00 01"
     - 
       commands: 
         relative: 0
       name: "DotaPlayer::PrepareUnitOrders"
-      signature: "E8 ? ? ? ? 8B 43 0C 47"
+      signature: "E8 ? ? ? ? 8B 43 0C 46"
     - 
-      commands: 
-        relative: 0
-      name: "DotaPlayer::SetClickBehaviour"
-      signature: "E8 ? ? ? ? 81 4D"
-    - 
-      commands: 
-        offset: 1
+      commands:
         relative: 0
       name: "EconItemView::Init"
-      signature: "57 E8 ? ? ? ? 8B B3"
+      signature: "E8 ? ? ? ? 8D 8B 58 AA 00 00"
     - 
       commands:
-        offset: 2
         relative: 0
       name: "EconItemView::Create"
-      signature: "8B F0 E8 ? ? ? ? 89 45 10 EB 07"
+      signature: "E8 ? ? ? ? 8B F0 EB 02 33 F6 6A 00 68 0F 27 00 00 68 0F 27 00 00 FF 33"
     - 
       commands:
-        offset: 3
         relative: 0
       name: "ParticleManager::PrecacheParticleSystem"
-      signature: "8B 75 0C E8 ? ? ? ? 85 FF 74 07"
+      signature: "E8 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? 8B 55 10"
     - 
       commands:
-        offset: 1
         relative: 0
       name: "ParticleManager::DestroyParticle"
-      signature: "50 E8 ? ? ? ? C7 86 ? ? ? ? ? ? ? ? 5F"
+      signature: "E8 ? ? ? ? C7 83 84 02 00 00 FF FF FF FF"
     - 
       commands:
         relative: 0
@@ -170,26 +116,23 @@ static:
       signature: "E8 ? ? ? ? 6A 00 6A 00 68 ? ? ? ? 6A 01"
     - 
       commands:
+        offset: 1
         relative: 0
       name: "ParticleManager::SetParticleControl"
-      signature: "E8 ? ? ? ? 83 EE 04"
+      signature: "56 E8 ? ? ? ? EB 45"
     - 
       commands:
+        offset: 3
         relative: 0
       name: "ParticleManager::SetParticleControlEnt"
-      signature: "E8 ? ? ? ? 8B 0D ? ? ? ? 51 8B C7 E8 ? ? ? ? 8B CE"
+      signature: "89 42 08 E8 ? ? ? ? 8B 0D ? ? ? ? 53"
     - 
       commands:
         relative: 0
       name: "ParticleManager::ReleaseParticleIndex"
-      signature: "E8 ? ? ? ? 8B 44 24 34 99"
+      signature: "E8 ? ? ? ? 8B 83 F8 10 00 00"
     - 
       commands:
         relative: 0
-      name: "DOTABaseAbility::OnExecute"
-      signature: "E8 ? ? ? ? 84 C0 75 13 8B 75 08"
-    - 
-      commands:
-        relative: 0
-      name: "DOTABaseAbility::GetLevelSpecialValueFor"
-      signature: "E8 ? ? ? ? 3B C3 74 55"
+      name: "DotaPlayerResource::GetPlayerSelectedHero"
+      signature: "E8 ? ? ? ? 33 C9 8B F8"
