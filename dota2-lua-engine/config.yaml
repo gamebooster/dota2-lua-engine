@@ -20,7 +20,7 @@ dynamic:
       commands: 
         offset: 3
       name: Hud
-      signature: "7C E9 B9 ? ? ? ?"
+      signature: "7C E9 B9 ? ? ? ? E8 ? ? ? ?"
     - 
       commands: 
         offset: 3

@@ -41,7 +41,7 @@ DWORD WINAPI InitializeHook(void* arguments) {
   g_pCVar = reinterpret_cast<ICvar*>(GlobalInstanceManager::GetCVar());
   commands::Register();
 
-  dota::GameSystemsRetriever().DumpSystems();
+  //dota::GameSystemsRetriever().DumpSystems();
 
   return 1;
 }
