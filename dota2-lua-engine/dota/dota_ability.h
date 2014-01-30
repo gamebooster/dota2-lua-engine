@@ -129,12 +129,12 @@ public:
 class DotaItem : public DotaAbility {
 public:
   const char* GetName() {
-    int offset = 0x778;
+    int offset = 0x768;
     return *reinterpret_cast<const char**>(
       *reinterpret_cast<int*>(this + offset));
   }
   int GetItemId() {
-    int offset = 0x778;
+    int offset = 0x768;
     return *reinterpret_cast<int*>(
       (*reinterpret_cast<int*>(this + offset)) + 0x3c);
   }

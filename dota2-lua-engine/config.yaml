@@ -54,7 +54,7 @@ static:
       commands: 
         relative: 0
       name: "GameRules::GetKillingSpreeAnnouncer"
-      signature: "E8 ? ? ? ? 8B F0 85 F6 0F 84 ? ? ? ? 80 BE DC 33 00 00 00"
+      signature: "E8 ? ? ? ? 8B F0 85 F6 0F 84 ? ? ? ? 80 BE B4 34 00 00 00"
     - 
       commands:
         offset: 1
@@ -69,10 +69,9 @@ static:
       signature: "68 ? ? ? ? E8 ? ? ? ? 8B 4D FC 68 ? ? ? ? 89 41 20"
     - 
       commands:
-        offset: 1
         relative: 0
       name: "SFHudOverlay::ShowSpecItemPickup"
-      signature: "56 E8 ? ? ? ? E9 ? ? ? ? 3B 87 88 02 00 00"
+      signature: "E8 ? ? ? ? E9 ? ? ? ? 3B 87 8C 02 00 00"
     - 
       commands: 
         offset: 1
@@ -83,7 +82,7 @@ static:
       commands: 
         relative: 0
       name: "UnitAnnouncer::SetAnnouncerItem"
-      signature: "E8 ? ? ? ? EB 32 C6 86 DC 33 00 00 01"
+      signature: "E8 ? ? ? ? EB 32 C6 86 B4 34 00 00 01"
     - 
       commands: 
         relative: 0
@@ -106,9 +105,10 @@ static:
       signature: "E8 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? 8B 55 10"
     - 
       commands:
+        offset: 1
         relative: 0
       name: "ParticleManager::DestroyParticle"
-      signature: "E8 ? ? ? ? C7 83 84 02 00 00 FF FF FF FF"
+      signature: "50 E8 ? ? ? ? C7 83 94 02 00 00 FF FF FF FF"
     - 
       commands:
         relative: 0
@@ -116,10 +116,9 @@ static:
       signature: "E8 ? ? ? ? 6A 00 6A 00 68 ? ? ? ? 6A 01"
     - 
       commands:
-        offset: 1
         relative: 0
       name: "ParticleManager::SetParticleControl"
-      signature: "56 E8 ? ? ? ? EB 45"
+      signature: "E8 ? ? ? ? F3 0F 7E 45 E0"
     - 
       commands:
         offset: 3
@@ -130,7 +129,7 @@ static:
       commands:
         relative: 0
       name: "ParticleManager::ReleaseParticleIndex"
-      signature: "E8 ? ? ? ? 8B 83 F8 10 00 00"
+      signature: "E8 ? ? ? ? 8B 83 E8 10 00 00"
     - 
       commands:
         relative: 0
