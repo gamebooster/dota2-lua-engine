@@ -54,7 +54,7 @@ static:
       commands: 
         relative: 0
       name: "GameRules::GetKillingSpreeAnnouncer"
-      signature: "E8 ? ? ? ? 8B F0 85 F6 0F 84 ? ? ? ? 80 BE B4 34 00 00 00"
+      signature: "E8 ? ? ? ? 8B F0 85 F6 0F 84 ? ? ? ? 80 BE ? 34 00 00 00"
     - 
       commands:
         offset: 1
@@ -82,7 +82,7 @@ static:
       commands: 
         relative: 0
       name: "UnitAnnouncer::SetAnnouncerItem"
-      signature: "E8 ? ? ? ? EB 32 C6 86 B4 34 00 00 01"
+      signature: "E8 ? ? ? ? EB 32 C6 86 ? 34 00 00 01"
     - 
       commands: 
         relative: 0
