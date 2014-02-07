@@ -32,7 +32,7 @@ namespace dota {
     }
     int GetTeamIndex() {
       typedef int ( __thiscall* OriginalFn )(void* thisptr);
-      return utils::GetVtableFunction<OriginalFn>(this, 87)(this);
+      return utils::GetVtableFunction<OriginalFn>(this, 89)(this);
     }
     int GetHealth() {
       typedef int ( __thiscall* OriginalFn )(void* thisptr);

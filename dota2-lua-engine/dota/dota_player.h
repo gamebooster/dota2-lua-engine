@@ -14,7 +14,7 @@ class BasePlayer : public BaseEntity {
  public:
   int GetPlayerId() {
     typedef int ( __thiscall* OriginalFn )(void* thisptr);
-    return utils::GetVtableFunction<OriginalFn>(this, 282)(this);
+    return utils::GetVtableFunction<OriginalFn>(this, 284)(this);
   }
 };
 
